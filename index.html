@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端面试题文档库</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #fafaf9;
+            --bg-secondary: #f5f5f4;
+            --bg-tertiary: #e7e5e4;
+            --text-primary: #1c1917;
+            --text-secondary: #57534e;
+            --text-muted: #a8a29e;
+            --accent-color: #b45309;
+            --accent-light: #d97706;
+            --accent-glow: rgba(180, 83, 9, 0.1);
+            --border-color: #d6d3d1;
+            --sidebar-width: 320px;
+            --header-height: 64px;
+            --code-bg: #292524;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: linear-gradient(135deg, #1c1917 0%, #292524 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #fafaf9;
+        }
+
+        .header-logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(180, 83, 9, 0.4);
+        }
+
+        .header-logo-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .header-logo-text span {
+            color: #f5f5f4;
+            font-weight: 400;
+        }
+
+        .search-container {
+            position: relative;
+            width: 380px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 18px 10px 44px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 24px;
+            background: rgba(255,255,255,0.08);
+            color: #fafaf9;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.12);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            margin-top: var(--header-height);
+            height: calc(100vh - var(--header-height));
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: var(--header-height);
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        .sidebar-section {
+            padding: 16px 16px 8px;
+        }
+
+        .sidebar-section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-section-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .sidebar-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            margin: 2px 8px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: white;
+            color: var(--accent-color);
+            box-shadow: var(--shadow-sm);
+            font-weight: 500;
+        }
+
+        .nav-item-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .nav-item.active .nav-item-icon {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 32px 48px;
+            overflow-y: auto;
+            background: var(--bg-primary);
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 32px rgba(180, 83, 9, 0.3);
+        }
+
+        .welcome-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 48px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Markdown Content */
+        .markdown-body {
+            animation: fadeIn 0.4s ease;
+        }
+
+        .markdown-body h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .markdown-body h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 32px 0 16px;
+        }
+
+        .markdown-body h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 24px 0 12px;
+        }
+
+        .markdown-body p {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .markdown-body li {
+            margin: 8px 0;
+            color: var(--text-secondary);
+        }
+
+        .markdown-body code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--accent-color);
+        }
+
+        .markdown-body pre {
+            background: var(--code-bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .markdown-body pre code {
+            background: transparent;
+            padding: 0;
+            color: #e7e5e4;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .markdown-body blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding: 16px 20px;
+            margin: 20px 0;
+            background: var(--bg-secondary);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        .markdown-body blockquote p {
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .markdown-body th, .markdown-body td {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .markdown-body th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .markdown-body td {
+            color: var(--text-secondary);
+        }
+
+        .markdown-body a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .markdown-body a:hover {
+            text-decoration: underline;
+        }
+
+        .markdown-body hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 32px 0;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile */
+        .mobile-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px;
+            }
+
+            .welcome-stats {
+                gap: 24px;
+            }
+        }
+
+        /* Search highlight */
+        .search-highlight {
+            background: #fef3c7;
+            padding: 1px 3px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <button class="mobile-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-logo-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="header-logo-text">
+                前端面试题 <span>文档库</span>
+            </div>
+        </div>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索文档标题或内容...">
+        </div>
+    </header>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <div class="sidebar-section-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <span class="sidebar-section-title">核心基础</span>
+                </div>
+                <ul class="nav-list" id="nav-basic"></ul>
+            </nav>
+
+            <nav class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <div class="sidebar-section-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <span class="sidebar-section-title">框架生态</span>
+                </div>
+                <ul class="nav-list" id="nav-framework"></ul>
+            </nav>
+
+            <nav class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <div class="sidebar-section-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <span class="sidebar-section-title">工程实战</span>
+                </div>
+                <ul class="nav-list" id="nav-engineering"></ul>
+            </nav>
+
+            <nav class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <div class="sidebar-section-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <span class="sidebar-section-title">大厂专项</span>
+                </div>
+                <ul class="nav-list" id="nav-company"></ul>
+            </nav>
+
+            <nav class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <div class="sidebar-section-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <span class="sidebar-section-title">面试技巧</span>
+                </div>
+                <ul class="nav-list" id="nav-interview"></ul>
+            </nav>
+
+            <nav class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <div class="sidebar-section-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <span class="sidebar-section-title">个人简历</span>
+                </div>
+                <ul class="nav-list" id="nav-resume"></ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-wrapper" id="mainContent">
+                <div class="welcome-screen">
+                    <div class="welcome-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h1 class="welcome-title">欢迎使用文档中心</h1>
+                    <p class="welcome-subtitle">选择左侧导航栏中的文档开始学习</p>
+                    <div class="welcome-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">6</div>
+                            <div class="stat-label">基础分类</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">28</div>
+                            <div class="stat-label">文档数量</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">面试考点</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 文档数据结构
+        const docsStructure = {
+            basic: {
+                title: '核心基础',
+                icon: 'fa-layer-group',
+                files: [
+                    { path: '01-基础核心/1-1 HTMLCSS.md', title: 'HTML/CSS', icon: 'fa-html5' },
+                    { path: '01-基础核心/1-2 JavaScript.md', title: 'JavaScript', icon: 'fa-js' },
+                    { path: '01-基础核心/1-3 TypeScript.md', title: 'TypeScript', icon: 'fa-ts' },
+                    { path: '01-基础核心/1-4 计算机网络.md', title: '计算机网络', icon: 'fa-network-wired' },
+                    { path: '01-基础核心/1-5 算法与数据结构.md', title: '算法与数据结构', icon: 'fa-code-branch' },
+                    { path: '01-基础核心/1-6 Linux运维.md', title: 'Linux运维', icon: 'fa-linux' }
+                ]
+            },
+            framework: {
+                title: '框架生态',
+                icon: 'fa-cube',
+                files: [
+                    { path: '02-框架生态/2-1 React.md', title: 'React', icon: 'fa-react' },
+                    { path: '02-框架生态/2-2 Vue.md', title: 'Vue', icon: 'fa-vuejs' },
+                    { path: '02-框架生态/2-3 Node与BFF.md', title: 'Node与BFF', icon: 'fa-node' },
+                    { path: '02-框架生态/2-4 WebGL与可视化.md', title: 'WebGL与可视化', icon: 'fa-chart-line' },
+                    { path: '02-框架生态/2-5 音视频与跨端.md', title: '音视频与跨端', icon: 'fa-video' }
+                ]
+            },
+            engineering: {
+                title: '工程实战',
+                icon: 'fa-tools',
+                files: [
+                    { path: '03-工程实战/3-1 前端工程化.md', title: '前端工程化', icon: 'fa-cogs' },
+                    { path: '03-工程实战/3-2 构建工具与插件.md', title: '构建工具与插件', icon: 'fa-hammer' },
+                    { path: '03-工程实战/3-3 实际工程应用.md', title: '实际工程应用', icon: 'fa-briefcase' },
+                    { path: '03-工程实战/3-4 AI与大模型实战.md', title: 'AI与大模型实战', icon: 'fa-robot' }
+                ]
+            },
+            company: {
+                title: '大厂专项',
+                icon: 'fa-building',
+                files: [
+                    { path: '04-大厂专项/4-1 拓竹科技 (MakerWorld).md', title: '拓竹科技', icon: 'fa-print-3d' },
+                    { path: '04-大厂专项/4-2 腾讯WXG.md', title: '腾讯WXG', icon: 'fa-tencent' },
+                    { path: '04-大厂专项/4-3 蚂蚁集团 (qiankun).md', title: '蚂蚁集团', icon: 'fa-ant' }
+                ]
+            },
+            interview: {
+                title: '面试技巧',
+                icon: 'fa-user-tie',
+                files: [
+                    { path: '05-面试技巧/5-1 手写代码题.md', title: '手写代码题', icon: 'fa-pen-fancy' },
+                    { path: '05-面试技巧/5-2 项目深挖问题.md', title: '项目深挖问题', icon: 'fa-project-diagram' },
+                    { path: '05-面试技巧/5-3 简历深度分析.md', title: '简历深度分析', icon: 'fa-file-alt' },
+                    { path: '05-面试技巧/5-4 面试软技能.md', title: '面试软技能', icon: 'fa-comments' },
+                    { path: '05-面试技巧/5-5 高频考点速览.md', title: '高频考点速览', icon: 'fa-star' },
+                    { path: '05-面试技巧/5-6 题库大纲.md', title: '题库大纲', icon: 'fa-list-alt' }
+                ]
+            },
+            resume: {
+                title: '个人简历',
+                icon: 'fa-id-card',
+                files: [
+                    { path: '06-个人简历/个人简历.html', title: '我的简历', icon: 'fa-id-card-alt', isHtml: true }
+                ]
+            }
+        };
+
+        // 初始化导航
+        function initNavigation() {
+            const navIds = {
+                basic: 'nav-basic',
+                framework: 'nav-framework',
+                engineering: 'nav-engineering',
+                company: 'nav-company',
+                interview: 'nav-interview',
+                resume: 'nav-resume'
+            };
+
+            for (const [key, navId] of Object.entries(navIds)) {
+                const navList = document.getElementById(navId);
+                const category = docsStructure[key];
+
+                category.files.forEach(file => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <a class="nav-item" data-path="${file.path}" data-html="${file.isHtml || false}">
+                            <i class="nav-item-icon ${file.icon}"></i>
+                            <span>${file.title}</span>
+                        </a>
+                    `;
+                    navList.appendChild(li);
+                });
+            }
+
+            // 添加点击事件
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const path = this.getAttribute('data-path');
+                    const isHtml = this.getAttribute('data-html') === 'true';
+
+                    // 更新激活状态
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 关闭移动端侧边栏
+                    document.getElementById('sidebar').classList.remove('open');
+
+                    // 加载内容
+                    if (isHtml) {
+                        loadHtmlContent(path);
+                    } else {
+                        loadMarkdownContent(path);
+                    }
+                });
+            });
+        }
+
+        // 加载Markdown内容
+        async function loadMarkdownContent(path) {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+            try {
+                const response = await fetch('docs/' + path);
+                if (!response.ok) throw new Error('文件加载失败');
+                const text = await response.text();
+
+                // 配置marked
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        return code;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+
+                const html = marked.parse(text);
+                mainContent.innerHTML = `<div class="markdown-body">${html}</div>`;
+
+                // 滚动到顶部
+                mainContent.scrollTop = 0;
+            } catch (error) {
+                mainContent.innerHTML = `
+                    <div class="welcome-screen">
+                        <div class="welcome-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h1 class="welcome-title">加载失败</h1>
+                        <p class="welcome-subtitle">无法加载文档: ${path}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 加载HTML内容
+        async function loadHtmlContent(path) {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+            try {
+                const response = await fetch('docs/' + path);
+                if (!response.ok) throw new Error('文件加载失败');
+                const html = await response.text();
+
+                // 提取body内容
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const bodyContent = doc.body.innerHTML;
+
+                mainContent.innerHTML = `<div class="markdown-body" style="background: white; padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">${bodyContent}</div>`;
+                mainContent.scrollTop = 0;
+            } catch (error) {
+                mainContent.innerHTML = `
+                    <div class="welcome-screen">
+                        <div class="welcome-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h1 class="welcome-title">加载失败</h1>
+                        <p class="welcome-subtitle">无法加载文档: ${path}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 搜索功能
+        function initSearch() {
+            const searchInput = document.getElementById('searchInput');
+
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase().trim();
+
+                if (query.length < 2) {
+                    // 显示欢迎屏幕
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.style.display = '';
+                        nav.classList.remove('active');
+                    });
+                    return;
+                }
+
+                // 搜索所有文档
+                let results = [];
+                for (const [key, category] of Object.entries(docsStructure)) {
+                    category.files.forEach(file => {
+                        if (file.title.toLowerCase().includes(query)) {
+                            results.push({ ...file, category: key });
+                        }
+                    });
+                }
+
+                // 显示搜索结果
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    const title = nav.querySelector('span').textContent.toLowerCase();
+                    nav.style.display = title.includes(query) ? '' : 'none';
+                });
+            });
+        }
+
+        // 移动端侧边栏切换
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+            initSearch();
+        });
+    </script>
+</body>
+</html>

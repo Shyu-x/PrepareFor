@@ -1,0 +1,13 @@
+{
+  "name": "prepare-for",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:web": "yarn workspace @prepare-for/web dev",
+    "dev:api": "yarn workspace @prepare-for/api dev",
+    "build": "yarn workspaces foreach -p run build"
+  }
+}

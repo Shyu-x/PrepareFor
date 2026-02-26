@@ -1,0 +1,285 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #0891B2;
+  --primary-light: #22D3EE;
+  --secondary: #0ea5e9;
+  --accent: #8b5cf6;
+  --bg-main: #f8fafc;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Markdown 鍐呭鏍峰紡 - 鏋佽嚧鐜颁唬鎺掔増 */
+.markdown-content {
+  color: #334155;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* 鏍囬鏍峰紡 - 鐜颁唬绠€绾︽笎鍙?*/
+.markdown-content h1 {
+  font-size: 34px;
+  font-weight: 800;
+  margin: 0 0 32px;
+  padding: 32px;
+  background: linear-gradient(135deg, #0891B2 0%, #22D3EE 100%);
+  color: #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(8, 145, 178, 0.2);
+  letter-spacing: -1.5px;
+  text-align: center;
+}
+
+.markdown-content h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 48px 0 24px;
+  padding: 0 0 12px;
+  color: #0f172a;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+  letter-spacing: -0.5px;
+}
+
+.markdown-content h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, #0891B2, #22D3EE);
+}
+
+.markdown-content h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.markdown-content h3::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: #0891B2;
+  border-radius: 2px;
+}
+
+.markdown-content h4 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 24px 0 12px;
+  color: #334155;
+}
+
+/* 娈佃惤涓庡垪琛ㄥ鍣?*/
+.markdown-content p, 
+.markdown-content ul, 
+.markdown-content ol {
+  margin: 16px 0;
+}
+
+/* 鍒楄〃鏍峰紡 */
+.markdown-content ul,
+.markdown-content ol {
+  padding-left: 24px;
+}
+
+.markdown-content li {
+  margin: 12px 0;
+  padding-left: 4px;
+}
+
+.markdown-content li::marker {
+  color: #0891B2;
+  font-weight: 600;
+}
+
+/* 浠ｇ爜鏍峰紡 - 浼橀泤娣辫壊涓婚 */
+.markdown-content pre {
+  background: #0f172a !important;
+  padding: 24px;
+  border-radius: 16px;
+  margin: 24px 0;
+  overflow-x: auto;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+}
+
+.markdown-content pre code {
+  background: transparent;
+  padding: 0;
+  color: #e2e8f0 !important;
+  font-size: 13.5px;
+  line-height: 1.6;
+  border: none;
+  display: block;
+  font-family: 'Fira Code', 'JetBrains Mono', Consolas, Monaco, monospace;
+}
+
+/* 琛屽唴浠ｇ爜 - 鐜颁唬楂樹寒 */
+.markdown-content :not(pre) > code {
+  background: #f1f5f9 !important;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #0891B2 !important;
+  font-size: 0.9em;
+  font-weight: 500;
+  font-family: 'Fira Code', Consolas, monospace;
+  border: 1px solid #e2e8f0;
+}
+
+/* 寮曠敤鍧楁牱寮?- 鏋佺畝涓讳箟 */
+.markdown-content blockquote {
+  border-left: 4px solid #0891B2;
+  background: #f0f9ff;
+  padding: 16px 24px;
+  margin: 24px 0;
+  border-radius: 0 12px 12px 0;
+  color: #0c4a6e;
+  font-style: italic;
+}
+
+/* 琛ㄦ牸鏍峰紡 - 鐜颁唬鏁版嵁缃戞牸 */
+.markdown-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 32px 0;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.markdown-content th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.markdown-content td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #475569;
+}
+
+.markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-content tr:hover td {
+  background: #f8fafc;
+}
+
+/* 寮鸿皟鏍峰紡 */
+.markdown-content strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* 鍒嗗壊绾挎牱寮?*/
+.markdown-content hr {
+  border: none;
+  height: 1px;
+  background: #e2e8f0;
+  margin: 48px 0;
+}
+
+/* 閾炬帴鏍峰紡 */
+.markdown-content a {
+  color: #0891B2;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(8, 145, 178, 0.2);
+  transition: all 0.2s ease;
+}
+
+.markdown-content a:hover {
+  color: #0e7490;
+  border-bottom-color: #0891B2;
+}
+
+/* PlantUML 鍥捐〃鏍峰紡 - 澧炲己鐜荤拑鎬?*/
+.plantuml-diagram {
+  margin: 32px 0;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plantuml-diagram:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.plantuml-diagram img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* 婊氬姩鏉″畾鍒?*/
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 5px;
+  border: 2px solid #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Ant Design Overrides */
+.ant-layout-sider-trigger {
+  background: rgba(8, 145, 178, 0.8) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 0 0 20px 20px;
+}
+
+.ant-menu-item-selected {
+  background: linear-gradient(90deg, rgba(8, 145, 178, 0.1) 0%, rgba(34, 211, 238, 0.05) 100%) !important;
+  color: #0891B2 !important;
+  font-weight: 600 !important;
+}
+
+.ant-menu-item-selected .anticon {
+  color: #0891B2 !important;
+}
