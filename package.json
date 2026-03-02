@@ -1,6 +1,9 @@
 {
   "name": "prepare-for",
   "version": "1.0.0",
+  "description": "前端面试题库系统 - 帮助开发者准备前端面试",
+  "author": "Shyu <shyu@example.com>",
+  "license": "MIT",
   "private": true,
   "workspaces": [
     "apps/*"
@@ -8,6 +11,31 @@
   "scripts": {
     "dev:web": "yarn workspace @prepare-for/web dev",
     "dev:api": "yarn workspace @prepare-for/api dev",
-    "build": "yarn workspaces foreach -p run build"
-  }
+    "dev": "concurrently \"yarn dev:api\" \"yarn dev:web\"",
+    "build": "yarn workspaces foreach -p run build",
+    "start": "yarn dev:api & yarn dev:web",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "version:bump": "node scripts/version.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shyu/prepare-for.git"
+  },
+  "keywords": [
+    "interview",
+    "frontend",
+    "education",
+    "react",
+    "nextjs",
+    "nestjs"
+  ]
 }

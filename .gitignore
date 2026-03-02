@@ -1,12 +1,48 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Build
 .next/
+out/
 dist/
-.env*
+build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 *.log
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
 .idea/
 .vscode/
+*.swp
+*.swo
+
+# Test
+coverage/
+.nyc_output/
+
+# Minimax
 .minimax/
+
 # 临时脚本
 generate_full_docs.js
 rebuild.js
+
+# Docker
+.docker/

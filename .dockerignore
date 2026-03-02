@@ -1,0 +1,53 @@
+# Docker Ignore
+# 作者: Shyu
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# 文档
+README.md
+VERSION.md
+docs/
+
+# Node
+node_modules/
+apps/*/node_modules
+apps/*/.next
+apps/*/dist
+apps/*/build
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 测试
+coverage/
+.nyc_output/
+
+# 环境文件
+.env
+.env.local
+.env.*.local
+
+# Docker
+Dockerfile
+docker-compose.yml
+.docker/
+
+# 临时文件
+tmp/
+temp/
+*.tmp

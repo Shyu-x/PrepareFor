@@ -1,0 +1,81 @@
+# Docker Compose 配置
+# 作者: Shyu
+# 版本: 1.0.0
+
+version: '3.8'
+
+services:
+  # 前端服务
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web-builder
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    command: pnpm dev
+    networks:
+      - prepare-for-network
+
+  # 后端服务
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api-builder
+    ports:
+      - "42123:42123"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./apps/api:/app
+      - ./前端面试题汇总:/app/前端面试题汇总
+      - /app/node_modules
+    command: npm run start:dev
+    networks:
+      - prepare-for-network
+    depends_on:
+      - web
+
+  # 生产环境服务
+  production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+      - "42123:42123"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./前端面试题汇总:/app/前端面试题汇总
+    networks:
+      - prepare-for-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  prepare-for-network:
+    driver: bridge
+
+# 开发环境快速启动
+profiles:
+  dev:
+    web:
+      command: pnpm dev
+    api:
+      command: npm run start:dev
+
+  prod:
+    production:
+      restart: unless-stopped

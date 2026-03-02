@@ -34,30 +34,10 @@ function encodeSB64(buffer: Uint8Array): string {
   return result
 }
 
-function encodePlantUML(code: string): string {
-  // Add PlantUML header if not present
-  let plantumlCode = code.trim()
-  if (!plantumlCode.includes('@startuml')) {
-    plantumlCode = '@startuml\nskinparam backgroundColor #FEFEFE\n' + plantumlCode + '\n@enduml'
-  } else if (!plantumlCode.includes('skinparam backgroundColor')) {
-    plantumlCode = plantumlCode.replace('@startuml', '@startuml\nskinparam backgroundColor #FEFEFE')
-  }
-
-  // UTF-8 encode
-  const utf8Encoder = new TextEncoder()
-  const utf8Buffer = utf8Encoder.encode(plantumlCode)
-
-  // Deflate compress using CompressionStream API
-  // Since we can't use CompressionStream synchronously, we'll use a workaround
-  // by encoding to base64 first then using the plantuml.com API format
-  // Actually, let's use a simpler approach - the plantuml.com API accepts different encodings
-
-  // Try using the plantuml text encoding approach
-  // PlantUML also supports direct text encoding with ~1 prefix
-  // For now, let's use the simple URL encoding approach that works
-
-  // Use async compression
-  return encodeWithCompression(plantumlCode)
+// This function is kept for reference but we use async version in the component
+function encodePlantUML(_code: string): string {
+  // This is now handled async in the component
+  return ''
 }
 
 async function encodeWithCompression(code: string): Promise<string> {
@@ -106,7 +86,7 @@ export default function PlantUML({ code }: PlantUMLProps) {
         if (!plantumlCode.includes('@startuml')) {
           plantumlCode = '@startuml\nskinparam backgroundColor #FEFEFE\n' + plantumlCode + '\n@enduml'
         } else if (!plantumlCode.includes('skinparam backgroundColor')) {
-          plantumlCode = plantumlCode.replace('@startuml', '@startuml\nskinparam backgroundColor #FEFEFE')
+          plantumlCode = plantumlCode.replace('@startuml', '@startuml\nskinparam backgroundColor #FEFECE')
         }
 
         // Use the plantuml.com API with proper encoding
