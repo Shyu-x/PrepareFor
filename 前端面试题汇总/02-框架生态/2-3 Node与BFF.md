@@ -245,6 +245,219 @@ foo();
 // 但如果 bar() 返回 Promise.thenable，行为可能有差异
 ```
 
+#### 2.1.6 libuv 架构与事件循环底层原理
+
+**面试常问题目**:
+理解 Node.js 事件循环的底层原理是进阶面试中的高频考点。Node.js 的事件循环由 libuv 库实现，它是跨平台的异步 I/O 库。
+
+##### libuv 架构解析
+
+```
+┌─────────────────────────────────────────────┐
+│                   Node.js                   │
+│  ┌─────────────────────────────────────┐   │
+│  │           V8 JavaScript 引擎         │   │
+│  │  (执行 JavaScript 代码，管理堆内存)   │   │
+│  └──────────────────┬──────────────────┘   │
+│                     │                        │
+│                     ▼                        │
+│  ┌─────────────────────────────────────┐   │
+│  │           libuv 事件循环             │   │
+│  │  ┌─────────┐ ┌─────────┐ ┌───────┐ │   │
+│  │  │Timers   │ │Pending  │ │ Check │ │   │
+│  │  │         │ │Callbacks│ │       │ │   │
+│  │  └────┬────┘ └────┬────┘ └───┬───┘ │   │
+│  │       │           │          │      │   │
+│  │       ▼           ▼          ▼      │   │
+│  │  ┌────────────────────────────────┐ │   │
+│  │  │       6 个阶段循环执行          │ │   │
+│  │  │  timers → pending → idle →    │ │   │
+│  │  │  poll → check → close          │ │   │
+│  │  └────────────────────────────────┘ │   │
+│  └──────────────────┬──────────────────┘   │
+│                     │                        │
+│                     ▼                        │
+│  ┌─────────────────────────────────────┐   │
+│  │           线程池 (Thread Pool)       │   │
+│  │    处理文件 I/O、DNS、压缩等         │   │
+│  └─────────────────────────────────────┘   │
+└─────────────────────────────────────────────┘
+```
+
+##### 事件循环 6 个阶段详解
+
+```javascript
+// 事件循环每个阶段的任务队列
+
+// 阶段1: Timers (定时器阶段)
+// 执行 setTimeout 和 setInterval 回调，时间阈值 >= 0
+setTimeout(() => {
+  console.log('timers 阶段执行');
+}, 0);
+
+// 阶段2: Pending Callbacks
+// 执行被延迟到下一次循环的 I/O 回调
+
+// 阶段3: Idle, Prepare (仅 libuv 内部使用)
+// 开发者无需关注
+
+// 阶段4: Poll (轮询阶段)
+// 处理 I/O 事件，执行大部分回调
+// 如果 poll 队列不为空，依次执行回调直到队列为空
+// 如果 poll 队列为空且 check 队列有回调，会等待一段时间后进入 check 阶段
+
+// 阶段5: Check (检查阶段)
+// 执行 setImmediate() 回调
+setImmediate(() => {
+  console.log('check 阶段执行');
+});
+
+// 阶段6: Close Callbacks
+// 执行 close 事件回调，如 socket.destroy(), socket.on('close')
+```
+
+##### Node.js 特有的微任务执行时机
+
+```javascript
+// Node.js 微任务执行时机详解
+
+// 重要结论：
+// 1. 每个阶段之间都会执行微任务队列
+// 2. process.nextTick 优先级高于 Promise
+// 3. nextTick 队列在每个阶段结束后单独执行，不与其他微任务混合
+
+console.log('1. 同步代码 start');
+
+setTimeout(() => {
+  console.log('2. setTimeout 回调');
+  Promise.resolve().then(() => {
+    console.log('   Promise in setTimeout');
+  });
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('3. Promise.then');
+});
+
+process.nextTick(() => {
+  console.log('4. nextTick');
+});
+
+console.log('5. 同步代码 end');
+
+// 输出顺序:
+// 1. 同步代码 start
+// 5. 同步代码 end
+// 4. nextTick (nextTick 队列优先执行)
+// 3. Promise.then (Promise 队列)
+// 2. setTimeout 回调 (下一个事件循环阶段)
+
+// 特别注意：nextTick 会在每个阶段之间执行
+const fs = require('fs');
+
+fs.readFile(__filename, () => {
+  console.log('I/O 回调');
+
+  // 在 I/O 回调中执行微任务
+  process.nextTick(() => console.log('nextTick in I/O'));
+  Promise.resolve().then(() => console.log('Promise in I/O'));
+});
+
+// 微任务执行流程图
+// ┌───────────────────────┐
+// │  主线程同步代码        │
+// └─────────┬─────────────┘
+//           ▼
+// ┌───────────────────────┐
+// │  nextTick 队列        │ ← 最高优先级
+// └─────────┬─────────────┘
+//           ▼
+// ┌───────────────────────┐
+// │  Promise 队列          │ ← 次优先级
+// └─────────┬─────────────┘
+//           ▼
+// ┌───────────────────────┐
+// │  事件循环阶段1: Timers │
+// └─────────┬─────────────┘
+//           ▼
+// ┌───────────────────────┐
+// │  微任务队列 (nextTick │
+// │  + Promise)          │
+// └─────────┬─────────────┘
+//           ▼
+// │  ... 其他阶段 ...     │
+//           ▼
+// ┌───────────────────────┐
+// │  阶段5: Check         │
+// └─────────┬─────────────┘
+//           ▼
+// ┌───────────────────────┐
+// │  微任务队列           │
+// └───────────────────────┘
+```
+
+##### 经典面试题：事件循环执行顺序
+
+```javascript
+// 面试题1: 多个 setTimeout 和 setImmediate
+const fs = require('fs');
+
+fs.readFile(__filename, () => {
+  console.log('1. I/O 回调');
+
+  setTimeout(() => console.log('2. setTimeout'), 0);
+  setImmediate(() => console.log('3. setImmediate'));
+});
+
+// 答案: 1 -> 3 -> 2
+// 解释: I/O 回调在 poll 阶段执行，执行完后进入 check 阶段，
+//       然后才是 timers 阶段
+
+// 面试题2: process.nextTick 嵌套
+process.nextTick(() => {
+  console.log('1. nextTick 1');
+
+  process.nextTick(() => {
+    console.log('2. nextTick 2');
+
+    process.nextTick(() => {
+      console.log('3. nextTick 3');
+    });
+  });
+});
+
+Promise.resolve().then(() => {
+  console.log('4. Promise 1');
+});
+
+console.log('5. 同步代码');
+
+// 输出: 5 -> 1 -> 2 -> 3 -> 4
+// 解释: nextTick 队列会清空后再执行 Promise 队列
+
+// 面试题3: async/await 与微任务
+async function async1() {
+  console.log('1. async1 start');
+  await async2();
+  console.log('2. async1 end');
+}
+
+async function async2() {
+  console.log('3. async2');
+}
+
+console.log('4. 同步代码');
+
+async1();
+
+Promise.resolve().then(() => {
+  console.log('5. Promise');
+});
+
+// 输出: 4 -> 1 -> 3 -> 5 -> 2
+// 解释: await 后面的代码相当于 Promise.then，会作为微任务执行
+```
+
 ### 2.2 Node.js 进程与线程
 
 **面试常问题目**:
@@ -1660,6 +1873,269 @@ async function useRedis() {
 
 ---
 
+### 2.8 Node.js 内存管理
+
+**面试常问题目**:
+理解 Node.js 的内存管理机制对于编写高性能应用和排查内存问题至关重要。Node.js 使用 V8 引擎的垃圾回收机制，但开发者仍需了解内存配置和常见内存问题。
+
+#### 2.8.1 堆内存配置
+
+```javascript
+// Node.js 堆内存配置
+
+// 1. 查看默认内存限制
+// node --max-old-space-size=4096 app.js  设置老年带为 4GB
+
+// 2. 内存统计 API
+const memoryUsage = () => {
+  const used = process.memoryUsage();
+
+  console.log('heapUsed:', Math.round(used.heapUsed / 1024 / 1024), 'MB');
+  console.log('heapTotal:', Math.round(used.heapTotal / 1024 / 1024), 'MB');
+  console.log('rss (Resident Set Size):', Math.round(used.rss / 1024 / 1024), 'MB');
+  console.log('external:', Math.round(used.external / 1024 / 1024), 'MB');
+
+  // rss: 进程占用的总内存
+  // heapTotal: V8 堆内存总量
+  // heapUsed: 已使用的堆内存
+  // external: V8 管理的 C++ 对象内存
+};
+
+// 3. 堆内存各区域说明
+// 新生代 (New Space): 1-8MB，分为 from-space 和 to-space
+// 老年带 (Old Space): 存放长时间存活的对象
+// 大对象区 (Large Object Space): 存放大于老年带阈值的大对象
+// 代码区 (Code Space): 存放编译后的代码
+// 属性区 (Property Cell Space): 存放属性槽
+// 调试区 (Debugger Space): 调试相关
+```
+
+#### 2.8.2 垃圾回收机制
+
+```javascript
+// V8 垃圾回收机制
+
+// 1. Scavenge (新生代垃圾回收)
+// 适用于生命周期短的对象，使用 from-space 和 to-space 复制
+// 效率高，但内存利用率只有 50%
+
+// 2. Mark-Sweep / Mark-Compact (老年带垃圾回收)
+// Mark-Sweep: 标记清除，回收死亡对象
+// Mark-Compact: 标记整理，整理碎片化内存
+
+// 3. 增量标记 (Incremental Marking)
+// 将 GC 分为多个小步骤，避免长时间停顿
+
+// 4. 垃圾回收触发时机
+setInterval(() => {
+  const used = process.memoryUsage();
+  const heapUsedMB = Math.round(used.heapUsed / 1024 / 1024);
+
+  // 如果老年带使用超过 70%，建议触发 GC 或排查内存
+  if (heapUsedMB > 1024) {
+    console.warn('Memory usage high:', heapUsedMB, 'MB');
+  }
+}, 5000);
+
+// 5. 手动触发 GC (仅用于调试)
+if (global.gc) {
+  console.log('Running GC...');
+  global.gc();
+}
+
+// 启动时启用 GC 调试
+// node --expose-gc --inspect app.js
+```
+
+#### 2.8.3 内存泄漏排查
+
+```javascript
+// 内存泄漏排查方法
+
+// 1. 使用 --inspect 进行内存分析
+// node --inspect app.js
+// 打开 Chrome DevTools -> Memory -> Heap Snapshot
+
+// 2. 定位内存泄漏代码
+const leakDetector = () => {
+  const used = process.memoryUsage();
+
+  return {
+    heapUsed: Math.round(used.heapUsed / 1024 / 1024),
+    // 对比不同时刻的 heapUsed，持续增长说明有内存泄漏
+  };
+};
+
+// 3. 常见内存泄漏场景
+
+// 场景1: 全局变量泄漏
+// 错误
+global.cacheData = [];
+global.cacheData.push(largeObject);
+
+// 解决: 使用 WeakMap 或及时清理
+const cache = new WeakMap();
+
+// 场景2: 闭包引用
+function createClosure() {
+  const bigData = new Array(1000000);
+
+  return {
+    getData: () => bigData.length, // 错误: 整个 bigData 被保留
+    getSize: () => bigData.length  // 正确: 只保留需要的数据
+  };
+}
+
+// 场景3: 事件监听器未移除
+class EventManager {
+  constructor() {
+    this.listeners = new Map();
+  }
+
+  subscribe(event, handler) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, []);
+    }
+    this.listeners.get(event).push(handler);
+  }
+
+  unsubscribe(event, handler) {
+    const handlers = this.listeners.get(event);
+    if (handlers) {
+      const index = handlers.indexOf(handler);
+      if (index > -1) handlers.splice(index, 1);
+    }
+  }
+
+  // 内存泄漏: 组件销毁时未取消订阅
+}
+
+// 正确做法
+class SafeEventManager extends EventManager {
+  constructor() {
+    super();
+    this.cleanupCallbacks = [];
+  }
+
+  subscribeWithCleanup(event, handler) {
+    this.subscribe(event, handler);
+    this.cleanupCallbacks.push(() => this.unsubscribe(event, handler));
+  }
+
+  destroy() {
+    this.cleanupCallbacks.forEach(cb => cb());
+    this.cleanupCallbacks = [];
+    this.listeners.clear();
+  }
+}
+
+// 场景4: 定时器未清理
+class TimerLeak {
+  constructor() {
+    this.timers = [];
+  }
+
+  startPolling() {
+    const timer = setInterval(() => {
+      // 轮询任务
+    }, 1000);
+    this.timers.push(timer);
+  }
+
+  stopPolling() {
+    this.timers.forEach(clearInterval);
+    this.timers = [];
+  }
+}
+
+// 场景5: 模块级缓存无限增长
+// 错误
+const cache = {};
+function getData(id) {
+  if (!cache[id]) {
+    cache[id] = fetchFromDB(id);
+  }
+  return cache[id];
+}
+
+// 解决: 使用 LRU 缓存或设置过期时间
+const LRU = require('lru-cache');
+const cache = new LRU({
+  max: 1000,
+  ttl: 1000 * 60 * 10 // 10 分钟过期
+});
+```
+
+#### 2.8.4 内存优化最佳实践
+
+```javascript
+// 内存优化技巧
+
+// 1. 对象池模式 - 复用对象减少 GC 压力
+class ObjectPool {
+  constructor(factory, maxSize = 100) {
+    this.pool = [];
+    this.factory = factory;
+    this.maxSize = maxSize;
+  }
+
+  acquire() {
+    return this.pool.pop() || this.factory();
+  }
+
+  release(obj) {
+    if (this.pool.length < this.maxSize) {
+      this.pool.push(obj);
+    }
+  }
+}
+
+// 示例: 复用 Buffer
+const bufferPool = new ObjectPool(() => Buffer.alloc(8192));
+const buf = bufferPool.acquire();
+// 使用 buffer
+bufferPool.release(buf);
+
+// 2. 流式处理 - 避免一次性加载大文件
+const fs = require('fs');
+const readStream = fs.createReadStream('large-file.txt');
+const chunks = [];
+
+readStream.on('data', (chunk) => {
+  chunks.push(chunk);
+  // 处理每个 chunk，而不是等待全部加载
+});
+
+readStream.on('end', () => {
+  const result = Buffer.concat(chunks);
+});
+
+// 3. 及时释放大对象引用
+async function processLargeData() {
+  const largeData = await fetchLargeData();
+
+  try {
+    const result = transform(largeData);
+    return result;
+  } finally {
+    // 显式释放
+    largeData.length = 0;
+  }
+}
+
+// 4. 使用 WeakRef 和 FinalizationRegistry
+// (Node.js 14+)
+const registry = new FinalizationRegistry((value) => {
+  console.log('Object with value', value, 'is being garbage collected');
+});
+
+let obj = { data: 'important' };
+registry.register(obj, obj.data);
+obj = null; // 不再持有引用，对象可被回收
+```
+
+---
+
 ## 第三章 BFF 架构深入
 
 ### 3.1 BFF 定义与优势详解
@@ -2452,6 +2928,576 @@ app.post('/api/bff/oauth/token', async (req, res) => {
   const tokenData = await oauthService.exchangeCode(provider, code);
 
   res.json(tokenData);
+});
+```
+
+---
+
+### 3.6 BFF vs API Gateway
+
+**面试常问题目**:
+BFF 和 API Gateway 都是微服务架构中的重要组件，但它们的职责和使用场景有所不同。理解两者的区别是架构设计面试中的常见问题。
+
+#### 3.6.1 核心区别对比
+
+| 特性 | BFF | API Gateway |
+|------|-----|-------------|
+| 层级位置 | 前端与后端之间 | 客户端与微服务之间 |
+| 职责 | 适配前端需求，接口聚合 | 统一入口，请求路由 |
+| 粒度 | 按前端类型（Web/Mobile） | 统一网关 |
+| 业务逻辑 | 包含业务数据转换 | 仅路由和通用处理 |
+| 典型功能 | 字段裁剪、数据聚合 | 限流、鉴权、协议转换 |
+
+```javascript
+// BFF 示例：针对前端类型的数据适配
+app.get('/api/bff/products', async (req, res) => {
+  const products = await productService.getProducts();
+
+  // 根据客户端类型返回不同数据
+  const clientType = req.headers['x-client-type'];
+
+  if (clientType === 'mobile') {
+    // Mobile 端返回精简数据
+    res.json(products.map(p => ({
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      thumbnail: p.images[0]
+    })));
+  } else {
+    // Web 端返回完整数据
+    res.json(products);
+  }
+});
+
+// API Gateway 示例：统一入口和路由
+// 使用 Kong、Nginx、Express Gateway 等实现
+app.all('/api/gateway/:service/*', async (req, res) => {
+  const service = req.params.service;
+  const path = req.params[0];
+
+  // 统一限流
+  await rateLimiter.check(req.ip);
+
+  // 统一鉴权
+  const token = req.headers.authorization;
+  const user = await authService.verify(token);
+  req.user = user;
+
+  // 路由转发
+  const targetService = serviceRoutes[service];
+  const response = await http.request({
+    method: req.method,
+    url: `${targetService}/${path}`,
+    body: req.body,
+    headers: { ...req.headers, 'x-user-id': user.id }
+  });
+
+  res.status(response.status).json(response.body);
+});
+```
+
+#### 3.6.2 两者结合使用
+
+```javascript
+// BFF + API Gateway 架构
+
+//                    ┌─────────────┐
+//                    │   Browser   │
+//                    └──────┬──────┘
+//                           │
+//                    ┌──────▼──────┐
+//                    │ API Gateway │  (Nginx / Kong)
+//                    │ - 限流      │
+//                    │ - 鉴权      │
+//                    │ - 路由      │
+//                    └──────┬──────┘
+//                           │
+//         ┌─────────────────┼─────────────────┐
+//         │                 │                 │
+//    ┌────▼────┐      ┌────▼────┐      ┌────▼────┐
+//    │  BFF   │      │  BFF   │      │  BFF   │
+//    │  Web   │      │ Mobile  │      │  Mini   │
+//    └────┬────┘      └────┬────┘      └────┬────┘
+//         │                 │                 │
+//         └─────────────────┼─────────────────┘
+//                           │
+//                    ┌──────▼──────┐
+//                    │  微服务集群  │
+//                    │ - User      │
+//                    │ - Order     │
+//                    │ - Product   │
+//                    └─────────────┘
+```
+
+#### 3.6.3 何时选择 BFF vs API Gateway
+
+```javascript
+// 选择建议
+
+// 使用 BFF 的场景
+// 1. 多个前端应用需要不同格式的数据
+// 2. 需要进行复杂的数据聚合和转换
+// 3. 前端需要个性化的接口设计
+// 4. 需要针对不同端做性能优化
+
+// 使用 API Gateway 的场景
+// 1. 统一的鉴权、限流需求
+// 2. 服务路由和负载均衡
+// 3. 协议转换 (REST -> GraphQL)
+// 4. 统一的日志和监控
+
+// 最佳实践: 两者结合使用
+// API Gateway 处理通用逻辑，BFF 处理业务适配
+```
+
+---
+
+### 3.7 服务端聚合模式
+
+**面试常问题目**:
+BFF 层的核心价值之一就是进行服务端数据聚合。了解不同的聚合模式有助于设计高效的数据聚合方案。
+
+#### 3.7.1 串行聚合
+
+```javascript
+// 串行聚合: 按顺序调用依赖的服务
+// 适用于服务间有依赖关系的场景
+
+app.get('/api/bff/order/:orderId', async (req, res) => {
+  const { orderId } = req.params;
+
+  // 步骤1: 获取订单信息
+  const order = await orderService.getOrder(orderId);
+
+  // 步骤2: 依赖订单信息获取用户信息
+  const user = await userService.getUser(order.userId);
+
+  // 步骤3: 依赖订单信息获取商品信息
+  const products = await productService.getProducts(order.productIds);
+
+  // 步骤4: 获取物流信息
+  const shipping = await shippingService.getShipping(order.shippingId);
+
+  // 聚合结果
+  res.json({
+    order,
+    user: { id: user.id, name: user.name },
+    products,
+    shipping
+  });
+});
+
+// 时间复杂度: O(n) 其中 n 为服务调用次数
+```
+
+#### 3.7.2 并行聚合
+
+```javascript
+// 并行聚合: 同时调用多个无依赖关系的服务
+// 适用于服务间无依赖的场景，显著减少响应时间
+
+app.get('/api/bff/dashboard', async (req, res) => {
+  const userId = req.user.id;
+
+  // 同时发起多个请求
+  const [user, orders, notifications, recommendations] = await Promise.all([
+    userService.getProfile(userId),
+    orderService.getRecentOrders(userId),
+    notificationService.getUnread(userId),
+    recommendationService.getForUser(userId)
+  ]);
+
+  res.json({
+    user: {
+      name: user.name,
+      avatar: user.avatar,
+      level: user.level
+    },
+    orders: orders.slice(0, 5).map(o => ({
+      id: o.id,
+      status: o.status,
+      total: o.total
+    })),
+    unreadCount: notifications.filter(n => !n.read).length,
+    recommendations: recommendations.slice(0, 10)
+  });
+});
+
+// 时间复杂度: O(1) - 取最慢请求的时间
+```
+
+#### 3.7.3 混合聚合模式
+
+```javascript
+// 混合模式: 结合串行和并行的最优方案
+
+app.get('/api/bff/checkout/:cartId', async (req, res) => {
+  const { cartId } = req.params;
+  const userId = req.user.id;
+
+  // 第一步: 并行获取购物车和用户信息（无依赖）
+  const [cart, user] = await Promise.all([
+    cartService.getCart(cartId),
+    userService.getProfile(userId)
+  ]);
+
+  // 第二步: 依赖购物车获取商品信息（并行）
+  const products = await Promise.all(
+    cart.items.map(item => productService.getProduct(item.productId))
+  );
+
+  // 第三步: 依赖商品信息计算库存（串行）
+  const inventoryChecks = await Promise.all(
+    products.map(p => inventoryService.check(p.id))
+  );
+
+  // 第四步: 依赖用户获取地址（并行）
+  const [addresses, shippingOptions] = await Promise.all([
+    addressService.getUserAddresses(userId),
+    shippingService.getOptions()
+  ]);
+
+  // 聚合结果
+  res.json({
+    cart: {
+      items: cart.items.map((item, i) => ({
+        product: products[i],
+        quantity: item.quantity,
+        available: inventoryChecks[i].available
+      })),
+      subtotal: cart.subtotal
+    },
+    user: {
+      name: user.name,
+      points: user.points
+    },
+    addresses,
+    shippingOptions
+  });
+});
+```
+
+#### 3.7.4 错误处理与容错
+
+```javascript
+// 聚合层的错误处理策略
+
+// 1. 允许部分失败
+async function resilientAggregation(requests) {
+  const results = await Promise.allSettled(requests);
+
+  const data = {};
+  const errors = [];
+
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      data[result.value.key] = result.value.data;
+    } else {
+      errors.push({ index, error: result.reason });
+      // 设置默认值或使用缓存
+      data[`fallback_${index}`] = getFallbackData(index);
+    }
+  });
+
+  return { data, errors, partial: errors.length > 0 };
+}
+
+// 2. 使用 Circuit Breaker 模式
+const CircuitBreaker = require('opossum');
+
+const options = {
+  timeout: 3000,
+  errorThresholdPercentage: 50,
+  resetTimeout: 30000
+};
+
+const breaker = new CircuitBreaker(orderService.getOrder, options);
+
+breaker.on('open', () => console.log('Circuit opened'));
+breaker.on('close', () => console.log('Circuit closed'));
+
+app.get('/api/bff/order/:id', async (req, res) => {
+  try {
+    const order = await breaker.fire(req.params.id);
+    res.json(order);
+  } catch (error) {
+    // 返回缓存数据或降级响应
+    const cached = await cache.get(`order:${req.params.id}`);
+    if (cached) return res.json(cached);
+
+    res.status(503).json({ error: 'Service temporarily unavailable' });
+  }
+});
+```
+
+---
+
+### 3.8 缓存策略
+
+**面试常问题目**:
+BFF 层的缓存策略对于提升性能和减轻后端压力至关重要。合理的缓存设计可以显著改善用户体验。
+
+#### 3.8.1 多级缓存架构
+
+```javascript
+// BFF 多级缓存架构
+
+// L1: 进程内缓存 (Memory Cache)
+// L2: Redis 分布式缓存
+// L3: HTTP 缓存 (CDN/Browser)
+
+const CacheService = require('./services/cache');
+
+// 进程内缓存 (使用 node-cache 或 lru-cache)
+const localCache = new Map();
+
+// L1 缓存操作
+function getFromLocalCache(key) {
+  const item = localCache.get(key);
+  if (!item) return null;
+
+  if (item.expire < Date.now()) {
+    localCache.delete(key);
+    return null;
+  }
+  return item.value;
+}
+
+function setLocalCache(key, value, ttl = 60000) {
+  localCache.set(key, {
+    value,
+    expire: Date.now() + ttl
+  });
+}
+
+// L2 Redis 缓存操作
+async function getFromRedis(key) {
+  const value = await redis.get(key);
+  return value ? JSON.parse(value) : null;
+}
+
+async function setRedis(key, value, ttl = 3600) {
+  await redis.setex(key, ttl, JSON.stringify(value));
+}
+
+// 多级缓存读取
+async function getCachedData(key, fetcher, ttl = 300) {
+  // L1: 尝试进程缓存
+  let data = getFromLocalCache(key);
+  if (data) return data;
+
+  // L2: 尝试 Redis
+  data = await getFromRedis(key);
+  if (data) {
+    setLocalCache(key, data, ttl * 1000); // 写入 L1
+    return data;
+  }
+
+  // L3: 读取源
+  data = await fetcher();
+
+  // 写入缓存
+  setLocalCache(key, data, ttl * 1000);
+  await setRedis(key, data, ttl);
+
+  return data;
+}
+```
+
+#### 3.8.2 缓存策略模式
+
+```javascript
+// 1. Cache-Aside (旁路缓存) - 最常用
+
+app.get('/api/bff/user/:id', async (req, res) => {
+  const { id } = req.params;
+  const cacheKey = `user:${id}`;
+
+  // 读操作
+  let user = await getCachedData(cacheKey, () => userService.getUser(id));
+
+  // 如果缓存不存在，从数据库读取并写入缓存
+  if (!user) {
+    user = await userService.getUser(id);
+    if (user) {
+      await setRedis(cacheKey, user, 3600);
+    }
+  }
+
+  res.json(user);
+});
+
+// 写操作时删除缓存
+app.put('/api/bff/user/:id', async (req, res) => {
+  const { id } = req.params;
+
+  await userService.updateUser(id, req.body);
+
+  // 删除缓存，下一次读取会重新加载
+  await redis.del(`user:${id}`);
+
+  res.json({ success: true });
+});
+
+// 2. Write-Through (写穿透)
+
+app.post('/api/bff/user', async (req, res) => {
+  const user = await userService.createUser(req.body);
+
+  // 同时写入数据库和缓存
+  await setRedis(`user:${user.id}`, user, 3600);
+
+  res.json(user);
+});
+
+// 3. TTL 差异化策略
+
+const cacheStrategies = {
+  // 用户信息: 变更少，缓存时间长
+  user: { ttl: 3600, refreshAhead: 300 },
+
+  // 商品信息: 变更频繁，缓存时间短
+  product: { ttl: 300, refreshAhead: 30 },
+
+  // 列表数据: 缓存时间中等
+  list: { ttl: 600, refreshAhead: 60 },
+
+  // 配置数据: 几乎不变，缓存时间长
+  config: { ttl: 86400, refreshAhead: 3600 }
+};
+```
+
+#### 3.8.3 缓存击穿与雪崩防护
+
+```javascript
+// 1. 缓存击穿 (Cache Stampede)
+// 使用互斥锁或分布式锁防止大量请求同时访问数据库
+
+const lock = require('redlock');
+const locks = new lock([redis]);
+
+async function getWithLock(key, fetcher, ttl) {
+  let data = await getFromRedis(key);
+  if (data) return data;
+
+  // 尝试获取锁
+  const lockKey = `lock:${key}`;
+  try {
+    await locks.acquire(lockKey, 5000);
+
+    // 双重检查
+    data = await getFromRedis(key);
+    if (data) return data;
+
+    data = await fetcher();
+    await setRedis(key, data, ttl);
+
+    return data;
+  } catch (error) {
+    // 未获取到锁，等待后重试
+    await new Promise(r => setTimeout(r, 100));
+    return getFromRedis(key);
+  } finally {
+    locks.release(lockKey).catch(() => {});
+  }
+}
+
+// 2. 缓存雪崩 (Cache Avalanche)
+// 使用随机 TTL + 预热
+
+function getRandomTTL(base, variance) {
+  return base + Math.floor(Math.random() * variance * 2 - variance);
+}
+
+app.get('/api/bff/products', async (req, res) => {
+  const cacheKey = 'products:all';
+
+  let products = await getFromRedis(cacheKey);
+  if (!products) {
+    products = await productService.getAllProducts();
+    // 随机 TTL 3600-5400 秒
+    const ttl = getRandomTTL(3600, 900);
+    await setRedis(cacheKey, products, ttl);
+  }
+
+  res.json(products);
+});
+
+// 3. 缓存预热
+async function cacheWarmUp() {
+  const hotKeys = [
+    'products:featured',
+    'categories:all',
+    'config:global'
+  ];
+
+  await Promise.all(
+    hotKeys.map(async (key) => {
+      const data = await fetchFromDB(key);
+      await setRedis(key, data, getRandomTTL(3600, 300));
+    })
+  );
+
+  console.log('Cache warm up completed');
+}
+```
+
+#### 3.8.4 HTTP 缓存与 CDN
+
+```javascript
+// BFF 层设置 HTTP 缓存头
+
+app.get('/api/bff/products', async (req, res) => {
+  const products = await productService.getProducts();
+
+  // ETag 缓存
+  const etag = crypto.createHash('md5').update(JSON.stringify(products)).digest('hex');
+
+  // 检查 If-None-Match
+  if (req.headers['if-none-match'] === etag) {
+    return res.status(304).end();
+  }
+
+  res.set({
+    'Cache-Control': 'public, max-age=300, s-maxage=600',
+    'ETag': etag,
+    'Vary': 'Accept-Encoding'
+  });
+
+  res.json(products);
+});
+
+// CDN 缓存策略
+
+// 1. 静态资源 - 长期缓存
+app.use('/static', express.static('public', {
+  maxAge: '1y',
+  etag: true
+}));
+
+// 2. 个性化数据 - 私有缓存
+app.get('/api/bff/user/profile', async (req, res) => {
+  const profile = await getUserProfile(req.user.id);
+
+  res.set({
+    'Cache-Control': 'private, max-age=0, must-revalidate',
+    'Vary': 'Authorization'
+  });
+
+  res.json(profile);
+});
+
+// 3. 热点数据 - CDN 缓存
+app.get('/api/bff/products/popular', async (req, res) => {
+  const products = await getPopularProducts();
+
+  res.set({
+    'Cache-Control': 'public, max-age=60, s-maxage=300',
+    'X-Cache-TTL': '60'
+  });
+
+  res.json(products);
 });
 ```
 
