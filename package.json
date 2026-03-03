@@ -13,11 +13,7 @@
     "dev:api": "yarn workspace @prepare-for/api dev",
     "dev": "concurrently \"yarn dev:api\" \"yarn dev:web\"",
     "build": "yarn workspaces foreach -p run build",
-    "start": "yarn dev:api & yarn dev:web",
-    "docker:build": "docker-compose build",
-    "docker:up": "docker-compose up",
-    "docker:down": "docker-compose down",
-    "version:bump": "node scripts/version.js"
+    "start": "concurrently \"yarn dev:api\" \"yarn dev:web\""
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
