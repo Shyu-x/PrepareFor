@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第5卷-项目实战案例 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#1-webenv-os" class="toc-link "><span>第1章 WebEnv-OS</span></a></li><li class="toc-item"><a href="#1.1" class="toc-link "><span>1.1 窗口管理系统具体实现</span></a></li><li class="toc-item"><a href="#1.1" class="toc-link "><span>1.1 窗口组件代码</span></a></li><li class="toc-item"><a href="#1.2" class="toc-link "><span>1.2 拖拽性能优化实现</span></a></li><li class="toc-item"><a href="#1.3-z-index" class="toc-link "><span>1.3 窗口层级管理（Z-Index）</span></a></li><li class="toc-item"><a href="#1.4" class="toc-link "><span>1.4 窗口状态持久化</span></a></li><li class="toc-item"><a href="#2.1" class="toc-link "><span>2.1 文件系统具体实现</span></a></li><li class="toc-item"><a href="#2.1" class="toc-link "><span>2.1 大文件处理与分块存储</span></a></li><li class="toc-item"><a href="#2.2" class="toc-link "><span>2.2 离线支持与数据同步</span></a></li><li class="toc-item"><a href="#2.3" class="toc-link "><span>2.3 文件系统适配器模式</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第5卷 项目实战案例 / 第1章 WebEnv-OS</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第5卷 项目实战案例</span>
+            </div>
+            <h1 class="article-title">第5卷-项目实战案例</h1>
+          </header>
+
+          <div class="content"><h2 id="1-webenv-os">第1章 WebEnv-OS</h2>
+<h3 id="1.1">1.1 窗口管理系统具体实现</h3>
+<h3 id="1.1">1.1 窗口组件代码</h3>
+<h4 id="1.1.1-window">1.1.1 Window 组件的完整代码结构</h4>
+<p><strong>文件位置</strong>: <code>D:\Develeping\webEnv\webenv-os\src\components\desktop\Window.tsx</code></p>
+<pre class="hljs"><code><span class="hljs-comment">/**
+ * 窗口组件 - 原子化组件
+ * 支持拖拽、调整大小、最小化、最大化、关闭
+ */</span>
+
+<span class="hljs-string">&quot;use client&quot;</span>;
+
+<span class="hljs-keyword">import</span> { useState, useRef, useEffect, <span class="hljs-title class_">ReactNode</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">WindowProps</span> {
+  <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">children</span>: <span class="hljs-title class_">ReactNode</span>;
+  <span class="hljs-attr">initialPosition</span>?: { <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">y</span>: <span class="hljs-built_in">number</span> };
+  <span class="hljs-attr">initialSize</span>?: { <span class="hljs-attr">width</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">height</span>: <span class="hljs-built_in">number</span> };
+  <span class="hljs-attr">minSize</span>?: { <span class="hljs-attr">width</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">height</span>: <span class="hljs-built_in">number</span> };
+  <span class="hljs-attr">visible</span>?: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">onClose</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">onMinimize</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">onMaximize</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">resizable</span>?: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">draggable</span>?: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">zIndex</span>?: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">className</span>?: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">style</span>?: <span class="hljs-title class_">React</span>.<span class="hljs-property">CSSProperties</span>;
+  <span class="hljs-attr">onMouseDown</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">windowControls</span>?: <span class="hljs-string">&quot;windows&quot;</span> | <span class="hljs-string">&quot;macos&quot;</span> | <span class="hljs-string">&quot;linux&quot;</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Window</span>(<span class="hljs-params">{
+  title,
+  children,
+  initialPosition = { x: <span class="hljs-number">100</span>, y: <span class="hljs-number">100</span> },
+  initialSize = { width: <span class="hljs-number">600</span>, height: <span class="hljs-number">400</span> },
+  visible = <span class="hljs-literal">true</span>,
+  onClose,
+  onMinimize,
+  onMaximize,
+  resizable = <span class="hljs-literal">true</span>,
+  draggable = <span class="hljs-literal">true</span>,
+  zIndex = <span class="hljs-number">1000</span>,
+  className = <span class="hljs-string">&quot;&quot;</span>,
+  style = {},
+  onMouseDown,
+  minSize = { width: <span class="hljs-number">400</span>, height: <span class="hljs-number">300</span> },
+}: <span class="hljs-title class_">WindowProps</span></span>) {
+  <span class="hljs-comment">// 状态管理</span>
+  <span class="hljs-keyword">const</span> [position, setPosition] = <span class="hljs-title function_">useState</span>(initialPosition);
+  <span class="hljs-keyword">const</span> [size, setSize] = <span class="hljs-title function_">useState</span>(initialSize);
+</code></pre><h3 id="1.2">1.2 拖拽性能优化实现</h3>
+<h4 id="1.2.1-css-transform">1.2.1 CSS Transform 优化</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 优化策略1: 使用 CSS transform 代替 left/top</span>
+<span class="hljs-comment">// CSS transform 使用 GPU 合成，不触发重排</span>
+<span class="hljs-keyword">const</span> handleDragMove = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">e</span>: <span class="hljs-title class_">MouseEvent</span></span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!isDragging) <span class="hljs-keyword">return</span>;
+
+  <span class="hljs-comment">// 使用 requestAnimationFrame 合并多次移动为单次渲染</span>
+  <span class="hljs-title function_">requestAnimationFrame</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> newX = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">0</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(e.<span class="hljs-property">clientX</span> - dragStart.<span class="hljs-property">x</span>, bounds.<span class="hljs-property">width</span> - size.<span class="hljs-property">width</span>));
+    <span class="hljs-keyword">const</span> newY = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(taskbarHeight, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(e.<span class="hljs-property">clientY</span> - dragStart.<span class="hljs-property">y</span>, bounds.<span class="hljs-property">height</span> - size.<span class="hljs-property">height</span>));
+
+    <span class="hljs-comment">// 使用 transform 代替 left/top</span>
+    <span class="hljs-title function_">setPosition</span>({ <span class="hljs-attr">x</span>: newX, <span class="hljs-attr">y</span>: newY });
+  });
+}, [isDragging, dragStart, size, bounds, taskbarHeight]);
+
+<span class="hljs-comment">// CSS 样式优化</span>
+<span class="hljs-keyword">const</span> windowStyle = {
+  <span class="hljs-attr">transform</span>: <span class="hljs-string">`translate(<span class="hljs-subst">${position.x}</span>px, <span class="hljs-subst">${position.y}</span>px)`</span>,
+  <span class="hljs-attr">willChange</span>: <span class="hljs-string">&#x27;transform&#x27;</span>,  <span class="hljs-comment">// 提示浏览器优化</span>
+};
+</code></pre><h4 id="1.2.2">1.2.2 事件委托优化</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 优化策略2: 事件委托到 document</span>
+<span class="hljs-comment">// 在拖拽开始时绑定到 document，结束时解绑</span>
+<span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!isDragging &amp;&amp; !isResizing) <span class="hljs-keyword">return</span>;
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleMouseMove</span> = (<span class="hljs-params"><span class="hljs-attr">e</span>: <span class="hljs-title class_">MouseEvent</span></span>) =&gt; {
+    <span class="hljs-title function_">handleDragMove</span>(e);
+    <span class="hljs-title function_">handleResizeMove</span>(e);
+  };
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleMouseUp</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-title function_">handleDragEnd</span>();
+    <span class="hljs-title function_">handleResizeEnd</span>();
+  };
+
+  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, handleMouseMove);
+  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mouseup&#x27;</span>, handleMouseUp);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, handleMouseMove);
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;mouseup&#x27;</span>, handleMouseUp);
+  };
+}, [isDragging, isResizing]);
+</code></pre><h3 id="1.3-z-index">1.3 窗口层级管理（Z-Index）</h3>
+<pre class="hljs"><code><span class="hljs-comment">// 使用全局 Z-Index 计数器</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MAX_BASE_ZINDEX</span> = <span class="hljs-number">10000</span>;
+
+<span class="hljs-keyword">const</span> useWindowManager = create&lt;<span class="hljs-title class_">WindowManagerState</span>&gt;()(<span class="hljs-function">(<span class="hljs-params">set, get</span>) =&gt;</span> ({
+  <span class="hljs-attr">windows</span>: [],
+  <span class="hljs-attr">activeWindowId</span>: <span class="hljs-literal">null</span>,
+
+  <span class="hljs-attr">bringToFront</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">windowId</span>: <span class="hljs-built_in">string</span></span>) =&gt;</span> {
+    <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> maxZ = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(...state.<span class="hljs-property">windows</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">w</span> =&gt;</span> w.<span class="hljs-property">zIndex</span>), <span class="hljs-variable constant_">MAX_BASE_ZINDEX</span>);
+
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">activeWindowId</span>: windowId,
+        <span class="hljs-attr">windows</span>: state.<span class="hljs-property">windows</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">w</span> =&gt;</span>
+          w.<span class="hljs-property">id</span> === windowId
+            ? { ...w, <span class="hljs-attr">zIndex</span>: maxZ + <span class="hljs-number">1</span> }
+            : w
+        ),
+      };
+    });
+  },
+
+  <span class="hljs-comment">// 最小化时记录当前层级</span>
+  <span class="hljs-attr">minimize</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">windowId</span>: <span class="hljs-built_in">string</span></span>) =&gt;</span> {
+    <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({
+      <span class="hljs-attr">windows</span>: state.<span class="hljs-property">windows</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">w</span> =&gt;</span>
+        w.<span class="hljs-property">id</span> === windowId
+          ? { ...w, <span class="hljs-attr">minimized</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">prevZIndex</span>: w.<span class="hljs-property">zIndex</span> }
+          : w
+      ),
+    }));
+  },
+
+  <span class="hljs-comment">// 恢复时回到之前的层级</span>
+  <span class="hljs-attr">restore</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">windowId</span>: <span class="hljs-built_in">string</span></span>) =&gt;</span> {
+    <span class="hljs-title function_">set</span>(<span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({
+      <span class="hljs-attr">windows</span>: state.<span class="hljs-property">windows</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">w</span> =&gt;</span>
+        w.<span class="hljs-property">id</span> === windowId
+          ? { ...w, <span class="hljs-attr">minimized</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">zIndex</span>: w.<span class="hljs-property">prevZIndex</span> || <span class="hljs-variable constant_">MAX_BASE_ZINDEX</span> + <span class="hljs-number">1</span> }
+          : w
+      ),
+    }));
+  },
+}));
+</code></pre><h3 id="1.4">1.4 窗口状态持久化</h3>
+<pre class="hljs"><code><span class="hljs-comment">// 节流的保存函数</span>
+<span class="hljs-keyword">const</span> saveWindowState = <span class="hljs-title function_">useCallback</span>(
+  <span class="hljs-title function_">throttle</span>(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">windows</span>: <span class="hljs-title class_">Window</span>[]</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> stateToSave = windows.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">w</span> =&gt;</span> ({
+      <span class="hljs-attr">id</span>: w.<span class="hljs-property">id</span>,
+      <span class="hljs-attr">position</span>: w.<span class="hljs-property">position</span>,
+      <span class="hljs-attr">size</span>: w.<span class="hljs-property">size</span>,
+      <span class="hljs-attr">zIndex</span>: w.<span class="hljs-property">zIndex</span>,
+    }));
+    <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&#x27;windowState&#x27;</span>, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(stateToSave));
+  }, <span class="hljs-number">1000</span>),
+  []
+);
+
+<span class="hljs-comment">// 监听窗口变化并保存</span>
+<span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">saveWindowState</span>(windows);
+}, [windows, saveWindowState]);
+</code></pre><hr>
+<h3 id="2.1">2.1 文件系统具体实现</h3>
+<h3 id="2.1">2.1 大文件处理与分块存储</h3>
+<pre class="hljs"><code><span class="hljs-comment">// 分块存储实现</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">CHUNK_SIZE</span> = <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>; <span class="hljs-comment">// 1MB per chunk</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ChunkedFileStorage</span> {
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">saveLargeFile</span>(<span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">content</span>: <span class="hljs-title class_">ArrayBuffer</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">string</span>&gt; {
+    <span class="hljs-keyword">const</span> fileId = crypto.<span class="hljs-title function_">randomUUID</span>();
+    <span class="hljs-keyword">const</span> totalChunks = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(content.<span class="hljs-property">byteLength</span> / <span class="hljs-variable constant_">CHUNK_SIZE</span>);
+
+    <span class="hljs-comment">// 保存元数据</span>
+    <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">db</span>.<span class="hljs-title function_">write</span>({
+      <span class="hljs-attr">id</span>: fileId,
+      path,
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;file&#x27;</span>,
+      totalChunks,
+      <span class="hljs-attr">totalSize</span>: content.<span class="hljs-property">byteLength</span>,
+      <span class="hljs-attr">chunkSize</span>: <span class="hljs-variable constant_">CHUNK_SIZE</span>,
+    });
+
+    <span class="hljs-comment">// 分块写入</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; totalChunks; i++) {
+      <span class="hljs-keyword">const</span> start = i * <span class="hljs-variable constant_">CHUNK_SIZE</span>;
+      <span class="hljs-keyword">const</span> end = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(start + <span class="hljs-variable constant_">CHUNK_SIZE</span>, content.<span class="hljs-property">byteLength</span>);
+      <span class="hljs-keyword">const</span> chunk = content.<span class="hljs-title function_">slice</span>(start, end);
+
+      <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">db</span>.<span class="hljs-title function_">write</span>({
+        <span class="hljs-attr">id</span>: <span class="hljs-string">`<span class="hljs-subst">${fileId}</span>_chunk_<span class="hljs-subst">${i}</span>`</span>,
+        <span class="hljs-attr">parentId</span>: fileId,
+        <span class="hljs-attr">chunkIndex</span>: i,
+        <span class="hljs-attr">data</span>: chunk,
+      });
+    }
+
+    <span class="hljs-keyword">return</span> fileId;
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">readLargeFile</span>(<span class="hljs-attr">fileId</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">ArrayBuffer</span>&gt; {
+    <span class="hljs-keyword">const</span> metadata = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">db</span>.<span class="hljs-title function_">read</span>(fileId);
+    <span class="hljs-keyword">const</span> <span class="hljs-attr">chunks</span>: <span class="hljs-title class_">Uint8Array</span>[] = [];
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; metadata.<span class="hljs-property">totalChunks</span>; i++) {
+      <span class="hljs-keyword">const</span> chunk = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">db</span>.<span class="hljs-title function_">read</span>(<span class="hljs-string">`<span class="hljs-subst">${fileId}</span>_chunk_<span class="hljs-subst">${i}</span>`</span>);
+      chunks.<span class="hljs-title function_">push</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(chunk.<span class="hljs-property">data</span>));
+    }
+
+    <span class="hljs-comment">// 合并</span>
+    <span class="hljs-keyword">const</span> totalLength = chunks.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, c</span>) =&gt;</span> sum + c.<span class="hljs-property">byteLength</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(totalLength);
+    <span class="hljs-keyword">let</span> offset = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> chunk <span class="hljs-keyword">of</span> chunks) {
+      result.<span class="hljs-title function_">set</span>(chunk, offset);
+      offset += chunk.<span class="hljs-property">byteLength</span>;
+    }
+
+    <span class="hljs-keyword">return</span> result.<span class="hljs-property">buffer</span>;
+  }
+}
+</code></pre><h3 id="2.2">2.2 离线支持与数据同步</h3>
+<pre class="hljs"><code><span class="hljs-comment">// 离线操作队列</span>
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">SyncOperation</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;create&#x27;</span> | <span class="hljs-string">&#x27;update&#x27;</span> | <span class="hljs-string">&#x27;delete&#x27;</span>;
+  <span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">data</span>?: <span class="hljs-built_in">any</span>;
+  <span class="hljs-attr">timestamp</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;pending&#x27;</span> | <span class="hljs-string">&#x27;syncing&#x27;</span> | <span class="hljs-string">&#x27;completed&#x27;</span> | <span class="hljs-string">&#x27;failed&#x27;</span>;
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">OfflineSyncManager</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">operationQueue</span>: <span class="hljs-title class_">SyncOperation</span>[] = [];
+  <span class="hljs-keyword">private</span> isOnline = navigator.<span class="hljs-property">onLine</span>;
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;online&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sync</span>());
+    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;offline&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">handleOffline</span>());
+  }
+
+  <span class="hljs-comment">// 添加操作到队列</span>
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">queueOperation</span>(<span class="hljs-params"><span class="hljs-attr">operation</span>: <span class="hljs-title class_">Omit</span>&lt;<span class="hljs-title class_">SyncOperation</span>, <span class="hljs-string">&#x27;id&#x27;</span> | <span class="hljs-string">&#x27;timestamp&#x27;</span> | <span class="hljs-string">&#x27;status&#x27;</span>&gt;</span>) {
+    <span class="hljs-keyword">const</span> <span class="hljs-attr">op</span>: <span class="hljs-title class_">SyncOperation</span> = {
+      ...operation,
+      <span class="hljs-attr">id</span>: crypto.<span class="hljs-title function_">randomUUID</span>(),
+      <span class="hljs-attr">timestamp</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>(),
+      <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;pending&#x27;</span>,
+    };
+
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">operationQueue</span>.<span class="hljs-title function_">push</span>(op);
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">isOnline</span>) {
+      <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sync</span>();
+    }
+  }
+
+  <span class="hljs-comment">// 同步操作</span>
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">sync</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> pendingOps = <span class="hljs-variable language_">this</span>.<span class="hljs-property">operationQueue</span>.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">op</span> =&gt;</span> op.<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;pending&#x27;</span>);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> op <span class="hljs-keyword">of</span> pendingOps) {
+      <span class="hljs-keyword">try</span> {
+        op.<span class="hljs-property">status</span> = <span class="hljs-string">&#x27;syncing&#x27;</span>;
+        <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">executeRemoteOperation</span>(op);
+        op.<span class="hljs-property">status</span> = <span class="hljs-string">&#x27;completed&#x27;</span>;
+      } <span class="hljs-keyword">catch</span> (error) {
+        op.<span class="hljs-property">status</span> = <span class="hljs-string">&#x27;failed&#x27;</span>;
+        <span class="hljs-comment">// 重试逻辑</span>
+      }
+    }
+
+    <span class="hljs-comment">// 清理已完成操作</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">operationQueue</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">operationQueue</span>.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">op</span> =&gt;</span> op.<span class="hljs-property">status</span> !== <span class="hljs-string">&#x27;completed&#x27;</span>);
+  }
+
+  <span class="hljs-comment">// 冲突检测</span>
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-title function_">detectConflict</span>(<span class="hljs-attr">op</span>: <span class="hljs-title class_">SyncOperation</span>, <span class="hljs-attr">remoteMeta</span>: <span class="hljs-title class_">FileMetadata</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">boolean</span>&gt; {
+    <span class="hljs-keyword">const</span> localMeta = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getLocalMetadata</span>(op.<span class="hljs-property">path</span>);
+    <span class="hljs-keyword">if</span> (!localMeta) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">return</span> localMeta.<span class="hljs-property">updatedAt</span> &gt; remoteMeta.<span class="hljs-property">updatedAt</span> &amp;&amp; op.<span class="hljs-property">timestamp</span> &lt; remoteMeta.<span class="hljs-property">updatedAt</span>;
+  }
+}
+</code></pre><h3 id="2.3">2.3 文件系统适配器模式</h3>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">IFileSystemAdapter</span> {
+  <span class="hljs-title function_">readFile</span>(<span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">string</span>&gt;;
+  <span class="hljs-title function_">writeFile</span>(<span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  <span class="hljs-title function_">readdir</span>(<span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">FileEntry</span>[]&gt;;
+  <span class="hljs-title function_">mkdir</span>(<span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  <span class="hljs-title function_">unlink</span>(<span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">void</span>&gt;;
+  <span class="hljs-title function_">stat</span>(<span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">FileStat</span>&gt;;
+}
+
+<span class="hljs-comment">// 本地适配器</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LocalFSAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">IFileSystemAdapter</span> { ... }
+
+<span class="hljs-comment">// 远程同步适配器</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">RemoteFSAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">IFileSystemAdapter</span> { ... }
+
+<span class="hljs-comment">// 统一适配器（本地缓存 + 远程同步）</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UnifiedFSAdapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">IFileSystemAdapter</span> { ... }
+</code></pre><hr>
+<h3 id="3.1">3.1 终端模拟器实现</h3>
+<h3 id="3.1-pty">3.1 PTY 多进程管理</h3>
+<pre class="hljs"><code><span class="hljs-comment">// PTY 进程池实现</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PTYProcessPool</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">pool</span>: <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-title class_">Terminal</span>&gt; = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">private</span> maxProcesses = <span class="hljs-number">100</span>;
+  <span class="hljs-keyword">private</span> idleTimeout = <span class="hljs-number">5</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>; <span class="hljs-comment">// 5分钟</span>
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">acquire</span>(<span class="hljs-attr">sessionId</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">options</span>: <span class="hljs-title class_">PTYOptions</span>): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">Terminal</span>&gt; {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">has</span>(sessionId)) {
+      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">get</span>(sessionId)!;
+    }
+
+    <span class="hljs-comment">// 超过最大进程数，清理空闲进程</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-property">size</span> &gt;= <span class="hljs-variable language_">this</span>.<span class="hljs-property">maxProcesses</span>) {
+      <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cleanupIdleProcesses</span>();
+    }
+
+    <span class="hljs-keyword">const</span> process = <span class="hljs-title function_">createTerminal</span>(options.<span class="hljs-property">shell</span>, [], {
+      <span class="hljs-attr">cols</span>: options.<span class="hljs-property">cols</span> || <span class="hljs-number">80</span>,
+      <span class="hljs-attr">rows</span>: options.<span class="hljs-property">rows</span> || <span class="hljs-number">24</span>,
+      <span class="hljs-attr">cwd</span>: options.<span class="hljs-property">cwd</span> || process.<span class="hljs-property">env</span>.<span class="hljs-property">HOME</span>,
+    });
+
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">set</span>(sessionId, process);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setupIdleTimeout</span>(sessionId);
+
+    <span class="hljs-keyword">return</span> process;
+  }
+
+  <span class="hljs-keyword">private</span> <span class="hljs-title function_">setupIdleTimeout</span>(<span class="hljs-params"><span class="hljs-attr">sessionId</span>: <span class="hljs-built_in">string</span></span>) {
+    <span class="hljs-keyword">const</span> process = <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">get</span>(sessionId);
+    <span class="hljs-keyword">if</span> (!process) <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-keyword">let</span> <span class="hljs-attr">idleTimer</span>: <span class="hljs-title class_">NodeJS</span>.<span class="hljs-property">Timeout</span>;
+
+    <span class="hljs-comment">// 有数据活动时重置定时器</span>
+    process.<span class="hljs-title function_">onData</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-built_in">clearTimeout</span>(idleTimer);
+      <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">setupIdleTimeout</span>(sessionId);
+    });
+
+    <span class="hljs-comment">// 空闲超时释放</span>
+    idleTimer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">release</span>(sessionId);
+    }, <span class="hljs-variable language_">this</span>.<span class="hljs-property">idleTimeout</span>);
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">release</span>(<span class="hljs-params"><span class="hljs-attr">sessionId</span>: <span class="hljs-built_in">string</span></span>) {
+    <span class="hljs-keyword">const</span> process = <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">get</span>(sessionId);
+    <span class="hljs-keyword">if</span> (process) {
+      process.<span class="hljs-title function_">kill</span>();
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">delete</span>(sessionId);
+    }
+  }
+}
+</code></pre><h3 id="3.2-ansi">3.2 ANSI 转义序列</h3>
+<p>终端使用 ANSI 转义序列控制光标、颜色等：</p>
+<ul>
+<li><strong>SGR (Select Graphic Rendition)</strong>: <code>\x1b[31m</code> 设置红色文字</li>
+<li><strong>CUP (Cursor Position)</strong>: <code>\x1b[10;10H</code> 移动光标到第10行第10列</li>
+<li><strong>ED (Erase Display)</strong>: <code>\x1b[2J</code> 清除整个屏幕</li>
+</ul>
+<h3 id="3.3-pty-pseudo-terminal">3.3 PTY (Pseudo Terminal)</h3>
+<p>PTY 是模拟终端的设备对：</p>
+<ul>
+<li><strong>Master</strong>: 应用程序控制的端点</li>
+<li><strong>Slave</strong>: 连接到 shell 或其他程序</li>
+</ul>
+<pre class="hljs"><code>Application (Node.js)
+    ↓ write()
+PTY Master (node-pty)
+    ↓
+PTY Slave
+    ↓
+Shell (bash/zsh)
+    ↓
+Program (ls, git, etc.)
+</code></pre><hr>
+<h3 id="4.1">4.1 代码编辑器实现</h3>
+<h3 id="4.1-monaco-editor">4.1 Monaco Editor 集成</h3>
+<pre class="hljs"><code><span class="hljs-comment">// Monaco Editor 配置</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">editorOptions</span>: editor.<span class="hljs-property">IStandaloneEditorConstructionOptions</span> = {
+  <span class="hljs-attr">theme</span>: isDark ? <span class="hljs-string">&#x27;vs-dark&#x27;</span> : <span class="hljs-string">&#x27;vs&#x27;</span>,
+  <span class="hljs-attr">fontSize</span>: <span class="hljs-number">14</span>,
+  <span class="hljs-attr">fontFamily</span>: <span class="hljs-string">&quot;&#x27;JetBrains Mono&#x27;, &#x27;Fira Code&#x27;, monospace&quot;</span>,
+  <span class="hljs-attr">minimap</span>: { <span class="hljs-attr">enabled</span>: <span class="hljs-literal">true</span> },
+  <span class="hljs-attr">scrollBeyondLastLine</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">automaticLayout</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">tabSize</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">wordWrap</span>: <span class="hljs-string">&#x27;on&#x27;</span>,
+  <span class="hljs-attr">lineNumbers</span>: <span class="hljs-string">&#x27;on&#x27;</span>,
+  <span class="hljs-attr">glyphMargin</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">folding</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">lineDecorationsWidth</span>: <span class="hljs-number">10</span>,
+  <span class="hljs-attr">lineNumbersMinChars</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">renderLineHighlight</span>: <span class="hljs-string">&#x27;all&#x27;</span>,
+  <span class="hljs-attr">scrollbar</span>: {
+    <span class="hljs-attr">useShadows</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">verticalScrollbarSize</span>: <span class="hljs-number">10</span>,
+    <span class="hljs-attr">horizontalScrollbarSize</span>: <span class="hljs-number">10</span>,
+  },
+};
+</code></pre><h3 id="4.2-lsp">4.2 语言服务器协议（LSP）集成</h3>
+<pre class="hljs"><code><span class="hljs-comment">// LSP 客户端配置</span>
+<span class="hljs-keyword">const</span> lspClient = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LanguageClient</span>(
+  <span class="hljs-string">&#x27;typescript&#x27;</span>,
+  <span class="hljs-string">&#x27;TypeScript Language Server&#x27;</span>,
+  {
+    <span class="hljs-attr">command</span>: <span class="hljs-string">&#x27;typescript-language-server&#x27;</span>,
+    <span class="hljs-attr">args</span>: [<span class="hljs-string">&#x27;--stdio&#x27;</span>],
+    <span class="hljs-attr">transport</span>: <span class="hljs-title class_">TransportKind</span>.<span class="hljs-property">stdio</span>,
+  },
+  {
+    <span class="hljs-attr">documentSelector</span>: [{ <span class="hljs-attr">language</span>: <span class="hljs-string">&#x27;typescript&#x27;</span> }, { <span class="hljs-attr">language</span>: <span class="hljs-string">&#x27;javascript&#x27;</span> }],
+    <span class="hljs-attr">synchronize</span>: {
+      <span class="hljs-attr">fileEvents</span>: workspace.<span class="hljs-title function_">createFileSystemWatcher</span>(<span class="hljs-string">&#x27;**/*.ts&#x27;</span>),
+    },
+  }
+);
+</code></pre><hr>
+<h3 id="5.1">5.1 技术难点分析</h3>
+<h3 id="5.1">5.1 浏览器渲染原理与窗口系统</h3>
+<h4 id="5.1.1-css-transform-vs-position">5.1.1 CSS Transform vs Position</h4>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>触发重排</th>
+<th>触发重绘</th>
+<th>GPU加速</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>left/top</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>transform</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p><strong>浏览器渲染流程</strong>:</p>
+<ol>
+<li><strong>DOM 树构建</strong> -&gt; 2. <strong>CSS 树构建</strong> -&gt; 3. <strong>渲染树</strong> -&gt; 4. <strong>布局(Layout)</strong> -&gt; 5. <strong>绘制(Paint)</strong> -&gt; 6. <strong>合成(Composite)</strong></li>
+</ol>
+<p>使用 <code>left/top</code> 修改位置会触发步骤 4（布局），这是最耗时的操作。使用 <code>transform: translate()</code> 只触发步骤 6（合成），因为它在一个独立的合成层中运行。</p>
+<h4 id="5.1.2-z-index">5.1.2 Z-Index 合成层</h4>
+<p><strong>浏览器分层机制</strong>:</p>
+<ul>
+<li>某些 CSS 属性会创建新的合成层（Compositing Layer）</li>
+<li>合成层独立于主线程渲染，不受 JS 阻塞影响</li>
+<li>使用 <code>will-change: transform</code> 可以主动创建合成层</li>
+</ul>
+<p><strong>内存考虑</strong>:</p>
+<ul>
+<li>每个合成层占用额外 GPU 内存</li>
+<li>过度使用会导致内存压力，反而降低性能</li>
+</ul>
+<h3 id="5.2">5.2 虚拟文件系统架构</h3>
+<h4 id="5.2.1-indexeddb">5.2.1 IndexedDB 存储机制</h4>
+<p><strong>IndexedDB 架构</strong>:</p>
+<pre class="hljs"><code>Database
+  ┗━━ ObjectStore (类似表)
+        ┗━━ Index (索引)
+              ┗━━ Record (记录)
+</code></pre><p><strong>事务机制</strong>:</p>
+<ul>
+<li>IndexedDB 所有操作都在事务中执行</li>
+<li>只读事务可以并发，写事务会阻塞</li>
+<li>使用事务可以保证数据一致性</li>
+</ul>
+<hr>
+<h3 id="6.1">6.1 核心业务价值</h3>
+<h4 id="6.1.1">6.1.1 产品定位</h4>
+<p>WebEnv-OS 定位为 <strong>浏览器端虚拟操作系统</strong>，解决以下核心需求：</p>
+<ol>
+<li><strong>跨设备访问</strong>: 任何设备通过浏览器访问个人开发环境</li>
+<li><strong>无需配置</strong>: 无需在本地安装开发工具</li>
+<li><strong>协作能力</strong>: 多人实时协作开发</li>
+<li><strong>资源弹性</strong>: 云端资源按需分配</li>
+</ol>
+<h4 id="6.1.2">6.1.2 用户场景</h4>
+<pre class="hljs"><code>场景1: 临时办公
+用户: 出差途中，需要修改代码
+操作: 打开浏览器 → 登录 → 开始工作
+
+场景2: 教学环境
+用户: 教师/学生
+操作: 创建班级环境 → 分配资源 → 实时指导
+
+场景3: 协作开发
+用户: 远程团队
+操作: 邀请成员 → 实时协作 → 代码审查
+</code></pre><h3 id="6.2">6.2 权限管理模型</h3>
+<pre class="hljs"><code><span class="hljs-comment">// 权限级别</span>
+<span class="hljs-keyword">enum</span> <span class="hljs-title class_">Permission</span> {
+  <span class="hljs-variable constant_">READ</span> = <span class="hljs-string">&#x27;read&#x27;</span>,      <span class="hljs-comment">// 只读</span>
+  <span class="hljs-variable constant_">WRITE</span> = <span class="hljs-string">&#x27;write&#x27;</span>,    <span class="hljs-comment">// 读写</span>
+  <span class="hljs-variable constant_">ADMIN</span> = <span class="hljs-string">&#x27;admin&#x27;</span>,    <span class="hljs-comment">// 管理</span>
+}
+
+<span class="hljs-comment">// 文件访问控制</span>
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">AccessControl</span> {
+  <span class="hljs-attr">ownerId</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">permissions</span>: {
+    [<span class="hljs-attr">userId</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">Permission</span>[];
+  };
+  <span class="hljs-attr">publicLevel</span>: <span class="hljs-title class_">Permission</span>;
+}
+
+<span class="hljs-comment">// 权限检查</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">checkAccess</span>(<span class="hljs-params"><span class="hljs-attr">ac</span>: <span class="hljs-title class_">AccessControl</span>, <span class="hljs-attr">userId</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">required</span>: <span class="hljs-title class_">Permission</span></span>): <span class="hljs-built_in">boolean</span> {
+  <span class="hljs-keyword">if</span> (ac.<span class="hljs-property">ownerId</span> === userId) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">if</span> (ac.<span class="hljs-property">permissions</span>[userId]?.<span class="hljs-title function_">includes</span>(required)) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">if</span> (ac.<span class="hljs-property">permissions</span>[userId]?.<span class="hljs-title function_">includes</span>(<span class="hljs-title class_">Permission</span>.<span class="hljs-property">ADMIN</span>)) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">if</span> (ac.<span class="hljs-property">publicLevel</span> === required) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+</code></pre><h3 id="6.3">6.3 用户交互流程</h3>
+<pre class="hljs"><code>用户访问流程
+
+1. 访问入口
+   ┗━━ Web URL → 登录页/仪表盘
+
+2. 认证授权
+   ┗━━ OAuth/JWT → 获取访问令牌
+
+3. 环境初始化
+   ┗━━ 加载用户配置 → 初始化 VFS → 连接终端
+
+4. 进入桌面
+   ┗━━ 加载窗口状态 → 恢复会话 → 显示桌面
+
+5. 应用操作
+   ┗━━ 打开应用 → 读取/编辑 → 保存 → 同步
+
+6. 退出
+   ┗━━ 保存状态 → 断开连接 → 清理资源
+</code></pre><hr>
+<h3 id="7.1">7.1 各模块工作量详细估算</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>工作量占比</th>
+<th>预估工时</th>
+<th>开发难度</th>
+<th>核心挑战</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>窗口管理系统</strong></td>
+<td>25%</td>
+<td>80h</td>
+<td>高</td>
+<td>拖拽性能、层级管理</td>
+</tr>
+<tr>
+<td><strong>虚拟文件系统</strong></td>
+<td>20%</td>
+<td>64h</td>
+<td>高</td>
+<td>大文件、离线同步</td>
+</tr>
+<tr>
+<td><strong>终端模拟器</strong></td>
+<td>20%</td>
+<td>64h</td>
+<td>高</td>
+<td>PTY管理、命令解析</td>
+</tr>
+<tr>
+<td><strong>代码编辑器</strong></td>
+<td>15%</td>
+<td>48h</td>
+<td>中</td>
+<td>Monaco集成、主题</td>
+</tr>
+<tr>
+<td><strong>任务栏/Dock</strong></td>
+<td>10%</td>
+<td>32h</td>
+<td>低</td>
+<td>动画、响应式</td>
+</tr>
+<tr>
+<td><strong>开始菜单</strong></td>
+<td>5%</td>
+<td>16h</td>
+<td>低</td>
+<td>布局、动画</td>
+</tr>
+<tr>
+<td><strong>系统设置</strong></td>
+<td>5%</td>
+<td>16h</td>
+<td>低</td>
+<td>表单、数据管理</td>
+</tr>
+</tbody>
+</table>
+<p><strong>总计</strong>: 约 320h (8周/人)</p>
+<h3 id="">关键技术攻关时间</h3>
+<table>
+<thead>
+<tr>
+<th>技术点</th>
+<th>预估时间</th>
+<th>风险等级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>窗口拖拽性能优化</td>
+<td>16h</td>
+<td>高</td>
+</tr>
+<tr>
+<td>大文件分块存储</td>
+<td>24h</td>
+<td>高</td>
+</tr>
+<tr>
+<td>PTY进程池管理</td>
+<td>24h</td>
+<td>高</td>
+</tr>
+<tr>
+<td>Monaco与VFS集成</td>
+<td>16h</td>
+<td>中</td>
+</tr>
+<tr>
+<td>离线同步冲突解决</td>
+<td>16h</td>
+<td>中</td>
+</tr>
+<tr>
+<td>响应式多端适配</td>
+<td>16h</td>
+<td>低</td>
+</tr>
+</tbody>
+</table>
+<h3 id="">团队分工建议</h3>
+<pre class="hljs"><code>前端开发 (2人)
+┣━━ 窗口系统 + UI (A)
+┃   ┗━━ 窗口拖拽、任务栏、Dock
+┣━━ 编辑器 + 终端 (B)
+┃   ┗━━ Monaco集成、xterm.js
+┗━━ 公共组件 + 状态管理
+    ┗━━ Zustand Store、主题系统
+
+后端开发 (1人)
+┣━━ PTY进程管理
+┣━━ 文件同步服务
+┗━━ WebSocket网关
+</code></pre></div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="4-7-深度问题解析.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第4卷 面试官拷打专题</span>
+          </a>
+              <a href="5-2-核心技术实现.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第5卷 FastDocument</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

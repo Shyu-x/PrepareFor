@@ -1,0 +1,90 @@
+@startuml Deployment_Architecture
+!theme plain
+hide stereotype
+
+skinparam rectangle {
+    BackgroundColor #f8f9fa
+    BorderColor #0d9488
+    FontName Microsoft YaHei
+    RoundCorner 10
+}
+
+skinparam database {
+    BackgroundColor #e0f2fe
+    BorderColor #0284c7
+}
+
+skinparam storage {
+    BackgroundColor #dcfce7
+    BorderColor #22c55e
+}
+
+skinparam node {
+    BackgroundColor #fef3c7
+    BorderColor #f59e0b
+}
+
+' 定义包
+package "Docker 网络: fastdoc-network (172.28.0.0/16)" as DockerNet {
+    node "Nginx (Port 80/443)" as Nginx {
+        rectangle "反向代理" as NginxReverse
+        rectangle "负载均衡" as NginxLB
+        rectangle "SSL 终结" as NginxSSL
+    }
+
+    node "Frontend (Port 13000)" as Frontend {
+        rectangle "Next.js 16" as NextJS
+        rectangle "静态资源" as Static
+    }
+
+    node "Backend (Port 5555)" as Backend {
+        rectangle "NestJS API" as NestJSAPI
+        rectangle "WebSocket" as NestWS
+        rectangle "业务逻辑" as BizLogic
+    }
+
+    node "PostgreSQL (Port 5432)" as PostgreSQL {
+        rectangle "主数据库" as MainDB
+        rectangle "数据持久化" as DataPersist
+    }
+
+    node "Redis (Port 6379)" as Redis {
+        rectangle "缓存" as Cache
+        rectangle "会话存储" as Session
+        rectangle "Pub/Sub" as PubSub
+    }
+
+    node "LiveKit (Port 7880/7881/7882)" as LiveKit {
+        rectangle "WebRTC SFU" as SFU
+        rectangle "Room 管理" as RoomMgr
+        rectangle "API 服务" as LKAPI
+    }
+}
+
+package "外部服务" as External {
+    actor "用户设备" as UserDevice
+    cloud "互联网" as Internet
+}
+
+' 绘制连接关系
+UserDevice --> Internet : HTTPS/HTTP
+Internet --> Nginx : 请求
+
+Nginx --> Frontend : 静态资源/SSR
+Nginx --> Backend : API 转发
+
+Frontend --> Backend : API 请求
+Frontend --> NestWS : WebSocket
+Frontend --> LiveKit : WebRTC
+
+Backend --> PostgreSQL : SQL
+Backend --> Redis : 缓存/Pub/Sub
+
+NestWS --> Redis : 实时消息
+NestWS --> Frontend : 广播
+
+' 设置布局
+UserDevice -[hidden]-> Internet
+Internet -[hidden]-> Nginx
+
+@enduml

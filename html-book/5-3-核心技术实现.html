@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第5卷-项目实战案例 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#3-unothree" class="toc-link "><span>第3章 UnoThree</span></a></li><li class="toc-item"><a href="#1.1-scene3d" class="toc-link "><span>1.1 Scene3D 主场景组件</span></a></li><li class="toc-item"><a href="#1.2-card3d-3d" class="toc-link "><span>1.2 Card3D 3D 卡牌组件</span></a></li><li class="toc-item"><a href="#1.3" class="toc-link "><span>1.3 粒子特效系统</span></a></li><li class="toc-item"><a href="#2.1-scene2d" class="toc-link "><span>2.1 Scene2D 主场景组件</span></a></li><li class="toc-item"><a href="#3.1" class="toc-link "><span>3.1 游戏状态管理</span></a></li><li class="toc-item"><a href="#3.2-websocket" class="toc-link "><span>3.2 WebSocket 通信</span></a></li><li class="toc-item"><a href="#4.1-ai" class="toc-link "><span>4.1 AI 决策算法</span></a></li><li class="toc-item"><a href="#5.1" class="toc-link "><span>5.1 音频管理器</span></a></li><li class="toc-item"><a href="#6.1" class="toc-link "><span>6.1 各模块工作量</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第5卷 项目实战案例 / 第3章 UnoThree</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第5卷 项目实战案例</span>
+            </div>
+            <h1 class="article-title">第5卷-项目实战案例</h1>
+          </header>
+
+          <div class="content"><h2 id="3-unothree">第3章 UnoThree</h2>
+<blockquote>
+<p>本文档详细讲解 UnoThree 项目中核心代码的实现方式，包括组件编写、技术难点、工作量分布、底层细节和业务逻辑。</p>
+</blockquote>
+<hr>
+<h3 id="1.1-scene3d">1.1 Scene3D 主场景组件</h3>
+<p><strong>文件路径</strong>: <code>frontend/src/components/game/Scene3D.tsx</code></p>
+<p>Scene3D 是整个 3D 游戏的核心容器，使用 React Three Fiber 构建完整的 3D 游戏环境。</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Canvas</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@react-three/fiber&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Stars</span>, <span class="hljs-title class_">PerspectiveCamera</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@react-three/drei&#x27;</span>;
+<span class="hljs-keyword">import</span> { useMemo } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> <span class="hljs-variable constant_">THREE</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Scene3D</span>(<span class="hljs-params">{
+  gameState,
+  onCardClick,
+  onDrawClick,
+  onColorSelect,
+  onUnoClick
+}: <span class="hljs-title class_">Scene3DProps</span></span>) {
+  <span class="hljs-comment">// 响应式相机配置</span>
+  <span class="hljs-keyword">const</span> cameraConfig = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> isMobile = <span class="hljs-regexp">/iPhone|iPad|iPod|Android/i</span>.<span class="hljs-title function_">test</span>(navigator.<span class="hljs-property">userAgent</span>);
+    <span class="hljs-keyword">const</span> isPortrait = <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span> &gt; <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span>;
+    <span class="hljs-keyword">const</span> playerCount = gameState?.<span class="hljs-property">players</span>.<span class="hljs-property">length</span> || <span class="hljs-number">4</span>;
+
+    <span class="hljs-keyword">let</span> <span class="hljs-attr">cameraPos</span>: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>];
+    <span class="hljs-keyword">let</span> <span class="hljs-attr">cameraFov</span>: <span class="hljs-built_in">number</span>;
+
+    <span class="hljs-keyword">if</span> (isMobile) {
+      <span class="hljs-keyword">if</span> (isPortrait) {
+        cameraPos = [<span class="hljs-number">0</span>, <span class="hljs-number">55</span>, <span class="hljs-number">70</span>];
+        cameraFov = <span class="hljs-number">60</span>;
+      } <span class="hljs-keyword">else</span> {
+        cameraPos = [<span class="hljs-number">0</span>, <span class="hljs-number">35</span>, <span class="hljs-number">48</span>];
+        cameraFov = <span class="hljs-number">45</span>;
+      }
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">if</span> (playerCount &gt;= <span class="hljs-number">10</span>) {
+        cameraPos = [<span class="hljs-number">0</span>, <span class="hljs-number">28</span>, <span class="hljs-number">45</span>];
+        cameraFov = <span class="hljs-number">28</span>;
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (playerCount &gt;= <span class="hljs-number">6</span>) {
+        cameraPos = [<span class="hljs-number">0</span>, <span class="hljs-number">25</span>, <span class="hljs-number">40</span>];
+        cameraFov = <span class="hljs-number">36</span>;
+      } <span class="hljs-keyword">else</span> {
+        cameraPos = [<span class="hljs-number">0</span>, <span class="hljs-number">22</span>, <span class="hljs-number">35</span>];
+        cameraFov = <span class="hljs-number">35</span>;
+      }
+    }
+
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">position</span>: cameraPos, <span class="hljs-attr">fov</span>: cameraFov };
+  }, [gameState?.<span class="hljs-property">players</span>.<span class="hljs-property">length</span>]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Canvas</span> <span class="hljs-attr">shadows</span>&gt;</span>
+      {/* 相机系统 */}
+      <span class="hljs-tag">&lt;<span class="hljs-name">PerspectiveCamera</span>
+        <span class="hljs-attr">makeDefault</span>
+        <span class="hljs-attr">position</span>=<span class="hljs-string">{cameraConfig.position}</span>
+        <span class="hljs-attr">fov</span>=<span class="hljs-string">{cameraConfig.fov}</span>
+      /&gt;</span>
+
+      {/* 环境系统 */}
+      <span class="hljs-tag">&lt;<span class="hljs-name">Stars</span> <span class="hljs-attr">radius</span>=<span class="hljs-string">{100}</span> <span class="hljs-attr">depth</span>=<span class="hljs-string">{50}</span> <span class="hljs-attr">count</span>=<span class="hljs-string">{5000}</span> <span class="hljs-attr">factor</span>=<span class="hljs-string">{4}</span> <span class="hljs-attr">fade</span> <span class="hljs-attr">speed</span>=<span class="hljs-string">{1}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">color</span> <span class="hljs-attr">attach</span>=<span class="hljs-string">&quot;background&quot;</span> <span class="hljs-attr">args</span>=<span class="hljs-string">{[</span>&#x27;#<span class="hljs-attr">0a0a1a</span>&#x27;]} /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">fog</span> <span class="hljs-attr">attach</span>=<span class="hljs-string">&quot;fog&quot;</span> <span class="hljs-attr">args</span>=<span class="hljs-string">{[</span>&#x27;#<span class="hljs-attr">0a0a1a</span>&#x27;, <span class="hljs-attr">30</span>, <span class="hljs-attr">80</span>]} /&gt;</span>
+
+      {/* 灯光系统 */}
+      <span class="hljs-tag">&lt;<span class="hljs-name">ambientLight</span> <span class="hljs-attr">intensity</span>=<span class="hljs-string">{1.2}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">pointLight</span> <span class="hljs-attr">position</span>=<span class="hljs-string">{[0,</span> <span class="hljs-attr">30</span>, <span class="hljs-attr">0</span>]} <span class="hljs-attr">intensity</span>=<span class="hljs-string">{150}</span> <span class="hljs-attr">castShadow</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">spotLight</span>
+        <span class="hljs-attr">position</span>=<span class="hljs-string">{[0,</span> <span class="hljs-attr">50</span>, <span class="hljs-attr">0</span>]}
+        <span class="hljs-attr">angle</span>=<span class="hljs-string">{0.5}</span>
+        <span class="hljs-attr">penumbra</span>=<span class="hljs-string">{0.6}</span>
+        <span class="hljs-attr">intensity</span>=<span class="hljs-string">{200}</span>
+        <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;#fef3c7&quot;</span>
+      /&gt;</span>
+
+      {/* 游戏桌面 */}
+      <span class="hljs-tag">&lt;<span class="hljs-name">GameTable</span> <span class="hljs-attr">gameState</span>=<span class="hljs-string">{gameState}</span> /&gt;</span>
+
+      {/* 玩家区域 */}
+      {gameState?.players.map((player, index) =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">PlayerArea</span>
+          <span class="hljs-attr">key</span>=<span class="hljs-string">{player.id}</span>
+          <span class="hljs-attr">player</span>=<span class="hljs-string">{player}</span>
+          <span class="hljs-attr">position</span>=<span class="hljs-string">{calculatePlayerPosition(index,</span> <span class="hljs-attr">gameState.players.length</span>)}
+          <span class="hljs-attr">isCurrentPlayer</span>=<span class="hljs-string">{gameState.currentPlayerIndex</span> === <span class="hljs-string">index}</span>
+        /&gt;</span>
+      ))}
+
+      {/* 卡牌堆和弃牌堆 */}
+      <span class="hljs-tag">&lt;<span class="hljs-name">Deck3D</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onDrawClick}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">DiscardPile3D</span> <span class="hljs-attr">cards</span>=<span class="hljs-string">{gameState?.discardPile</span> || []} /&gt;</span>
+
+      {/* 特效层 */}
+      <span class="hljs-tag">&lt;<span class="hljs-name">ParticleEffects</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Canvas</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 计算玩家在 3D 空间中的位置</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">calculatePlayerPosition</span>(<span class="hljs-params"><span class="hljs-attr">index</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">totalPlayers</span>: <span class="hljs-built_in">number</span></span>): [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>] {
+  <span class="hljs-keyword">const</span> radius = <span class="hljs-number">15</span>;
+  <span class="hljs-keyword">const</span> angle = (index / totalPlayers) * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> * <span class="hljs-number">2</span> - <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> / <span class="hljs-number">2</span>;
+  <span class="hljs-keyword">return</span> [
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">cos</span>(angle) * radius,
+    <span class="hljs-number">0</span>,
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sin</span>(angle) * radius
+  ];
+}
+</code></pre><p><strong>技术难点</strong>:</p>
+<ol>
+<li><strong>性能优化</strong>: 3D 场景中需要同时渲染大量卡牌和粒子效果，需要使用 <code>useMemo</code> 缓存计算结果</li>
+<li><strong>响应式适配</strong>: 不同设备需要不同的相机参数，需要动态计算</li>
+<li><strong>阴影渲染</strong>: 使用 <code>castShadow</code> 和 <code>receiveShadow</code> 需要合理设置光源位置</li>
+</ol>
+<hr>
+<h3 id="1.2-card3d-3d">1.2 Card3D 3D 卡牌组件</h3>
+<p>使用 Three.js 的 BoxGeometry 创建 3D 卡牌模型，结合 React Spring 实现动画效果。</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { useRef, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { useFrame } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@react-three/fiber&#x27;</span>;
+<span class="hljs-keyword">import</span> { useSpring, animated } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@react-spring/three&#x27;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> <span class="hljs-variable constant_">THREE</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three&#x27;</span>;
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Card3DProps</span> {
+  <span class="hljs-attr">card</span>: <span class="hljs-title class_">UnoCard</span>;
+  <span class="hljs-attr">position</span>: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>];
+  <span class="hljs-attr">rotation</span>?: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>];
+  <span class="hljs-attr">isPlayable</span>?: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">isHovered</span>?: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">isHinted</span>?: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">onClick</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Card3D</span>(<span class="hljs-params">{
+  card,
+  position,
+  rotation = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  isPlayable = <span class="hljs-literal">false</span>,
+  isHovered = <span class="hljs-literal">false</span>,
+  isHinted = <span class="hljs-literal">false</span>,
+  onClick
+}: <span class="hljs-title class_">Card3DProps</span></span>) {
+  <span class="hljs-keyword">const</span> meshRef = useRef&lt;<span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">Mesh</span>&gt;(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [hovered, setHovered] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
+
+  <span class="hljs-comment">// 使用 React Spring 实现动画</span>
+  <span class="hljs-keyword">const</span> { springPos, springScale, springRot } = <span class="hljs-title function_">useSpring</span>({
+    <span class="hljs-attr">springPos</span>: [
+      position[<span class="hljs-number">0</span>],
+      position[<span class="hljs-number">1</span>] + (hovered ? <span class="hljs-number">2.5</span> : (isHinted ? <span class="hljs-number">0.8</span> : <span class="hljs-number">0</span>)),
+      position[<span class="hljs-number">2</span>] + (hovered ? <span class="hljs-number">1.5</span> : <span class="hljs-number">0</span>)
+    ] <span class="hljs-keyword">as</span> [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>],
+    <span class="hljs-attr">springScale</span>: hovered ? <span class="hljs-number">1.25</span> : <span class="hljs-number">1</span>,
+    <span class="hljs-attr">springRot</span>: rotation <span class="hljs-keyword">as</span> [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>],
+    <span class="hljs-attr">config</span>: { <span class="hljs-attr">mass</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">tension</span>: <span class="hljs-number">350</span>, <span class="hljs-attr">friction</span>: <span class="hljs-number">35</span> }
+  });
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">animated.group</span>
+      <span class="hljs-attr">position</span>=<span class="hljs-string">{springPos}</span>
+      <span class="hljs-attr">scale</span>=<span class="hljs-string">{springScale}</span>
+      <span class="hljs-attr">rotation</span>=<span class="hljs-string">{springRot}</span>
+    &gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mesh</span>
+        <span class="hljs-attr">ref</span>=<span class="hljs-string">{meshRef}</span>
+        <span class="hljs-attr">onClick</span>=<span class="hljs-string">{(e)</span> =&gt;</span> {
+          e.stopPropagation();
+          if (isPlayable) onClick?.();
+        }}
+        castShadow
+        receiveShadow
+      &gt;
+        {/* 卡牌主体 */}
+        <span class="hljs-tag">&lt;<span class="hljs-name">boxGeometry</span> <span class="hljs-attr">args</span>=<span class="hljs-string">{[2.5,</span> <span class="hljs-attr">3.5</span>, <span class="hljs-attr">0.18</span>]} /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">meshStandardMaterial</span> <span class="hljs-attr">color</span>=<span class="hljs-string">{COLOR_MAP[card.color]}</span> <span class="hljs-attr">roughness</span>=<span class="hljs-string">{0.4}</span> <span class="hljs-attr">metalness</span>=<span class="hljs-string">{0.1}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">mesh</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">animated.group</span>&gt;</span></span>
+  );
+}
+</code></pre><hr>
+<h3 id="1.3">1.3 粒子特效系统</h3>
+<p>使用 Three.js 的 Points 和 BufferGeometry 实现高性能粒子特效。</p>
+<pre class="hljs"><code><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">ConfettiParticles</span>(<span class="hljs-params">{ active, count = <span class="hljs-number">200</span> }: <span class="hljs-title class_">ConfettiParticlesProps</span></span>) {
+  <span class="hljs-keyword">const</span> pointsRef = useRef&lt;<span class="hljs-variable constant_">THREE</span>.<span class="hljs-property">Points</span>&gt;(<span class="hljs-literal">null</span>);
+
+  <span class="hljs-keyword">const</span> { positions, velocities, colors, sizes } = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> positions = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(count * <span class="hljs-number">3</span>);
+    <span class="hljs-keyword">const</span> velocities = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(count * <span class="hljs-number">3</span>);
+    <span class="hljs-keyword">const</span> colors = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(count * <span class="hljs-number">3</span>);
+    <span class="hljs-keyword">const</span> sizes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Float32Array</span>(count);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; count; i++) {
+      <span class="hljs-keyword">const</span> i3 = i * <span class="hljs-number">3</span>;
+      positions[i3] = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span>;
+      positions[i3 + <span class="hljs-number">1</span>] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">20</span> + <span class="hljs-number">10</span>;
+      positions[i3 + <span class="hljs-number">2</span>] = (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>) * <span class="hljs-number">10</span>;
+      velocities[i3 + <span class="hljs-number">1</span>] = -<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">0.2</span> - <span class="hljs-number">0.05</span>;
+      <span class="hljs-comment">// ...</span>
+    }
+    <span class="hljs-keyword">return</span> { positions, velocities, colors, sizes };
+  }, [count]);
+
+  <span class="hljs-title function_">useFrame</span>(<span class="hljs-function">(<span class="hljs-params">_, delta</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!active || !pointsRef.<span class="hljs-property">current</span>) <span class="hljs-keyword">return</span>;
+    <span class="hljs-comment">// 更新粒子位置...</span>
+  });
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">points</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{pointsRef}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">bufferGeometry</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">bufferAttribute</span> <span class="hljs-attr">attach</span>=<span class="hljs-string">&quot;attributes-position&quot;</span> <span class="hljs-attr">count</span>=<span class="hljs-string">{count}</span> <span class="hljs-attr">array</span>=<span class="hljs-string">{positions}</span> <span class="hljs-attr">itemSize</span>=<span class="hljs-string">{3}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">bufferGeometry</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">pointsMaterial</span> <span class="hljs-attr">size</span>=<span class="hljs-string">{0.3}</span> <span class="hljs-attr">vertexColors</span> <span class="hljs-attr">transparent</span> <span class="hljs-attr">opacity</span>=<span class="hljs-string">{0.8}</span> <span class="hljs-attr">sizeAttenuation</span> <span class="hljs-attr">blending</span>=<span class="hljs-string">{THREE.AdditiveBlending}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">points</span>&gt;</span></span>
+  );
+}
+</code></pre><hr>
+<h3 id="2.1-scene2d">2.1 Scene2D 主场景组件</h3>
+<pre class="hljs"><code><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Scene2D</span>(<span class="hljs-params">{
+  gameState,
+  playerId,
+  onCardClick,
+  onDrawClick,
+  onColorSelect,
+  onUnoClick
+}: <span class="hljs-title class_">Scene2DProps</span></span>) {
+  <span class="hljs-keyword">const</span> config = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (isMobile) {
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">cardSize</span>: <span class="hljs-string">&#x27;small&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>,
+        <span class="hljs-attr">handHeight</span>: isPortraitMode ? <span class="hljs-string">&#x27;h-20&#x27;</span> : <span class="hljs-string">&#x27;h-24&#x27;</span>,
+        <span class="hljs-attr">handCardOffset</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">playerRadius</span>: isPortraitMobile ? <span class="hljs-number">20</span> : <span class="hljs-number">28</span>,
+      };
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">cardSize</span>: <span class="hljs-string">&#x27;large&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>,
+        <span class="hljs-attr">handHeight</span>: <span class="hljs-string">&#x27;h-52&#x27;</span>,
+        <span class="hljs-attr">handCardOffset</span>: <span class="hljs-number">8</span>,
+        <span class="hljs-attr">playerRadius</span>: <span class="hljs-number">46</span>,
+      };
+    }
+  }, [isMobile, isTablet, isPortrait]);
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">getPlayerPositions</span> = (<span class="hljs-params"><span class="hljs-attr">count</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">myIndex</span>: <span class="hljs-built_in">number</span></span>) =&gt; {
+    <span class="hljs-keyword">const</span> positions = [];
+    <span class="hljs-keyword">const</span> radius = config.<span class="hljs-property">playerRadius</span>;
+    <span class="hljs-keyword">const</span> startAngle = -<span class="hljs-number">140</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; count; i++) {
+      <span class="hljs-keyword">if</span> (i === myIndex) {
+        positions.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">x</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">85</span>, <span class="hljs-attr">rotation</span>: <span class="hljs-number">0</span> });
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// 其他玩家在上半圆弧分布</span>
+        <span class="hljs-keyword">const</span> otherPlayers = [];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>; j &lt; count; j++) {
+          <span class="hljs-keyword">if</span> (j !== myIndex) otherPlayers.<span class="hljs-title function_">push</span>(j);
+        }
+        <span class="hljs-keyword">const</span> angle = startAngle + (otherPlayers.<span class="hljs-title function_">indexOf</span>(i) * <span class="hljs-number">160</span> / <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">1</span>, otherPlayers.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>));
+        positions.<span class="hljs-title function_">push</span>({
+          <span class="hljs-attr">x</span>: <span class="hljs-number">50</span> + radius * <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">cos</span>(angle * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> / <span class="hljs-number">180</span>),
+          <span class="hljs-attr">y</span>: <span class="hljs-number">40</span> + radius * <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sin</span>(angle * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> / <span class="hljs-number">180</span>) * <span class="hljs-number">0.5</span>,
+          <span class="hljs-attr">rotation</span>: <span class="hljs-number">0</span>,
+        });
+      }
+    }
+    <span class="hljs-keyword">return</span> positions;
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;relative w-full h-full&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Table2D</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Deck2D</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onDrawClick}</span> <span class="hljs-attr">remaining</span>=<span class="hljs-string">{gameState?.deck.length</span> || <span class="hljs-attr">0</span>} /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">DiscardPile2D</span> <span class="hljs-attr">topCard</span>=<span class="hljs-string">{gameState?.discardPile.slice(-1)[0]}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">DirectionIndicator2D</span> <span class="hljs-attr">direction</span>=<span class="hljs-string">{gameState?.direction}</span> /&gt;</span>
+      {gameState?.players.map((player, index) =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">PlayerArea2D</span>
+          <span class="hljs-attr">key</span>=<span class="hljs-string">{player.id}</span>
+          <span class="hljs-attr">player</span>=<span class="hljs-string">{player}</span>
+          <span class="hljs-attr">position</span>=<span class="hljs-string">{getPlayerPositions(gameState.players.length,</span> <span class="hljs-attr">playerIndex</span>)[<span class="hljs-attr">index</span>]}
+          <span class="hljs-attr">isCurrentPlayer</span>=<span class="hljs-string">{gameState.currentPlayerIndex</span> === <span class="hljs-string">index}</span>
+        /&gt;</span>
+      ))}
+      <span class="hljs-tag">&lt;<span class="hljs-name">Hand2D</span>
+        <span class="hljs-attr">cards</span>=<span class="hljs-string">{myHand}</span>
+        <span class="hljs-attr">onCardClick</span>=<span class="hljs-string">{onCardClick}</span>
+        <span class="hljs-attr">canPlayCard</span>=<span class="hljs-string">{isMyTurn}</span>
+      /&gt;</span>
+      {needsColorPicker &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">ColorPicker2D</span> <span class="hljs-attr">onSelect</span>=<span class="hljs-string">{onColorSelect}</span> /&gt;</span>}
+      {shouldShowUnoButton &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">UnoButton2D</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onUnoClick}</span> /&gt;</span>}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+</code></pre><hr>
+<h3 id="3.1">3.1 游戏状态管理</h3>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">GameStore</span> {
+  <span class="hljs-attr">gameState</span>: <span class="hljs-title class_">GameState</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">playerId</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">playerName</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">roomId</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">masterVolume</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">isMicMuted</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">deviceType</span>: <span class="hljs-title class_">DeviceType</span>;
+  <span class="hljs-attr">orientation</span>: <span class="hljs-title class_">Orientation</span>;
+  <span class="hljs-attr">notifications</span>: <span class="hljs-title class_">Notification</span>[];
+
+  <span class="hljs-attr">setGameState</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">state</span>: <span class="hljs-title class_">GameState</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">setPlayerInfo</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">addNotification</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">notification</span>: <span class="hljs-title class_">Omit</span>&lt;<span class="hljs-title class_">Notification</span>, <span class="hljs-string">&#x27;id&#x27;</span>&gt;</span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">resetGame</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useGameStore = create&lt;<span class="hljs-title class_">GameStore</span>&gt;(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({
+  <span class="hljs-attr">gameState</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">playerId</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">playerName</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">roomId</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">masterVolume</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">isMicMuted</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">deviceType</span>: <span class="hljs-string">&#x27;desktop&#x27;</span>,
+  <span class="hljs-attr">orientation</span>: <span class="hljs-string">&#x27;landscape&#x27;</span>,
+  <span class="hljs-attr">notifications</span>: [],
+
+  <span class="hljs-attr">setGameState</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> <span class="hljs-title function_">set</span>({ <span class="hljs-attr">gameState</span>: state }),
+  <span class="hljs-attr">setPlayerInfo</span>: <span class="hljs-function">(<span class="hljs-params">id, name</span>) =&gt;</span> <span class="hljs-title function_">set</span>({ <span class="hljs-attr">playerId</span>: id, <span class="hljs-attr">playerName</span>: name }),
+  <span class="hljs-attr">addNotification</span>: <span class="hljs-function">(<span class="hljs-params">notification</span>) =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> ({
+    <span class="hljs-attr">notifications</span>: [...state.<span class="hljs-property">notifications</span>, { ...notification, <span class="hljs-attr">id</span>: <span class="hljs-title function_">uuid</span>() }]
+  })),
+  <span class="hljs-attr">resetGame</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">set</span>({ <span class="hljs-attr">gameState</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">roomId</span>: <span class="hljs-literal">null</span> }),
+}));
+</code></pre><h3 id="3.2-websocket">3.2 WebSocket 通信</h3>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">GameSocketContext</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">socket</span>: <span class="hljs-title class_">Socket</span> | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span>;
+
+  <span class="hljs-title function_">connect</span>(<span class="hljs-params"><span class="hljs-attr">url</span>: <span class="hljs-built_in">string</span></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span> = <span class="hljs-title function_">io</span>(url, {
+      <span class="hljs-attr">transports</span>: [<span class="hljs-string">&#x27;websocket&#x27;</span>],
+      <span class="hljs-attr">reconnection</span>: <span class="hljs-literal">true</span>,
+    });
+
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;connect&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Connected&#x27;</span>));
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;gameStateUpdate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> {
+      useGameStore.<span class="hljs-title function_">getState</span>().<span class="hljs-title function_">setGameState</span>(state);
+    });
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;playerShoutedUno&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">{ playerId }</span>) =&gt;</span> {
+      useGameStore.<span class="hljs-title function_">getState</span>().<span class="hljs-title function_">addNotification</span>({
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;info&#x27;</span>,
+        <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;Player shouted UNO!&#x27;</span>,
+      });
+    });
+  }
+
+  <span class="hljs-title function_">joinRoom</span>(<span class="hljs-params"><span class="hljs-attr">roomId</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">playerName</span>: <span class="hljs-built_in">string</span></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span>?.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;joinRoom&#x27;</span>, { roomId, playerName });
+  }
+
+  <span class="hljs-title function_">playCard</span>(<span class="hljs-params"><span class="hljs-attr">cardId</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">color</span>?: <span class="hljs-title class_">CardColor</span></span>) {
+    <span class="hljs-keyword">const</span> roomId = useGameStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">roomId</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span>?.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;playCard&#x27;</span>, { roomId, cardId, color });
+  }
+
+  <span class="hljs-title function_">drawCard</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> roomId = useGameStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">roomId</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span>?.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;drawCard&#x27;</span>, { roomId });
+  }
+
+  <span class="hljs-title function_">shoutUno</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> roomId = useGameStore.<span class="hljs-title function_">getState</span>().<span class="hljs-property">roomId</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">socket</span>?.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;shoutUno&#x27;</span>, { roomId });
+  }
+}
+</code></pre><hr>
+<h3 id="4.1-ai">4.1 AI 决策算法</h3>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">AiService</span> {
+  <span class="hljs-title function_">getBestMove</span>(<span class="hljs-attr">hand</span>: <span class="hljs-title class_">Card</span>[], <span class="hljs-attr">topCard</span>: <span class="hljs-title class_">Card</span>, <span class="hljs-attr">currentColor</span>: <span class="hljs-title class_">CardColor</span>): <span class="hljs-title class_">Card</span> | <span class="hljs-literal">null</span> {
+    <span class="hljs-keyword">const</span> playableCards = hand.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">card</span> =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">isPlayable</span>(card, topCard, currentColor));
+    <span class="hljs-keyword">if</span> (playableCards.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+
+    <span class="hljs-comment">// 简单难度：随机选择</span>
+    <span class="hljs-keyword">if</span> (difficulty === <span class="hljs-string">&#x27;EASY&#x27;</span>) {
+      <span class="hljs-keyword">return</span> playableCards[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * playableCards.<span class="hljs-property">length</span>)];
+    }
+
+    <span class="hljs-comment">// 中等难度：优先普通牌</span>
+    <span class="hljs-keyword">if</span> (difficulty === <span class="hljs-string">&#x27;MEDIUM&#x27;</span>) {
+      <span class="hljs-keyword">const</span> colorCount = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">countColors</span>(hand);
+      <span class="hljs-keyword">const</span> bestColor = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">entries</span>(colorCount).<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b[<span class="hljs-number">1</span>] - a[<span class="hljs-number">1</span>])[<span class="hljs-number">0</span>]?.[<span class="hljs-number">0</span>];
+      <span class="hljs-keyword">return</span> playableCards.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c.<span class="hljs-property">color</span> === bestColor &amp;&amp; c.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;WILD&#x27;</span>) || playableCards[<span class="hljs-number">0</span>];
+    }
+
+    <span class="hljs-comment">// 困难难度：攻击策略</span>
+    <span class="hljs-keyword">if</span> (difficulty === <span class="hljs-string">&#x27;HARD&#x27;</span>) {
+      <span class="hljs-comment">// 攻击下家</span>
+      <span class="hljs-keyword">if</span> (hand.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">3</span>) {
+        <span class="hljs-keyword">const</span> actionCards = playableCards.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;NUMBER&#x27;</span>);
+        <span class="hljs-keyword">if</span> (actionCards.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> actionCards[<span class="hljs-number">0</span>];
+      }
+      <span class="hljs-comment">// 清理最多颜色</span>
+      <span class="hljs-keyword">const</span> colorCount = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">countColors</span>(hand);
+      <span class="hljs-keyword">const</span> bestColor = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">entries</span>(colorCount).<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b[<span class="hljs-number">1</span>] - a[<span class="hljs-number">1</span>])[<span class="hljs-number">0</span>]?.[<span class="hljs-number">0</span>];
+      <span class="hljs-keyword">return</span> playableCards.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c.<span class="hljs-property">color</span> === bestColor) || playableCards[<span class="hljs-number">0</span>];
+    }
+  }
+
+  <span class="hljs-keyword">private</span> <span class="hljs-title function_">isPlayable</span>(<span class="hljs-attr">card</span>: <span class="hljs-title class_">Card</span>, <span class="hljs-attr">topCard</span>: <span class="hljs-title class_">Card</span>, <span class="hljs-attr">currentColor</span>: <span class="hljs-title class_">CardColor</span>): <span class="hljs-built_in">boolean</span> {
+    <span class="hljs-keyword">return</span> card.<span class="hljs-property">color</span> === <span class="hljs-title class_">CardColor</span>.<span class="hljs-property">WILD</span> ||
+           card.<span class="hljs-property">color</span> === currentColor ||
+           (card.<span class="hljs-property">type</span> === topCard.<span class="hljs-property">type</span> &amp;&amp; card.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;NUMBER&#x27;</span>) ||
+           (card.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;NUMBER&#x27;</span> &amp;&amp; topCard.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;NUMBER&#x27;</span> &amp;&amp; card.<span class="hljs-property">value</span> === topCard.<span class="hljs-property">value</span>);
+  }
+}
+</code></pre><hr>
+<h3 id="5.1">5.1 音频管理器</h3>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">AudioManager</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">context</span>: <span class="hljs-title class_">AudioContext</span> | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">sounds</span>: <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-title class_">AudioBuffer</span>&gt; = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">init</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span> = <span class="hljs-title function_">new</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">AudioContext</span> || (<span class="hljs-variable language_">window</span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>).<span class="hljs-property">webkitAudioContext</span>)();
+    <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">loadSounds</span>();
+  }
+
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">loadSounds</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> soundFiles = [<span class="hljs-string">&#x27;login&#x27;</span>, <span class="hljs-string">&#x27;match-success&#x27;</span>, <span class="hljs-string">&#x27;game-start&#x27;</span>, <span class="hljs-string">&#x27;play-card&#x27;</span>, <span class="hljs-string">&#x27;shout-uno&#x27;</span>, <span class="hljs-string">&#x27;challenge&#x27;</span>, <span class="hljs-string">&#x27;draw-card&#x27;</span>, <span class="hljs-string">&#x27;win&#x27;</span>, <span class="hljs-string">&#x27;lose&#x27;</span>, <span class="hljs-string">&#x27;game-over&#x27;</span>];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> sound <span class="hljs-keyword">of</span> soundFiles) {
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/sounds/<span class="hljs-subst">${sound}</span>.mp3`</span>);
+      <span class="hljs-keyword">const</span> arrayBuffer = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">arrayBuffer</span>();
+      <span class="hljs-keyword">const</span> audioBuffer = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>!.<span class="hljs-title function_">decodeAudioData</span>(arrayBuffer);
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">sounds</span>.<span class="hljs-title function_">set</span>(sound, audioBuffer);
+    }
+  }
+
+  <span class="hljs-title function_">play</span>(<span class="hljs-params"><span class="hljs-attr">soundName</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">volume</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">1</span></span>) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span> || !<span class="hljs-variable language_">this</span>.<span class="hljs-property">sounds</span>.<span class="hljs-title function_">has</span>(soundName)) <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-keyword">const</span> source = <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>.<span class="hljs-title function_">createBufferSource</span>();
+    <span class="hljs-keyword">const</span> gainNode = <span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>.<span class="hljs-title function_">createGain</span>();
+    source.<span class="hljs-property">buffer</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">sounds</span>.<span class="hljs-title function_">get</span>(soundName)!;
+    gainNode.<span class="hljs-property">gain</span>.<span class="hljs-property">value</span> = volume;
+    source.<span class="hljs-title function_">connect</span>(gainNode);
+    gainNode.<span class="hljs-title function_">connect</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">context</span>.<span class="hljs-property">destination</span>);
+    source.<span class="hljs-title function_">start</span>();
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> audioManager = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AudioManager</span>();
+</code></pre><hr>
+<h3 id="6.1">6.1 各模块工作量</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>工作量占比</th>
+<th>预估工时</th>
+<th>核心挑战</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3D 渲染系统</td>
+<td>30%</td>
+<td>96h</td>
+<td>Three.js 性能优化</td>
+</tr>
+<tr>
+<td>2D 渲染系统</td>
+<td>20%</td>
+<td>64h</td>
+<td>响应式布局</td>
+</tr>
+<tr>
+<td>游戏逻辑</td>
+<td>20%</td>
+<td>64h</td>
+<td>UNO 规则复杂度</td>
+</tr>
+<tr>
+<td>WebSocket 通信</td>
+<td>15%</td>
+<td>48h</td>
+<td>状态同步</td>
+</tr>
+<tr>
+<td>AI 对手</td>
+<td>10%</td>
+<td>32h</td>
+<td>决策算法</td>
+</tr>
+<tr>
+<td>音效系统</td>
+<td>5%</td>
+<td>16h</td>
+<td>Web Audio API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>总计</strong>: 约 320h (8周/人)</p>
+<hr>
+<h3 id="6.2">6.2 关键技术攻关时间</h3>
+<table>
+<thead>
+<tr>
+<th>技术点</th>
+<th>预估时间</th>
+<th>风险等级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3D 卡牌性能优化</td>
+<td>24h</td>
+<td>高</td>
+</tr>
+<tr>
+<td>粒子特效系统</td>
+<td>16h</td>
+<td>中</td>
+</tr>
+<tr>
+<td>响应式适配</td>
+<td>16h</td>
+<td>中</td>
+</tr>
+<tr>
+<td>WebSocket 重连</td>
+<td>16h</td>
+<td>中</td>
+</tr>
+<tr>
+<td>AI 决策优化</td>
+<td>24h</td>
+<td>低</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="5-2-核心技术实现.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第5卷 FastDocument</span>
+          </a>
+              <a href="6-1-手写代码题库.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第6卷 手写代码题</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

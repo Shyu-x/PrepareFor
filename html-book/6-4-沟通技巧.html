@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第6卷-面试技巧与总结 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#4" class="toc-link "><span>第4章 面试软技能</span></a></li><li class="toc-item"><a href="#4-1" class="toc-link "><span>4-1 沟通技巧</span></a></li><li class="toc-item"><a href="#4.1" class="toc-link "><span>4.1 技术问题回答技巧</span></a></li><li class="toc-item"><a href="#4.2" class="toc-link "><span>4.2 反问面试官技巧</span></a></li><li class="toc-item"><a href="#4.3" class="toc-link "><span>4.3 谈薪与入职技巧</span></a></li><li class="toc-item"><a href="#4.4" class="toc-link "><span>4.4 谈离职原因技巧</span></a></li><li class="toc-item"><a href="#4.5" class="toc-link "><span>4.5 常见面试问题应对</span></a></li><li class="toc-item"><a href="#4.6" class="toc-link "><span>4.6 面试心态调整</span></a></li><li class="toc-item"><a href="#4.7" class="toc-link "><span>4.7 各厂面试风格分析</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第6卷 面试技巧与总结 / 第4章 面试软技能</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第6卷 面试技巧与总结</span>
+            </div>
+            <h1 class="article-title">第6卷-面试技巧与总结</h1>
+          </header>
+
+          <div class="content"><h2 id="4">第4章 面试软技能</h2>
+<h2 id="4-1">4-1 沟通技巧</h2>
+<h3 id="4.1">4.1 技术问题回答技巧</h3>
+<h4 id="4.1.1">4.1.1 被问倒怎么办</h4>
+<p>当遇到不会的问题时：</p>
+<ol>
+<li><strong>诚实承认</strong>：明确表示这个知识点是你的盲区</li>
+<li><strong>展示思路</strong>：尝试给出解决思路，展示你的学习能力</li>
+<li><strong>关联迁移</strong>：尝试用已知的相关知识来类比</li>
+<li><strong>后续计划</strong>：说明你会如何补齐这个知识点</li>
+</ol>
+<p><strong>示例</strong>：</p>
+<blockquote>
+<p>“这个问题我之前确实没有深入研究过，不过根据我对此的理解，它可能涉及XXX原理。我的学习计划是XXX…”</p>
+</blockquote>
+<h4 id="4.1.2">4.1.2 深入追问怎么答</h4>
+<p>当面试官深入追问时：</p>
+<ol>
+<li><strong>讲原理</strong>：先讲核心原理</li>
+<li><strong>说实现</strong>：结合实际代码实现</li>
+<li><strong>谈优化</strong>：提及可能的优化方案</li>
+<li><strong>画重点</strong>：可以用画图或比划的方式辅助说明</li>
+</ol>
+<hr>
+<h3 id="4.2">4.2 反问面试官技巧</h3>
+<h4 id="4.2.1">4.2.1 高质量问题示例</h4>
+<ol>
+<li>
+<p><strong>团队技术栈</strong>：</p>
+<blockquote>
+<p>“贵司前端团队目前主要使用哪些技术框架？对于新技术的引入有什么标准？”</p>
+</blockquote>
+</li>
+<li>
+<p><strong>成长空间</strong>：</p>
+<blockquote>
+<p>“公司对于初级工程师的成长路径是如何规划的？有没有技术分享或培训机制？”</p>
+</blockquote>
+</li>
+<li>
+<p><strong>业务挑战</strong>：</p>
+<blockquote>
+<p>“目前团队面临的最大技术挑战是什么？我能如何参与解决？”</p>
+</blockquote>
+</li>
+<li>
+<p><strong>团队氛围</strong>：</p>
+<blockquote>
+<p>“团队平时有什么技术交流活动吗？Code Review的频率是怎样的？”</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="4.2.2">4.2.2 应聘公司研究</h4>
+<p>面试前必须了解：</p>
+<ol>
+<li><strong>公司业务</strong>：产品定位、目标用户、市场地位</li>
+<li><strong>技术博客</strong>：公司技术公众号、博客、GitHub</li>
+<li><strong>融资情况</strong>：融资阶段、规模</li>
+<li><strong>行业动态</strong>：最近新闻、动向</li>
+</ol>
+<hr>
+<h3 id="4.3">4.3 谈薪与入职技巧</h3>
+<h4 id="4.3.1">4.3.1 薪资谈判策略</h4>
+<ol>
+<li><strong>基于市场</strong>：提前调研同级别同岗位的薪资范围</li>
+<li><strong>基于价值</strong>：强调自己的核心竞争力和价值</li>
+<li><strong>基于组合</strong>：除了基本工资，也要关注股票、期权、福利</li>
+<li><strong>留有余地</strong>：给出期望区间，给谈判留空间</li>
+</ol>
+<h4 id="4.3.2">4.3.2 谈薪注意事项</h4>
+<ol>
+<li><strong>不要先报价</strong>：让HR先了解你的期望</li>
+<li><strong>突出价值</strong>：强调你能为公司带来的价值</li>
+<li><strong>注意语气</strong>：保持专业、自信但不傲慢</li>
+<li><strong>考虑整体</strong>：综合考虑基本工资、奖金、股票、福利</li>
+</ol>
+<h4 id="4.3.3">4.3.3 期望薪资写法</h4>
+<p><strong>建议写法</strong>：</p>
+<blockquote>
+<p>“基于我的经验和能力，以及对市场薪资水平的了解，我的期望薪资是 XXK ~ XXK/月。当然，我也愿意根据公司的整体薪酬方案进行沟通。”</p>
+</blockquote>
+<hr>
+<h3 id="4.4">4.4 谈离职原因技巧</h3>
+<h4 id="4.4.1">4.4.1 好的离职原因</h4>
+<ol>
+<li><strong>职业发展</strong>：寻求更大的发展空间和挑战</li>
+<li><strong>技术追求</strong>：追求更先进的技术栈</li>
+<li><strong>工作地点</strong>：搬家或通勤原因</li>
+<li><strong>公司调整</strong>：公司业务调整或部门变动</li>
+</ol>
+<h4 id="4.4.2">4.4.2 不好的离职原因</h4>
+<ol>
+<li><strong>抱怨前公司</strong>：不要说前公司的坏话</li>
+<li><strong>人际问题</strong>：不要抱怨同事或领导</li>
+<li><strong>薪资太低</strong>：虽然是常见原因，但不要说&quot;因为钱少&quot;</li>
+<li><strong>工作太累</strong>：不要说因为加班多</li>
+</ol>
+<h4 id="4.4.3">4.4.3 离职原因示例</h4>
+<p><strong>推荐说法</strong>：</p>
+<blockquote>
+<p>“在上一家公司我已经学到了很多，也取得了不错的成绩。但我认为自己已经到了需要寻求更大挑战的阶段，希望能够在技术深度和业务广度上都有更大的提升。”</p>
+</blockquote>
+<p><strong>或者</strong>：</p>
+<blockquote>
+<p>“公司的发展方向和我的职业规划有了一些偏差，我希望能够在一个更专注于前端技术创新的团队中发展。”</p>
+</blockquote>
+<hr>
+<h3 id="4.5">4.5 常见面试问题应对</h3>
+<h4 id="4.5.1">4.5.1 自我介绍</h4>
+<p><strong>1分钟版本</strong>：</p>
+<blockquote>
+<p>“面试官您好，我叫XXX，有X年的前端开发经验。我之前在XXX公司负责XXX项目，主要使用React、Vue等技术栈。在过去的工作中，我擅长性能优化和工程化建设，曾主导XXX项目取得了XXX成果。今天应聘的是XXX岗位，希望能够加入贵公司继续发展。”</p>
+</blockquote>
+<p><strong>3分钟版本</strong>：</p>
+<blockquote>
+<p>&quot;面试官您好，我叫XXX，毕业于XXX学校计算机专业，从事前端开发工作已有X年。</p>
+<p>我的工作经历主要分为两个阶段：第一阶段在XXX公司，我负责了XXX项目的开发，积累了扎实的基础；第二阶段在XXX公司，我作为前端负责人主导了XXX项目，从零到一搭建了技术架构，团队规模从X人发展到X人。</p>
+<p>在技术方面，我熟练掌握React、Vue等主流框架，对性能优化和工程化有深入研究。在上一份工作中，我将项目首屏加载时间从X秒优化到X秒，提升了X%。</p>
+<p>我选择投递贵公司，是因为看好XXX领域的发展前景，而且贵公司的技术氛围和团队文化非常吸引我。&quot;</p>
+</blockquote>
+<h4 id="4.5.2">4.5.2 你的缺点是什么</h4>
+<p><strong>回答技巧</strong>：</p>
+<ul>
+<li>选择与工作不直接冲突的缺点</li>
+<li>承认缺点的同时展示改进措施</li>
+<li>避免说&quot;没有缺点&quot;或太致命的缺点</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<blockquote>
+<p>“我有时候会对代码质量要求过高，导致在一些紧急需求上花费较多时间。后来我学会了在不同场景下调整优先级，紧急需求先保证功能可用，后续再进行优化。”</p>
+</blockquote>
+<h4 id="4.5.3">4.5.3 你还有什么要问我的</h4>
+<p><strong>推荐问题</strong>：</p>
+<ul>
+<li>
+<p>技术相关：</p>
+<blockquote>
+<p>“贵公司前端团队目前面临的最大技术挑战是什么？”
+“团队的技术栈选型是如何决定的？”</p>
+</blockquote>
+</li>
+<li>
+<p>团队相关：</p>
+<blockquote>
+<p>“团队目前的规模和分工是怎样的？”
+“团队的技术分享频率和形式是怎样的？”</p>
+</blockquote>
+</li>
+<li>
+<p>岗位相关：</p>
+<blockquote>
+<p>“这个岗位的主要工作内容是什么？”
+“成功胜任这个岗位需要具备哪些核心能力？”</p>
+</blockquote>
+</li>
+<li>
+<p>发展相关：</p>
+<blockquote>
+<p>“公司对员工的成长路径是如何规划的？”
+“在这个岗位上未来可能的发展方向是什么？”</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>避免问题</strong>：</p>
+<ul>
+<li>薪资福利（留到HR面再问）</li>
+<li>面试结果（不要当场追问）</li>
+<li>能否入职（显得太急躁）</li>
+</ul>
+<hr>
+<h3 id="4.6">4.6 面试心态调整</h3>
+<h4 id="4.6.1">4.6.1 保持自信</h4>
+<ol>
+<li><strong>充分准备</strong>：提前准备好常见问题的答案</li>
+<li><strong>换位思考</strong>：展示你能为公司带来的价值</li>
+<li><strong>不要卑微</strong>：你是来找工作的，不是来求工作的</li>
+<li><strong>接受失败</strong>：每一次面试都是学习的机会</li>
+</ol>
+<h4 id="4.6.2">4.6.2 应对高压面试</h4>
+<ol>
+<li><strong>保持冷静</strong>：不要被面试官的态度影响</li>
+<li><strong>理清思路</strong>：回答前先思考一下再回答</li>
+<li><strong>展示学习能力</strong>：遇到不会的问题展示你的思路</li>
+<li><strong>及时调整</strong>：如果感觉不对，及时调整状态</li>
+</ol>
+<h4 id="4.6.3">4.6.3 面试后跟进</h4>
+<ol>
+<li><strong>发送感谢信</strong>：面试后24小时内发送感谢邮件</li>
+<li><strong>保持礼貌</strong>：即使没有通过，也保持良好态度</li>
+<li><strong>及时复盘</strong>：每次面试后及时总结经验教训</li>
+</ol>
+<hr>
+<h3 id="4.7">4.7 各厂面试风格分析</h3>
+<table>
+<thead>
+<tr>
+<th>公司</th>
+<th>技术深度</th>
+<th>算法要求</th>
+<th>项目经验</th>
+<th>coding</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阿里</td>
+<td>高</td>
+<td>中高</td>
+<td>非常重视</td>
+<td>会考</td>
+<td>业务导向，价值观考核</td>
+</tr>
+<tr>
+<td>字节</td>
+<td>高</td>
+<td>非常高</td>
+<td>重视</td>
+<td>必考</td>
+<td>快速编码，原理深入</td>
+</tr>
+<tr>
+<td>腾讯</td>
+<td>高</td>
+<td>中高</td>
+<td>非常重视</td>
+<td>会考</td>
+<td>项目细节追问多</td>
+</tr>
+<tr>
+<td>美团</td>
+<td>中高</td>
+<td>中</td>
+<td>重视</td>
+<td>会考</td>
+<td>业务场景题多</td>
+</tr>
+<tr>
+<td>京东</td>
+<td>中</td>
+<td>中</td>
+<td>重视</td>
+<td>偶尔考</td>
+<td>匹配度为主</td>
+</tr>
+<tr>
+<td>拼多多</td>
+<td>中高</td>
+<td>高</td>
+<td>重视</td>
+<td>会考</td>
+<td>效率优先</td>
+</tr>
+<tr>
+<td>快手</td>
+<td>高</td>
+<td>高</td>
+<td>重视</td>
+<td>会考</td>
+<td>潜力看重</td>
+</tr>
+<tr>
+<td>百度</td>
+<td>高</td>
+<td>中高</td>
+<td>重视</td>
+<td>会考</td>
+<td>技术导向</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>文档版本：v1.0
+更新时间：2026-03-07</p>
+</blockquote>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="6-3-简历优化.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第6卷 简历深度分析</span>
+          </a>
+              <a href="6-5-考点总结.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第6卷 高频考点速览</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

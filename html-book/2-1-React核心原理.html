@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2卷-框架生态 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#1-react" class="toc-link "><span>第1章 React深入</span></a></li><li class="toc-item"><a href="#1.1-dom" class="toc-link "><span>1.1 虚拟DOM深度解析</span></a></li><li class="toc-item"><a href="#1.2-fiber" class="toc-link "><span>1.2 Fiber架构深度解析</span></a></li><li class="toc-item"><a href="#1.3" class="toc-link "><span>1.3 调和算法深度解析</span></a></li><li class="toc-item"><a href="#1.4-react" class="toc-link "><span>1.4 React渲染机制底层原理</span></a></li><li class="toc-item"><a href="#1.2-fiber" class="toc-link "><span>1.2 Fiber 架构详细解析</span></a></li><li class="toc-item"><a href="#1.3-concurrent-mode" class="toc-link "><span>1.3 Concurrent Mode 原理</span></a></li><li class="toc-item"><a href="#1.5-reactdiff" class="toc-link "><span>1.5 ReactDiff算法深入</span></a></li><li class="toc-item"><a href="#2.1-react-17-diff" class="toc-link "><span>2.1 React 17+ Diff 策略</span></a></li><li class="toc-item"><a href="#2.2-reconciliation" class="toc-link "><span>2.2 调和 (Reconciliation) 过程</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第2卷 框架生态 / 第1章 React深入</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第2卷 框架生态</span>
+            </div>
+            <h1 class="article-title">第2卷-框架生态</h1>
+          </header>
+
+          <div class="content"><hr>
+<h2 id="1-react">第1章 React深入</h2>
+<hr>
+<h3 id="1.1-dom">1.1 虚拟DOM深度解析</h3>
+<h4 id="1.1.1-dom">1.1.1 什么是虚拟DOM</h4>
+<p><strong>参考答案：</strong></p>
+<p>虚拟 DOM（Virtual DOM）是 React 的核心概念，它是一个 JavaScript 对象树，用于描述真实 DOM 的结构和状态。React 通过在内存中维护一个虚拟 DOM 树来高效地更新真实 DOM。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃                         虚拟 DOM 架构                            ┃
+┃                                                                  ┃
+┃   真实 DOM 结构：                                                ┃
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃  
+┃   ┃ &lt;div id="root"&gt;                                          ┃  ┃ 
+┃   ┃   &lt;ul&gt;                                                   ┃  ┃ 
+┃   ┃     &lt;li class="item"&gt;Item 1&lt;/li&gt;                        ┃  ┃  
+┃   ┃     &lt;li class="item"&gt;Item 2&lt;/li&gt;                        ┃  ┃  
+┃   ┃   &lt;/ul&gt;                                                  ┃  ┃ 
+┃   ┃ &lt;/div&gt;                                                   ┃  ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃  
+┃                                                                  ┃
+┃   虚拟 DOM 结构（JavaScript 对象）：                             ┃
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃  
+┃   ┃ {                                                         ┃  ┃
+┃   ┃   type: 'div',                                           ┃  ┃ 
+┃   ┃   props: { id: 'root' },                                 ┃  ┃ 
+┃   ┃   children: [                                            ┃  ┃ 
+┃   ┃     {                                                     ┃  ┃
+┃   ┃       type: 'ul',                                         ┃  ┃
+┃   ┃       children: [                                        ┃  ┃ 
+┃   ┃         { type: 'li', props: { className: 'item' },     ┃  ┃  
+┃   ┃           children: ['Item 1'] },                        ┃  ┃ 
+┃   ┃         { type: 'li', props: { className: 'item' },     ┃  ┃  
+┃   ┃           children: ['Item 2'] }                         ┃  ┃ 
+┃   ┃       ]                                                   ┃  ┃
+┃   ┃     }                                                     ┃  ┃
+┃   ┃   ]                                                       ┃  ┃
+┃   ┃ }                                                         ┃  ┃
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃  
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+
+</code></pre><h4 id="1.1.2-dom">1.1.2 虚拟DOM的优点</h4>
+<p><strong>参考答案：</strong></p>
+<ol>
+<li><strong>减少真实 DOM 操作</strong>：直接操作真实 DOM 成本很高，虚拟 DOM 通过 diff 算法最小化操作</li>
+<li><strong>跨平台渲染</strong>：虚拟 DOM 可以渲染到不同平台（Web、React Native、React 3D 等）</li>
+<li><strong>声明式编程</strong>：开发者只需要描述 UI 的最终状态，React 负责处理具体的 DOM 操作</li>
+<li><strong>可预测性</strong>：状态变化有明确的流程，更容易调试和测试</li>
+<li><strong>函数式 UI 更新</strong>：符合函数式编程范式，UI = f(state)</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 虚拟 DOM 示例</span>
+<span class="hljs-comment">// 这段 JSX 会被编译成虚拟 DOM 对象</span>
+<span class="hljs-keyword">const</span> element = (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Item 1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Item 2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+);
+
+<span class="hljs-comment">// 编译后的虚拟 DOM 结构</span>
+{
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;div&#x27;</span>,
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;container&#x27;</span>,
+    <span class="hljs-attr">children</span>: [
+      { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;h1&#x27;</span>, <span class="hljs-attr">props</span>: { <span class="hljs-attr">children</span>: <span class="hljs-string">&#x27;Hello&#x27;</span> } },
+      {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;ul&#x27;</span>,
+        <span class="hljs-attr">props</span>: {
+          <span class="hljs-attr">children</span>: [
+            { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;li&#x27;</span>, <span class="hljs-attr">props</span>: { <span class="hljs-attr">children</span>: <span class="hljs-string">&#x27;Item 1&#x27;</span> } },
+            { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;li&#x27;</span>, <span class="hljs-attr">props</span>: { <span class="hljs-attr">children</span>: <span class="hljs-string">&#x27;Item 2&#x27;</span> } }
+          ]
+        }
+      }
+    ]
+  }
+}
+</code></pre><h4 id="1.1.3-dom">1.1.3 虚拟DOM的缺点</h4>
+<p><strong>参考答案：</strong></p>
+<ol>
+<li><strong>内存开销</strong>：需要额外的内存来存储虚拟 DOM 树</li>
+<li><strong>首次渲染可能较慢</strong>：需要先构建虚拟 DOM 树，再渲染真实 DOM</li>
+<li><strong>不适用于所有场景</strong>：对于简单的静态页面，直接操作 DOM 可能更高效</li>
+<li><strong>学习曲线</strong>：需要理解 React 的工作方式和数据流</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 简单场景下，直接操作 DOM 可能更高效</span>
+<span class="hljs-comment">// 例如：只需要更新一个简单的时间显示</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Clock</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [time, setTime] = <span class="hljs-title function_">useState</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">toLocaleTimeString</span>());
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">setTime</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">toLocaleTimeString</span>());
+    }, <span class="hljs-number">1000</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearInterval</span>(timer);
+  }, []);
+
+  <span class="hljs-comment">// 这种简单场景下，虚拟 DOM 带来的开销可能不值得</span>
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{time}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre><h4 id="1.1.4-dom">1.1.4 虚拟DOM的实现原理</h4>
+<p><strong>参考答案：</strong></p>
+<p>React 中的虚拟 DOM 实现主要包含以下几个部分：</p>
+<ol>
+<li><strong>React Element</strong>：虚拟 DOM 的基本单元</li>
+<li><strong>Fiber 节点</strong>：React 16+ 的内部数据结构</li>
+<li><strong>Diff 算法</strong>：比较新旧虚拟 DOM 的差异</li>
+<li><strong>Reconciliation</strong>：协调和更新真实 DOM</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// React Element 的创建过程</span>
+<span class="hljs-comment">// JSX 会被 Babel 转译为 createElement 调用</span>
+<span class="hljs-keyword">const</span> element = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">createElement</span>(
+  <span class="hljs-string">&#x27;div&#x27;</span>,                    <span class="hljs-comment">// type: 元素类型</span>
+  { <span class="hljs-attr">className</span>: <span class="hljs-string">&#x27;wrapper&#x27;</span> }, <span class="hljs-comment">// props: 元素属性</span>
+  <span class="hljs-string">&#x27;Hello World&#x27;</span>            <span class="hljs-comment">// children: 子元素</span>
+);
+
+<span class="hljs-comment">// createElement 的简化实现</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createElement</span>(<span class="hljs-params">type, props, ...children</span>) {
+  <span class="hljs-keyword">return</span> {
+    type,
+    <span class="hljs-attr">props</span>: {
+      ...props,
+      <span class="hljs-attr">children</span>: children.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">child</span> =&gt;</span>
+        <span class="hljs-keyword">typeof</span> child === <span class="hljs-string">&#x27;object&#x27;</span> ? child : <span class="hljs-title function_">createTextElement</span>(child)
+      )
+    }
+  };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createTextElement</span>(<span class="hljs-params">text</span>) {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;TEXT_ELEMENT&#x27;</span>,
+    <span class="hljs-attr">props</span>: {
+      <span class="hljs-attr">nodeValue</span>: text,
+      <span class="hljs-attr">children</span>: []
+    }
+  };
+}
+</code></pre><hr>
+<h3 id="1.2-fiber">1.2 Fiber架构深度解析</h3>
+<h4 id="1.2.1-react">1.2.1 React架构演进</h4>
+<p><strong>参考答案：</strong></p>
+<p>React 的架构经历了从 React 15 的 Stack Reconciler 到 React 16+ 的 Fiber Reconciler 的重大变革。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    
+┃                    React 架构演进                                ┃   
+┃                                                                  ┃   
+┃  React 15 (Stack Reconciler)                                    ┃    
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃    
+┃  ┃                                                          ┃    ┃   
+┃  ┃   组件A ━━▶ 组件B ━━▶ 组件C ━━▶ ... ━━▶ DOM 更新    ┃    ┃        
+┃  ┃                                                          ┃    ┃   
+┃  ┃   特点：                                                  ┃    ┃  
+┃  ┃   - 同步递归执行                                          ┃    ┃  
+┃  ┃   - 无法中断                                              ┃    ┃  
+┃  ┃   - 大组件树更新会阻塞 UI                                 ┃    ┃  
+┃  ┃   - 无法处理优先级                                        ┃    ┃  
+┃  ┃   - 递归调用栈过深会导致性能问题                           ┃    ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃    
+┃                                                                  ┃   
+┃  React 16+ (Fiber Reconciler)                                   ┃    
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃    
+┃  ┃                                                          ┃    ┃   
+┃  ┃   Work Loop (可中断)                                    ┃    ┃    
+┃  ┃                                                          ┃    ┃   
+┃  ┃   1. beginWork ━━▶ 2. completeWork ━━▶ 3. commit       ┃    ┃     
+┃  ┃        ┃                                                    ┃    ┃
+┃  ┃        ▼                                                    ┃    ┃
+┃  ┃   可以根据优先级跳过/恢复任务                              ┃    ┃ 
+┃  ┃   支持并发渲染                                             ┃    ┃ 
+┃  ┃                                                          ┃    ┃   
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃    
+┃                                                                  ┃   
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    
+
+</code></pre><h4 id="1.2.2-fiber">1.2.2 为什么需要Fiber</h4>
+<p><strong>参考答案：</strong></p>
+<p>Fiber 的引入解决了以下问题：</p>
+<ol>
+<li><strong>可中断渲染</strong>：长时间运行的渲染任务可以被中断，让出主线程</li>
+<li><strong>优先级调度</strong>：根据任务的重要程度分配优先级</li>
+<li><strong>增量渲染</strong>：将渲染工作分散到多个帧中</li>
+<li><strong>更好的异步支持</strong>：支持 Suspense、Concurrent Mode 等特性</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 传统 Stack Reconciler 的问题</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">processComponentTree</span>(<span class="hljs-params">components</span>) {
+  <span class="hljs-comment">// 这个过程是同步的，无法中断</span>
+  <span class="hljs-comment">// 如果组件树很大，会长时间阻塞主线程</span>
+  <span class="hljs-comment">// 导致页面卡顿、动画不流畅等问题</span>
+  components.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
+    <span class="hljs-title function_">renderComponent</span>(component);
+  });
+}
+
+<span class="hljs-comment">// Fiber 的解决方案</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fiberWorkLoop</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 每次只处理一个 Fiber 节点</span>
+  <span class="hljs-comment">// 处理完成后检查是否需要让出主线程</span>
+  <span class="hljs-keyword">while</span> (nextUnitOfWork !== <span class="hljs-literal">null</span>) {
+    nextUnitOfWork = <span class="hljs-title function_">performUnitOfWork</span>(nextUnitOfWork);
+    <span class="hljs-comment">// 检查是否有更高优先级的任务</span>
+    <span class="hljs-keyword">if</span> (priorityLevel &gt; currentPriority) {
+      <span class="hljs-comment">// 让出主线程，处理更高优先级的任务</span>
+      <span class="hljs-keyword">yield</span>; <span class="hljs-comment">// 中断当前工作</span>
+    }
+  }
+}
+</code></pre><h4 id="1.2.3-fiber">1.2.3 Fiber节点结构</h4>
+<p><strong>参考答案：</strong></p>
+<p>Fiber 节点是 React 16+ 的核心数据结构，它是一个链表结构的 JavaScript 对象。</p>
+<pre class="hljs"><code><span class="hljs-comment">// Fiber 节点的完整结构</span>
+<span class="hljs-keyword">const</span> fiber = {
+  <span class="hljs-comment">// 组件信息</span>
+  <span class="hljs-attr">type</span>: <span class="hljs-title class_">Component</span>,           <span class="hljs-comment">// 组件类型（函数组件、类组件或 DOM 标签）</span>
+  <span class="hljs-attr">key</span>: <span class="hljs-literal">null</span>,                 <span class="hljs-comment">// key 属性，用于列表diff</span>
+  <span class="hljs-attr">tag</span>: <span class="hljs-title class_">FunctionComponent</span>,   <span class="hljs-comment">// Fiber 节点类型标签</span>
+
+  <span class="hljs-comment">// 链表结构 - 这是 Fiber 的核心</span>
+  <span class="hljs-attr">return</span>: fiber,            <span class="hljs-comment">// 父 Fiber 节点</span>
+  <span class="hljs-attr">child</span>: fiber,             <span class="hljs-comment">// 第一个子 Fiber 节点</span>
+  <span class="hljs-attr">sibling</span>: fiber,           <span class="hljs-comment">// 下一个兄弟 Fiber 节点</span>
+  <span class="hljs-attr">index</span>: <span class="hljs-number">0</span>,                 <span class="hljs-comment">// 在兄弟节点中的索引</span>
+
+  <span class="hljs-comment">// 状态数据</span>
+  <span class="hljs-attr">stateNode</span>: <span class="hljs-literal">null</span>,          <span class="hljs-comment">// DOM 节点或组件实例</span>
+  <span class="hljs-attr">pendingProps</span>: {},        <span class="hljs-comment">// 新的 props（正在处理中）</span>
+  <span class="hljs-attr">memoizedProps</span>: {},        <span class="hljs-comment">// 旧的 props（已确认的）</span>
+  <span class="hljs-attr">memoizedState</span>: {},        <span class="hljs-comment">// 旧的 state（已确认的）</span>
+  <span class="hljs-attr">updateQueue</span>: [],          <span class="hljs-comment">// 待处理的更新队列</span>
+
+  <span class="hljs-comment">// 副作用相关</span>
+  <span class="hljs-attr">effectTag</span>: <span class="hljs-string">&#x27;UPDATE&#x27;</span>,     <span class="hljs-comment">// 副作用类型标签</span>
+  <span class="hljs-attr">nextEffect</span>: fiber,       <span class="hljs-comment">// 下一个有副作用的 Fiber 节点</span>
+  <span class="hljs-attr">firstEffect</span>: fiber,      <span class="hljs-comment">// 第一个有副作用的子 Fiber</span>
+  <span class="hljs-attr">lastEffect</span>: fiber,       <span class="hljs-comment">// 最后一个有副作用的子 Fiber</span>
+
+  <span class="hljs-comment">// 过期状态（用于并发模式）</span>
+  <span class="hljs-attr">lanes</span>: <span class="hljs-number">0</span>,                <span class="hljs-comment">// 当前 Fiber 的所有车道</span>
+  <span class="hljs-attr">childLanes</span>: <span class="hljs-number">0</span>,          <span class="hljs-comment">// 子 Fiber 的车道</span>
+
+  <span class="hljs-comment">// 调试信息</span>
+  <span class="hljs-attr">alternate</span>: fiber,       <span class="hljs-comment">// 交替 Fiber（用于双缓冲技术）</span>
+  <span class="hljs-attr">deletions</span>: [],          <span class="hljs-comment">// 需要删除的子 Fiber</span>
+};
+
+<span class="hljs-comment">// 副作用标签类型</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">EffectTags</span> = {
+  <span class="hljs-attr">UPDATE</span>: <span class="hljs-string">&#x27;UPDATE&#x27;</span>,           <span class="hljs-comment">// 更新 DOM</span>
+  <span class="hljs-attr">PLACEMENT</span>: <span class="hljs-string">&#x27;PLACEMENT&#x27;</span>,    <span class="hljs-comment">// 新建 DOM 节点</span>
+  <span class="hljs-attr">DELETION</span>: <span class="hljs-string">&#x27;DELETION&#x27;</span>,      <span class="hljs-comment">// 删除 DOM 节点</span>
+  <span class="hljs-attr">CONTENT_RESET</span>: <span class="hljs-string">&#x27;CONTENT_RESET&#x27;</span>, <span class="hljs-comment">// 内容重置</span>
+  <span class="hljs-attr">PASSIVE</span>: <span class="hljs-string">&#x27;PASSIVE&#x27;</span>,        <span class="hljs-comment">// useEffect 副作用</span>
+};
+</code></pre><h4 id="1.2.4-fiber">1.2.4 Fiber树的双缓冲技术</h4>
+<p><strong>参考答案：</strong></p>
+<p>React 使用双缓冲技术管理 Fiber 树：维护 current 树（屏幕上显示的）和 workInProgress 树（正在构建的）。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 双缓冲技术示意</span>
+<span class="hljs-comment">// 当前 Fiber 树（显示在屏幕上）</span>
+<span class="hljs-keyword">const</span> currentFiberTree = {
+  <span class="hljs-attr">root</span>: {
+    <span class="hljs-attr">child</span>: {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;App&#x27;</span>,
+      <span class="hljs-attr">child</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Header&#x27;</span>,
+        <span class="hljs-attr">sibling</span>: {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Content&#x27;</span>
+        }
+      }
+    }
+  }
+};
+
+<span class="hljs-comment">// Work In Progress Fiber 树（正在构建）</span>
+<span class="hljs-keyword">const</span> workInProgressFiberTree = {
+  <span class="hljs-attr">root</span>: {
+    <span class="hljs-attr">child</span>: {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;App&#x27;</span>,
+      <span class="hljs-attr">child</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Header&#x27;</span>,  <span class="hljs-comment">// 可能被复用或重建</span>
+        <span class="hljs-attr">sibling</span>: {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Content&#x27;</span> <span class="hljs-comment">// 可能被复用或重建</span>
+        }
+      }
+    }
+  }
+};
+
+<span class="hljs-comment">// 双缓冲切换过程</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">commitRoot</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-comment">// 1. 处理所有副作用</span>
+  root.<span class="hljs-property">finishedWork</span> = root.<span class="hljs-property">current</span>.<span class="hljs-property">alternate</span>;
+  root.<span class="hljs-property">current</span> = root.<span class="hljs-property">current</span>.<span class="hljs-property">alternate</span>;
+
+  <span class="hljs-comment">// 2. 完成渲染后切换指针</span>
+  <span class="hljs-comment">// workInProgress 变成 current</span>
+}
+</code></pre><h4 id="1.2.5-fiber">1.2.5 Fiber工作循环</h4>
+<p><strong>参考答案：</strong></p>
+<p>Fiber 的工作循环是 React 渲染过程的核心，它是一个可中断的循环。</p>
+<pre class="hljs"><code><span class="hljs-comment">// Fiber 工作循环的简化实现</span>
+<span class="hljs-keyword">let</span> nextUnitOfWork = <span class="hljs-literal">null</span>;   <span class="hljs-comment">// 下一个工作单元</span>
+<span class="hljs-keyword">let</span> workInProgress = <span class="hljs-literal">null</span>;   <span class="hljs-comment">// 正在工作的 Fiber</span>
+<span class="hljs-keyword">let</span> current = <span class="hljs-literal">null</span>;          <span class="hljs-comment">// 当前 Fiber 树根节点</span>
+
+<span class="hljs-comment">// 调度工作循环</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">scheduleWork</span>(<span class="hljs-params">root</span>) {
+  nextUnitOfWork = root;
+  <span class="hljs-title function_">requestIdleCallback</span>(performWork);
+}
+
+<span class="hljs-comment">// 执行工作循环</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">performWork</span>(<span class="hljs-params">deadline</span>) {
+  <span class="hljs-comment">// 循环处理工作单元</span>
+  <span class="hljs-keyword">while</span> (nextUnitOfWork &amp;&amp; deadline.<span class="hljs-title function_">timeRemaining</span>() &gt; <span class="hljs-number">0</span>) {
+    nextUnitOfWork = <span class="hljs-title function_">performUnitOfWork</span>(nextUnitOfWork);
+  }
+
+  <span class="hljs-comment">// 如果还有工作，调度下一帧继续</span>
+  <span class="hljs-keyword">if</span> (nextUnitOfWork) {
+    <span class="hljs-title function_">requestIdleCallback</span>(performWork);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 所有工作完成，提交更改</span>
+    <span class="hljs-title function_">commitRoot</span>();
+  }
+}
+
+<span class="hljs-comment">// 处理单个 Fiber 节点</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">performUnitOfWork</span>(<span class="hljs-params">fiber</span>) {
+  <span class="hljs-comment">// 1. beginWork - 处理当前节点</span>
+  <span class="hljs-keyword">const</span> children = <span class="hljs-title function_">beginWork</span>(fiber);
+
+  <span class="hljs-comment">// 2. 如果有子节点，返回子节点作为下一个工作单元</span>
+  <span class="hljs-keyword">if</span> (fiber.<span class="hljs-property">child</span>) {
+    <span class="hljs-keyword">return</span> fiber.<span class="hljs-property">child</span>;
+  }
+
+  <span class="hljs-comment">// 3. 如果没有子节点，完成当前节点</span>
+  <span class="hljs-keyword">let</span> node = fiber;
+  <span class="hljs-keyword">while</span> (node) {
+    <span class="hljs-comment">// 4. completeWork - 完成当前节点的处理</span>
+    <span class="hljs-title function_">completeWork</span>(node);
+
+    <span class="hljs-comment">// 5. 处理兄弟节点</span>
+    <span class="hljs-keyword">if</span> (node.<span class="hljs-property">sibling</span>) {
+      <span class="hljs-keyword">return</span> node.<span class="hljs-property">sibling</span>;
+    }
+
+    <span class="hljs-comment">// 6. 回溯到父节点</span>
+    node = node.<span class="hljs-property">return</span>;
+  }
+}
+
+<span class="hljs-comment">// beginWork 的简化实现</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">beginWork</span>(<span class="hljs-params">workInProgress</span>) {
+  <span class="hljs-comment">// 根据组件类型处理</span>
+  <span class="hljs-keyword">switch</span> (workInProgress.<span class="hljs-property">tag</span>) {
+    <span class="hljs-keyword">case</span> <span class="hljs-title class_">HostRoot</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">updateHostRoot</span>(workInProgress);
+
+    <span class="hljs-keyword">case</span> <span class="hljs-title class_">FunctionComponent</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">updateFunctionComponent</span>(workInProgress);
+
+    <span class="hljs-keyword">case</span> <span class="hljs-title class_">ClassComponent</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">updateClassComponent</span>(workInProgress);
+
+    <span class="hljs-keyword">case</span> <span class="hljs-title class_">HostComponent</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">updateHostComponent</span>(workInProgress);
+  }
+}
+
+<span class="hljs-comment">// 提交阶段的简化实现</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">commitRoot</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-comment">// 1. 提交所有删除</span>
+  <span class="hljs-title function_">commitDeletions</span>(root);
+
+  <span class="hljs-comment">// 2. 提交所有更新</span>
+  <span class="hljs-title function_">commitUpdates</span>(root);
+
+  <span class="hljs-comment">// 3. 提交所有插入</span>
+  <span class="hljs-title function_">commitInserts</span>(root);
+
+  <span class="hljs-comment">// 4. 重置 Fiber 树</span>
+  root.<span class="hljs-property">current</span> = root.<span class="hljs-property">finishedWork</span>;
+}
+</code></pre><h4 id="1.2.6">1.2.6 优先级机制详解</h4>
+<p><strong>参考答案：</strong></p>
+<p>React 的优先级系统决定了哪些更新应该优先处理。</p>
+<pre class="hljs"><code><span class="hljs-comment">// React 优先级等级</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">PriorityLevel</span> = {
+  <span class="hljs-title class_">ImmediatePriority</span>: <span class="hljs-number">1</span>,        <span class="hljs-comment">// 最高优先级 - 立即执行</span>
+  <span class="hljs-title class_">UserBlockingPriority</span>: <span class="hljs-number">2</span>,    <span class="hljs-comment">// 用户阻塞优先级 - 响应用户输入</span>
+  <span class="hljs-title class_">NormalPriority</span>: <span class="hljs-number">3</span>,          <span class="hljs-comment">// 正常优先级 - 默认</span>
+  <span class="hljs-title class_">LowPriority</span>: <span class="hljs-number">4</span>,             <span class="hljs-comment">// 低优先级 - 可以延迟</span>
+  <span class="hljs-title class_">IdlePriority</span>: <span class="hljs-number">5</span>             <span class="hljs-comment">// 空闲优先级 - 空闲时执行</span>
+};
+
+<span class="hljs-comment">// Lane 模型（React 18）</span>
+<span class="hljs-comment">// Lane 比之前的优先级系统更细粒度</span>
+<span class="hljs-keyword">const</span> lanes = {
+  <span class="hljs-title class_">SyncLane</span>: <span class="hljs-number">0b00001</span>,                    <span class="hljs-comment">// 同步车道 - 同步更新</span>
+  <span class="hljs-title class_">InputContinuousLane</span>: <span class="hljs-number">0b00010</span>,        <span class="hljs-comment">// 连续输入 - 拖拽、滚动</span>
+  <span class="hljs-title class_">DefaultLane</span>: <span class="hljs-number">0b00100</span>,                 <span class="hljs-comment">// 默认车道 - 常规更新</span>
+  <span class="hljs-title class_">TransitionLane</span>: <span class="hljs-number">0b01000</span>,              <span class="hljs-comment">// 过渡车道 - useTransition</span>
+  <span class="hljs-title class_">RetryLane</span>: <span class="hljs-number">0b10000</span>,                   <span class="hljs-comment">// 重试车道 - Suspense</span>
+};
+
+<span class="hljs-comment">// 优先级使用场景</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">PriorityUseCases</span> = {
+  [<span class="hljs-title class_">PriorityLevel</span>.<span class="hljs-property">ImmediatePriority</span>]: [
+    <span class="hljs-string">&#x27;setState in componentDidMount&#x27;</span>,
+    <span class="hljs-string">&#x27;原生事件回调&#x27;</span>,
+    <span class="hljs-string">&#x27;同步渲染&#x27;</span>
+  ],
+
+  [<span class="hljs-title class_">PriorityLevel</span>.<span class="hljs-property">UserBlockingPriority</span>]: [
+    <span class="hljs-string">&#x27;onClick 事件处理&#x27;</span>,
+    <span class="hljs-string">&#x27;表单输入&#x27;</span>,
+    <span class="hljs-string">&#x27;动画&#x27;</span>,
+    <span class="hljs-string">&#x27;拖拽操作&#x27;</span>
+  ],
+
+  [<span class="hljs-title class_">PriorityLevel</span>.<span class="hljs-property">NormalPriority</span>]: [
+    <span class="hljs-string">&#x27;数据获取&#x27;</span>,
+    <span class="hljs-string">&#x27;路由跳转&#x27;</span>,
+    <span class="hljs-string">&#x27;列表渲染&#x27;</span>
+  ],
+
+  [<span class="hljs-title class_">PriorityLevel</span>.<span class="hljs-property">LowPriority</span>]: [
+    <span class="hljs-string">&#x27;非关键更新&#x27;</span>,
+    <span class="hljs-string">&#x27;后台同步&#x27;</span>
+  ],
+
+  [<span class="hljs-title class_">PriorityLevel</span>.<span class="hljs-property">IdlePriority</span>]: [
+    <span class="hljs-string">&#x27;日志上报&#x27;</span>,
+    <span class="hljs-string">&#x27;延迟加载&#x27;</span>,
+    <span class="hljs-string">&#x27;预加载&#x27;</span>
+  ]
+};
+
+<span class="hljs-comment">// 调度优先级</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">scheduleTask</span>(<span class="hljs-params">priority, callback</span>) {
+  <span class="hljs-keyword">if</span> (priority === <span class="hljs-title class_">PriorityLevel</span>.<span class="hljs-property">ImmediatePriority</span>) {
+    <span class="hljs-comment">// 立即执行</span>
+    <span class="hljs-title function_">callback</span>();
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (priority === <span class="hljs-title class_">PriorityLevel</span>.<span class="hljs-property">UserBlockingPriority</span>) {
+    <span class="hljs-comment">// 尽快执行（下一帧）</span>
+    <span class="hljs-title function_">requestAnimationFrame</span>(callback);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 空闲时执行</span>
+    <span class="hljs-title function_">requestIdleCallback</span>(callback);
+  }
+}
+</code></pre><h4 id="1.2.7-concurrentmode">1.2.7 ConcurrentMode并发模式</h4>
+<p><strong>参考答案：</strong></p>
+<p>Concurrent Mode 是 React 18 引入的重要特性，它允许 React 同时准备多个版本的 UI。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 启用并发模式（React 18 自动启用）</span>
+<span class="hljs-keyword">import</span> { createRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>;
+
+<span class="hljs-keyword">const</span> root = <span class="hljs-title function_">createRoot</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;root&#x27;</span>));
+root.<span class="hljs-title function_">render</span>(<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>);
+
+<span class="hljs-comment">// useTransition - 标记非紧急更新</span>
+<span class="hljs-keyword">import</span> { useTransition, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchResults</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> [isPending, startTransition] = <span class="hljs-title function_">useTransition</span>();
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleChange</span>(<span class="hljs-params">e</span>) {
+    <span class="hljs-keyword">const</span> value = e.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>;
+
+    <span class="hljs-comment">// 紧急更新 - 输入框立即响应</span>
+    <span class="hljs-title function_">setQuery</span>(value);
+
+    <span class="hljs-comment">// 非紧急更新 - 搜索结果可以延迟</span>
+    <span class="hljs-title function_">startTransition</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">setSearchResults</span>(value);
+    });
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{query}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleChange}</span> /&gt;</span>
+      {isPending ? <span class="hljs-tag">&lt;<span class="hljs-name">Spinner</span> /&gt;</span> : <span class="hljs-tag">&lt;<span class="hljs-name">Results</span> /&gt;</span>}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// useDeferredValue - 延迟非关键值</span>
+<span class="hljs-keyword">import</span> { useDeferredValue } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchResults</span>(<span class="hljs-params">{ query }</span>) {
+  <span class="hljs-comment">// query 的变化会被延迟处理</span>
+  <span class="hljs-keyword">const</span> deferredQuery = <span class="hljs-title function_">useDeferredValue</span>(query);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ExpensiveList</span> <span class="hljs-attr">query</span>=<span class="hljs-string">{deferredQuery}</span> /&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 配合 Suspense 使用</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Suspense</span>, lazy } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncComponent</span> = <span class="hljs-title function_">lazy</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./AsyncComponent&#x27;</span>));
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">Loading</span> /&gt;</span>}&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">AsyncComponent</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
+  );
+}
+</code></pre><hr>
+<h3 id="1.3">1.3 调和算法深度解析</h3>
+<h4 id="1.3.1-reactdiff">1.3.1 ReactDiff算法的基本原理</h4>
+<p><strong>参考答案：</strong></p>
+<p>React 的 Diff 算法是虚拟 DOM 的核心，它通过比较新旧虚拟 DOM 树来找出最小更新方案。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                      React Diff 算法                             ┃ 
+┃                                                                  ┃ 
+┃  Diff 策略：                                                    ┃  
+┃                                                                  ┃ 
+┃  1. 元素类型不同                                                ┃  
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┃  
+┃  ┃  &lt;div key="1"&gt;A&lt;/div&gt; ━━▶ &lt;span key="1"&gt;A&lt;/span&gt;     ┃     ┃    
+┃  ┃  策略：直接销毁重建                                     ┃     ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┃     
+┃                                                                  ┃ 
+┃  2. 元素类型相同（DOM 元素）                                     ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┃  
+┃  ┃  &lt;div className="a"&gt; ━━▶ &lt;div className="b"&gt;        ┃     ┃     
+┃  ┃  策略：只更新属性，不重建 DOM                            ┃     ┃
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┃     
+┃                                                                  ┃ 
+┃  3. 子元素 Diff（递归处理）                                      ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┃  
+┃  ┃  &lt;ul&gt;                                                   ┃     ┃ 
+┃  ┃    &lt;li key="a"&gt;A&lt;/li&gt; ━━▶ &lt;li key="a"&gt;A&lt;/li&gt;        ┃     ┃     
+┃  ┃    &lt;li key="b"&gt;B&lt;/li&gt; ━━▶ &lt;li key="b"&gt;B&lt;/li&gt;        ┃     ┃     
+┃  ┃  &lt;/ul&gt;                                                  ┃     ┃ 
+┃  ┃  策略：同 key 复用 DOM                                  ┃     ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┃     
+┃                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><h4 id="1.3.2-diff">1.3.2 Diff算法的复杂度优化</h4>
+<p><strong>参考答案：</strong></p>
+<p>React 通过以下策略将 Diff 算法的复杂度从 O(n^3) 降低到 O(n)：</p>
+<ol>
+<li><strong>只比较同层节点</strong>：不同层的节点不进行比较</li>
+<li><strong>不同类型直接替换</strong>：不同类型的元素直接销毁重建</li>
+<li><strong>Key 优化列表渲染</strong>：通过 key 尽量复用节点</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// Diff 算法的核心实现</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reconcileChildren</span>(<span class="hljs-params">current, workInProgress, nextChildren</span>) {
+  <span class="hljs-keyword">const</span> oldChildren = current ? current.<span class="hljs-property">child</span> : <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">reconcileChildFibers</span>(workInProgress, oldChildren, nextChildren);
+  workInProgress.<span class="hljs-property">child</span> = result;
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reconcileChildFibers</span>(<span class="hljs-params">returnFiber, oldChildren, newChildren</span>) {
+  <span class="hljs-comment">// 处理数组类型</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">isArray</span>(newChildren)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">reconcileChildrenArray</span>(
+      returnFiber,
+      oldChildren,
+      newChildren
+    );
+  }
+
+  <span class="hljs-comment">// 处理单个元素</span>
+  <span class="hljs-keyword">if</span> (newChildren &amp;&amp; newChildren.<span class="hljs-property">$typeof</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">reconcileSingleElement</span>(
+      returnFiber,
+      oldChildren,
+      newChildren
+    );
+  }
+
+  <span class="hljs-comment">// 处理文本节点</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> newChildren === <span class="hljs-string">&#x27;string&#x27;</span> || <span class="hljs-keyword">typeof</span> newChildren === <span class="hljs-string">&#x27;number&#x27;</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">reconcileSingleTextNode</span>(
+      returnFiber,
+      oldChildren,
+      newChildren
+    );
+  }
+
+  <span class="hljs-comment">// 没有子节点</span>
+  <span class="hljs-keyword">if</span> (!newChildren) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  }
+}
+
+<span class="hljs-comment">// 列表 Diff 算法</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reconcileChildrenArray</span>(<span class="hljs-params">
+  returnFiber,
+  oldChildren,
+  newChildren
+</span>) {
+  <span class="hljs-keyword">let</span> oldStartIndex = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> newStartIndex = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> oldEndIndex = oldChildren.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">let</span> newEndIndex = newChildren.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+
+  <span class="hljs-comment">// 第一轮：尝试复用位置相同的节点</span>
+  <span class="hljs-keyword">while</span> (oldStartIndex &lt;= oldEndIndex &amp;&amp; newStartIndex &lt;= newEndIndex) {
+    <span class="hljs-keyword">const</span> oldFiber = oldChildren[oldStartIndex];
+    <span class="hljs-keyword">const</span> newFiber = newChildren[newStartIndex];
+
+    <span class="hljs-keyword">if</span> (oldFiber.<span class="hljs-property">key</span> === newFiber.<span class="hljs-property">key</span>) {
+      <span class="hljs-comment">// key 相同，尝试复用</span>
+      <span class="hljs-keyword">if</span> (<span class="hljs-title function_">canReuse</span>(oldFiber, newFiber)) {
+        <span class="hljs-comment">// 复用并更新</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">placeChild</span>(newFiber, newStartIndex);
+      }
+      <span class="hljs-keyword">break</span>;
+    }
+
+    oldStartIndex++;
+    newStartIndex++;
+  }
+
+  <span class="hljs-comment">// 第二轮：处理无法直接复用的情况</span>
+  <span class="hljs-comment">// 使用 Map 优化查找</span>
+  <span class="hljs-keyword">const</span> existingChildren = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  existingChildren.<span class="hljs-title function_">set</span>(oldFiber.<span class="hljs-property">key</span>, oldFiber);
+
+  <span class="hljs-comment">// ... 继续处理剩余节点</span>
+}
+</code></pre><h4 id="1.3.3-key">1.3.3 Key的最佳实践</h4>
+<p><strong>参考答案：</strong></p>
+<p>Key 在 React Diff 算法中起着关键作用，正确使用 Key 可以显著提升性能。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 最佳实践 1：使用稳定唯一 ID</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">TodoList</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> todos = [
+    { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Learn React&#x27;</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Learn Redux&#x27;</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Learn TypeScript&#x27;</span> }
+  ];
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      {todos.map(todo =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{todo.id}</span>&gt;</span>{todo.text}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 最佳实践 2：避免使用索引作为 key</span>
+<span class="hljs-comment">// 错误示例：当列表顺序变化时会有问题</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">SortedList</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [items, setItems] = <span class="hljs-title function_">useState</span>([<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>]);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">sort</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 排序后，索引对应的元素变了</span>
+    <span class="hljs-comment">// 但 React 认为 key 0, 1, 2 还是相同的元素</span>
+    <span class="hljs-title function_">setItems</span>([...items].<span class="hljs-title function_">sort</span>());
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      {items.map((item, index) =&gt; (
+        // 错误：使用索引作为 key
+        <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{index}</span>&gt;</span>{item}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 正确示例</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">SortedListCorrect</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [items, setItems] = <span class="hljs-title function_">useState</span>([
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;c1&#x27;</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;c&#x27;</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;a1&#x27;</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;a&#x27;</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;b1&#x27;</span>, <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;b&#x27;</span> }
+  ]);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">sort</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title function_">setItems</span>([...items].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">value</span>.<span class="hljs-title function_">localeCompare</span>(b.<span class="hljs-property">value</span>)));
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      {items.map(item =&gt; (
+        // 正确：使用稳定 ID
+        <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{item.id}</span>&gt;</span>{item.value}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 最佳实践 3：列表组件的 key</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">List</span>(<span class="hljs-params">{ items }</span>) {
+  <span class="hljs-comment">// key 应该在最外层元素上</span>
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      {items.map(item =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">ListItem</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{item.id}</span> <span class="hljs-attr">item</span>=<span class="hljs-string">{item}</span> /&gt;</span>
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 最佳实践 4：key 的作用域</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Grid</span>(<span class="hljs-params">{ rows, columns }</span>) {
+  <span class="hljs-comment">// 每个子列表需要独立的 key 作用域</span>
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      {rows.map(rowId =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{rowId}</span>&gt;</span>
+          {columns.map(colId =&gt; (
+            <span class="hljs-tag">&lt;<span class="hljs-name">Cell</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{</span>`${<span class="hljs-attr">rowId</span>}<span class="hljs-attr">-</span>${<span class="hljs-attr">colId</span>}`} /&gt;</span>
+          ))}
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+</code></pre><h4 id="1.3.4-react">1.3.4 React的调和过程</h4>
+<p><strong>参考答案：</strong></p>
+<p>调和（Reconciliation）是 React 决定如何更新 DOM 的过程。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 调和过程的主要步骤</span>
+
+<span class="hljs-comment">// 1. 组件类型比较</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reconcileElementType</span>(<span class="hljs-params">returnFiber, current, nextElement</span>) {
+  <span class="hljs-comment">// 类型相同，尝试复用</span>
+  <span class="hljs-keyword">if</span> (current &amp;&amp; current.<span class="hljs-property">type</span> === nextElement.<span class="hljs-property">type</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">updateElement</span>(returnFiber, current, nextElement);
+  }
+
+  <span class="hljs-comment">// 类型不同，删除旧的，创建新的</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">createNewFiber</span>(returnFiber, nextElement);
+}
+
+<span class="hljs-comment">// 2. DOM 元素更新</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">updateHostComponent</span>(<span class="hljs-params">current, workInProgress</span>) {
+  <span class="hljs-keyword">const</span> oldProps = current.<span class="hljs-property">memoizedProps</span>;
+  <span class="hljs-keyword">const</span> newProps = workInProgress.<span class="hljs-property">pendingProps</span>;
+
+  <span class="hljs-comment">// 标记需要更新的属性</span>
+  <span class="hljs-keyword">if</span> (oldProps !== newProps) {
+    workInProgress.<span class="hljs-property">effectTag</span> = <span class="hljs-string">&#x27;UPDATE&#x27;</span>;
+  }
+
+  <span class="hljs-comment">// 返回子元素进行递归调和</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">reconcileChildren</span>(current, workInProgress, newProps.<span class="hljs-property">children</span>);
+}
+
+<span class="hljs-comment">// 3. 组件更新</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">updateClassComponent</span>(<span class="hljs-params">current, workInProgress, Component</span>) {
+  <span class="hljs-comment">// 创建或获取组件实例</span>
+  <span class="hljs-keyword">let</span> instance;
+  <span class="hljs-keyword">if</span> (current === <span class="hljs-literal">null</span>) {
+    instance = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Component</span>(workInProgress.<span class="hljs-property">props</span>);
+    workInProgress.<span class="hljs-property">stateNode</span> = instance;
+  } <span class="hljs-keyword">else</span> {
+    instance = workInProgress.<span class="hljs-property">stateNode</span>;
+  }
+
+  <span class="hljs-comment">// 处理 pending props 和 state</span>
+  <span class="hljs-keyword">const</span> nextProps = workInProgress.<span class="hljs-property">pendingProps</span>;
+  <span class="hljs-keyword">const</span> nextState = workInProgress.<span class="hljs-property">memoizedState</span>;
+
+  <span class="hljs-comment">// 调用生命周期或更新逻辑</span>
+  <span class="hljs-keyword">if</span> (current === <span class="hljs-literal">null</span>) {
+    <span class="hljs-comment">// 首次挂载</span>
+    <span class="hljs-title function_">componentDidMount</span>();
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 更新</span>
+    <span class="hljs-title function_">componentDidUpdate</span>(prevProps, prevState);
+  }
+
+  <span class="hljs-comment">// 渲染并调和子元素</span>
+  <span class="hljs-keyword">const</span> nextChildren = instance.<span class="hljs-title function_">render</span>();
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">reconcileChildren</span>(current, workInProgress, nextChildren);
+}
+</code></pre><hr>
+<h3 id="1.4-react">1.4 React渲染机制底层原理</h3>
+<h4 id="1.4.1-react15vs16">1.4.1 React15vs16+架构对比</h4>
+<h4 id="1.4.1.1-stack-reconciler">1.4.1.1 Stack Reconciler</h4>
+<p>React 15 使用的是 Stack Reconciler（堆栈协调器），它采用同步递归的方式进行虚拟 DOM 树的对比和更新。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    
+┃                    React 15 Stack Reconciler                    ┃    
+┃                                                                  ┃   
+┃   setState 触发                                                   ┃  
+┃        ┃                                                          ┃  
+┃        ▼                                                          ┃  
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃   
+┃   ┃           Stack Reconciler (同步递归)                    ┃    ┃  
+┃   ┃                                                          ┃    ┃  
+┃   ┃   Component A                                            ┃    ┃  
+┃   ┃      ┣━━━ Component B ━━━ Component D                   ┃    ┃   
+┃   ┃      ┃         ┗━━━ Component E                         ┃    ┃   
+┃   ┃      ┗━━━ Component C                                   ┃    ┃   
+┃   ┃                                                          ┃    ┃  
+┃   ┃   特点：                                                  ┃    ┃ 
+┃   ┃   - 同步递归遍历整个组件树                                 ┃    ┃
+┃   ┃   - 一旦开始无法中断，直到完成                             ┃    ┃
+┃   ┃   - 大组件树更新会阻塞主线程                               ┃    ┃
+┃   ┃   - 用户交互必须等待更新完成                               ┃    ┃
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃   
+┃        ┃                                                          ┃  
+┃        ▼                                                          ┃  
+┃   DOM 更新                                                        ┃  
+┃                                                                  ┃   
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    
+
+</code></pre><p><strong>缺点：</strong></p>
+<ul>
+<li>无法处理优先级，高频更新（如动画）会卡顿</li>
+<li>递归调用栈过深可能导致性能问题</li>
+<li>用户输入、动画等高优先级任务被阻塞</li>
+</ul>
+<h4 id="1.4.2-fiberreconciler">1.4.2 FiberReconciler</h4>
+<p>React 16 引入了 Fiber 架构，将协调过程拆分成可中断的小单元，支持优先级调度和并发渲染。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                    React 16+ Fiber Reconciler                   ┃   
+┃                                                                  ┃  
+┃   setState 触发                                                   ┃ 
+┃        ┃                                                          ┃ 
+┃        ▼                                                          ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃              Fiber Work Loop (可中断)                    ┃    ┃ 
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   优先级队列:                                             ┃    ┃
+┃   ┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃    ┃ 
+┃   ┃   ┃ 同步任务 ┃ 动画 ┃ 用户交互 ┃ 正常 ┃ 低优先级  ┃    ┃    ┃   
+┃   ┃   ┃ (最高)  ┃      ┃          ┃      ┃  (最低)   ┃    ┃    ┃    
+┃   ┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃    ┃ 
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   Work: beginWork → completeWork → commit             ┃    ┃    
+┃   ┃         ┃                                           ┃    ┃      
+┃   ┃         ▼                                           ┃    ┃      
+┃   ┃   每个 fiber 节点可以中断/恢复                          ┃    ┃  
+┃   ┃   高优先级任务可以抢占                                  ┃    ┃  
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃        ┃                                                          ┃ 
+┃        ▼                                                          ┃ 
+┃   DOM 更新 (仅在 commit 阶段)                                     ┃ 
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><p><strong>优势：</strong></p>
+<ul>
+<li>可中断、可恢复</li>
+<li>支持任务优先级调度</li>
+<li>并发渲染多个状态更新</li>
+<li>用户交互不会被长时间阻塞</li>
+</ul>
+<hr>
+<h3 id="1.2-fiber">1.2 Fiber 架构详细解析</h3>
+<h4 id="1.5.1-fiber">1.5.1 Fiber节点数据结构</h4>
+<p>Fiber 节点是 React 16+ 的核心数据结构，每个 React 元素对应一个 Fiber 节点。</p>
+<pre class="hljs"><code><span class="hljs-comment">// Fiber 节点核心结构</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">FiberNode</span>(<span class="hljs-params">tag, pendingProps, key, mode</span>) {
+  <span class="hljs-comment">// 基础属性</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">tag</span> = tag;                    <span class="hljs-comment">// 组件类型 (FunctionComponent, ClassComponent 等)</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">key</span> = key;                    <span class="hljs-comment">// React Key</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">type</span> = <span class="hljs-literal">null</span>;                  <span class="hljs-comment">// 元素类型 (函数组件/类组件/原生标签)</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">stateNode</span> = <span class="hljs-literal">null</span>;             <span class="hljs-comment">// 对应的真实 DOM 节点或组件实例</span>
+
+  <span class="hljs-comment">// Fiber 树结构</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">return</span> = <span class="hljs-literal">null</span>;                <span class="hljs-comment">// 父 Fiber 节点</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">child</span> = <span class="hljs-literal">null</span>;                 <span class="hljs-comment">// 第一个子 Fiber 节点</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">sibling</span> = <span class="hljs-literal">null</span>;               <span class="hljs-comment">// 下一个兄弟 Fiber 节点</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">index</span> = <span class="hljs-number">0</span>;                    <span class="hljs-comment">// 在兄弟节点中的索引</span>
+
+  <span class="hljs-comment">// 更新相关</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">pendingProps</span> = pendingProps;  <span class="hljs-comment">// 新的 props</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">memoizedProps</span> = <span class="hljs-literal">null</span>;         <span class="hljs-comment">// 上次渲染的 props</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">memoizedState</span> = <span class="hljs-literal">null</span>;         <span class="hljs-comment">// 上次渲染的状态</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">updateQueue</span> = <span class="hljs-literal">null</span>;           <span class="hljs-comment">// 更新队列</span>
+
+  <span class="hljs-comment">// 副作用</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">flags</span> = <span class="hljs-title class_">NoFlags</span>;              <span class="hljs-comment">// 当前节点的副作用类型</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">subtreeFlags</span> = <span class="hljs-title class_">NoFlags</span>;      <span class="hljs-comment">// 子树的副作用</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">deletions</span> = <span class="hljs-literal">null</span>;            <span class="hljs-comment">// 需要删除的子节点</span>
+
+  <span class="hljs-comment">// 调度相关</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">lanes</span> = <span class="hljs-title class_">NoLanes</span>;            <span class="hljs-comment">// 优先级 lane</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">childLanes</span> = <span class="hljs-title class_">NoLanes</span>;       <span class="hljs-comment">// 子树的 lane</span>
+
+  <span class="hljs-comment">// 双缓冲技术</span>
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">alternate</span> = <span class="hljs-literal">null</span>;            <span class="hljs-comment">// 指向另一棵树（current 或 workInProgress）</span>
+}
+</code></pre><pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                      Fiber 节点关系图                             ┃ 
+┃                                                                  ┃  
+┃                    ┏━━━━━━━━━━━━━━┓                              ┃  
+┃                    ┃  Parent Fiber ┃                              ┃ 
+┃                    ┃    (return)   ┃                              ┃ 
+┃                    ┗━━━━━━┳━━━━━━━┛                              ┃  
+┃                           ┃                                       ┃ 
+┃                           ┃ child                                  ┃
+┃                           ▼                                       ┃ 
+┃                    ┏━━━━━━━━━━━━━━┓                              ┃  
+┃                    ┃  Child Fiber  ┃━━━━━━━ sibling ━━━▶ ...     ┃  
+┃                    ┗━━━━━━━━━━━━━━┛                              ┃  
+┃                                                                  ┃  
+┃   Fiber 节点属性:                                                 ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃ return    → 父节点                                       ┃    ┃ 
+┃   ┃ child     → 第一个子节点                                 ┃    ┃ 
+┃   ┃ sibling   → 下一个兄弟节点                               ┃    ┃ 
+┃   ┃ alternate → 另一棵树的对应节点                           ┃    ┃ 
+┃   ┃ flags     → 副作用标记 (Placement, Update, Deletion)     ┃    ┃ 
+┃   ┃ lanes     → 优先级信息                                   ┃    ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><h4 id="1.2.2">1.2.2 渲染阶段与提交阶段</h4>
+<p>React 的渲染过程分为两个主要阶段：Render Phase（渲染阶段）和 Commit Phase（提交阶段）。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                    React 渲染两个阶段                             ┃ 
+┃                                                                  ┃  
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃                    1. Render Phase                     ┃    ┃   
+┃   ┃                 (可中断、可恢复)                          ┃    ┃
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   beginWork → completeWork → ...                        ┃    ┃  
+┃   ┃      ┃              ┃                                   ┃    ┃  
+┃   ┃      ▼              ▼                                   ┃    ┃  
+┃   ┃   创建/对比       标记副作用                              ┃    ┃
+┃   ┃   Fiber 节点     (Placement, Update, Deletion)          ┃    ┃  
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   这个阶段可以被打断，浏览器可以处理高优先级任务          ┃    ┃
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                           ┃                                       ┃ 
+┃                           ▼                                       ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃                   2. Commit Phase                      ┃    ┃   
+┃   ┃                 (同步执行，不可中断)                      ┃    ┃
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃    ┃   
+┃   ┃   ┃  beforeMutation (DOM 更新前)                     ┃  ┃    ┃  
+┃   ┃   ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫  ┃    ┃   
+┃   ┃   ┃  mutation (DOM 更新) - 插入/删除/更新            ┃  ┃    ┃  
+┃   ┃   ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫  ┃    ┃   
+┃   ┃   ┃  layout (DOM 更新后) - 触发 useLayoutEffect       ┃  ┃    ┃ 
+┃   ┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    ┃   
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   这个阶段必须同步执行完成，不能中断                      ┃    ┃
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><p><strong>渲染阶段（Render Phase）：</strong></p>
+<ul>
+<li>执行 beginWork：创建或对比 Fiber 节点</li>
+<li>执行 completeWork：完成 Fiber 节点处理，收集副作用</li>
+<li>可以被中断、恢复、优先级调度</li>
+<li>不涉及任何 DOM 操作</li>
+</ul>
+<p><strong>提交阶段（Commit Phase）：</strong></p>
+<ul>
+<li>同步执行，不能中断</li>
+<li>执行 DOM 更新（插入、删除、更新）</li>
+<li>触发 useLayoutEffect 回调</li>
+<li>触发 useEffect 回调（异步）</li>
+</ul>
+<h4 id="1.2.3-workinprogress">1.2.3 workInProgress 树</h4>
+<p>React 使用双缓冲技术（Double Buffering），维护两棵 Fiber 树：current 树和 workInProgress 树。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                    Fiber 双缓冲技术                               ┃
+┃                                                                  ┃ 
+┃   Current Tree (当前显示的 UI)                                    ┃
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃ 
+┃   ┃                                                         ┃    ┃ 
+┃   ┃      Root                                              ┃    ┃  
+┃   ┃       /  \                                             ┃    ┃  
+┃   ┃      A    B                                            ┃    ┃  
+┃   ┃     / \   |                                            ┃    ┃  
+┃   ┃    C   D  E                                            ┃    ┃  
+┃   ┃                                                         ┃    ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃ 
+┃                           ┃                                       ┃
+┃                  current.alternate                               ┃ 
+┃                           ┃ (指向 workInProgress)                 ┃
+┃                           ▼                                       ┃
+┃   workInProgress Tree (正在构建的)                               ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃ 
+┃   ┃                                                         ┃    ┃ 
+┃   ┃      Root*                                             ┃    ┃  
+┃   ┃       /  \                                             ┃    ┃  
+┃   ┃      A*   B*                                           ┃    ┃  
+┃   ┃     / \   |                                            ┃    ┃  
+┃   ┃    C*  D  E*                                           ┃    ┃  
+┃   ┃                                                         ┃    ┃ 
+┃   ┃   * 表示已更新或新建的节点                               ┃    ┃
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃ 
+┃                                                                  ┃ 
+┃   更新完成后：                                                    ┃
+┃   workInProgress 树的根节点 alternate 指向 current 树的根节点   ┃  
+┃   树切换：current = workInProgress                               ┃ 
+┃                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><p><strong>双缓冲工作流程：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 更新触发时</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">scheduleUpdateOnFiber</span>(<span class="hljs-params">fiber</span>) {
+  <span class="hljs-comment">// 2. 创建 workInProgress 树</span>
+  <span class="hljs-comment">// 如果 alternate 存在，克隆它；否则创建新节点</span>
+  <span class="hljs-keyword">const</span> workInProgress = fiber.<span class="hljs-property">alternate</span> || <span class="hljs-title function_">createFiber</span>(fiber);
+
+  <span class="hljs-comment">// 3. 在 workInProgress 上进行所有更新</span>
+  workInProgress.<span class="hljs-property">pendingProps</span> = fiber.<span class="hljs-property">memoizedProps</span>;
+
+  <span class="hljs-comment">// 4. 完成渲染后，切换指针</span>
+  <span class="hljs-comment">// current.alternate 指向新的 workInProgress</span>
+  fiber.<span class="hljs-property">alternate</span> = workInProgress;
+  workInProgress.<span class="hljs-property">alternate</span> = fiber;
+
+  <span class="hljs-comment">// 5. commit 阶段完成后，切换引用</span>
+  root.<span class="hljs-property">current</span> = workInProgress;
+}
+</code></pre><hr>
+<h3 id="1.3-concurrent-mode">1.3 Concurrent Mode 原理</h3>
+<h4 id="1.3.1">1.3.1 任务优先级</h4>
+<p>React 的并发模式使用 Lane（赛道）模型来管理任务优先级。</p>
+<pre class="hljs"><code><span class="hljs-comment">// React 18 优先级/Lane 定义</span>
+<span class="hljs-keyword">const</span> lanes = {
+  <span class="hljs-comment">// 同步优先级</span>
+  <span class="hljs-title class_">SyncLane</span>: <span class="hljs-number">0b00001</span>,           <span class="hljs-comment">// 最高优先级 - 同步更新</span>
+  <span class="hljs-title class_">InputContinuousLane</span>: <span class="hljs-number">0b00010</span>, <span class="hljs-comment">// 连续输入（拖拽、滚动）</span>
+
+  <span class="hljs-comment">// 异步优先级</span>
+  <span class="hljs-title class_">DefaultLane</span>: <span class="hljs-number">0b00100</span>,        <span class="hljs-comment">// 默认优先级</span>
+  <span class="hljs-title class_">TransitionLane</span>: <span class="hljs-number">0b01000</span>,     <span class="hljs-comment">// 过渡更新 (useTransition)</span>
+  <span class="hljs-title class_">SuspenseLane</span>: <span class="hljs-number">0b10000</span>,       <span class="hljs-comment">// Suspense 优先级</span>
+
+  <span class="hljs-comment">// 最低优先级</span>
+  <span class="hljs-title class_">IdleLane</span>: <span class="hljs-number">0b100000</span>           <span class="hljs-comment">// 空闲时执行</span>
+};
+
+<span class="hljs-comment">// 优先级比较</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getHighestPriorityLane</span>(<span class="hljs-params">lanes</span>) {
+  <span class="hljs-keyword">if</span> (lanes &amp; <span class="hljs-title class_">SyncLane</span>) <span class="hljs-keyword">return</span> <span class="hljs-title class_">SyncLane</span>;
+  <span class="hljs-keyword">if</span> (lanes &amp; <span class="hljs-title class_">InputContinuousLane</span>) <span class="hljs-keyword">return</span> <span class="hljs-title class_">InputContinuousLane</span>;
+  <span class="hljs-keyword">if</span> (lanes &amp; <span class="hljs-title class_">DefaultLane</span>) <span class="hljs-keyword">return</span> <span class="hljs-title class_">DefaultLane</span>;
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre><pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                      优先级层级图                                 ┃
+┃                                                                  ┃ 
+┃   优先级从高到低:                                                 ┃
+┃                                                                  ┃ 
+┃   ┏━━━━━━━━━━━━┓                                               ┃   
+┃   ┃  SyncLane  ┃ ← setState, 事件处理 (最高)                  ┃    
+┃   ┗━━━━━━━━━━━━┛                                               ┃   
+┃        ┃                                                        ┃  
+┃        ▼                                                        ┃  
+┃   ┏━━━━━━━━━━━━━━━━━┓                                           ┃  
+┃   ┃InputContinuous ┃ ← 拖拽、滚动、动画                       ┃    
+┃   ┃      Lane       ┃                                           ┃  
+┃   ┗━━━━━━━━━━━━━━━━━┛                                           ┃  
+┃        ┃                                                        ┃  
+┃        ▼                                                        ┃  
+┃   ┏━━━━━━━━━━━━┓                                               ┃   
+┃   ┃ DefaultLane ┃ ← 普通数据获取、状态更新                     ┃   
+┃   ┗━━━━━━━━━━━━┛                                               ┃   
+┃        ┃                                                        ┃  
+┃        ▼                                                        ┃  
+┃   ┏━━━━━━━━━━━━━┓                                               ┃  
+┃   ┃Transition   ┃ ← useTransition 标记的更新                  ┃    
+┃   ┃    Lane     ┃                                               ┃  
+┃   ┗━━━━━━━━━━━━━┛                                               ┃  
+┃        ┃                                                        ┃  
+┃        ▼                                                        ┃  
+┃   ┏━━━━━━━━━━━━┓                                               ┃   
+┃   ┃  IdleLane  ┃ ← 低优先级任务、预加载                        ┃   
+┃   ┗━━━━━━━━━━━━┛                                               ┃   
+┃                                                                  ┃ 
+┃   调度规则:                                                      ┃ 
+┃   - 高优先级任务可以中断低优先级任务                              ┃
+┃   - 被中断的任务可以恢复执行                                      ┃
+┃   - 同优先级的任务一起批量执行                                    ┃
+┃                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><h4 id="1.3.2">1.3.2 抢占式调度</h4>
+<p>React 的调度器基于浏览器原生的 requestIdleCallback 和 setTimeout 实现抢占式调度。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 简化的调度逻辑</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">scheduleTask</span>(<span class="hljs-params">priority, callback</span>) {
+  <span class="hljs-keyword">if</span> (priority === <span class="hljs-title class_">SyncPriority</span>) {
+    <span class="hljs-comment">// 同步任务立即执行</span>
+    <span class="hljs-title function_">callback</span>();
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (priority === <span class="hljs-title class_">UserBlockingPriority</span>) {
+    <span class="hljs-comment">// 用户交互优先级，使用 setTimeout 短延迟</span>
+    <span class="hljs-built_in">setTimeout</span>(callback, <span class="hljs-number">0</span>);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 低优先级，使用 requestIdleCallback</span>
+    <span class="hljs-title function_">requestIdleCallback</span>(callback, { <span class="hljs-attr">timeout</span>: <span class="hljs-number">200</span> });
+  }
+}
+
+<span class="hljs-comment">// Fiber Work Loop 中的抢占逻辑</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">workLoop</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">while</span> (workInProgress !== <span class="hljs-literal">null</span>) {
+    <span class="hljs-comment">// 检查是否有更高优先级的任务</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-title function_">shouldYield</span>()) {
+      <span class="hljs-comment">// 让出主线程，检查是否有更高优先级任务</span>
+      <span class="hljs-keyword">if</span> (<span class="hljs-title function_">hasHigherPriorityWork</span>()) {
+        <span class="hljs-comment">// 中断当前任务，处理高优先级任务</span>
+        <span class="hljs-keyword">return</span>;
+      }
+      <span class="hljs-comment">// 恢复执行</span>
+    }
+
+    <span class="hljs-comment">// 执行当前 Fiber 节点的工作</span>
+    workInProgress = <span class="hljs-title function_">performUnitOfWork</span>(workInProgress);
+  }
+}
+</code></pre><pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃                    抢占式调度示例                                ┃
+┃                                                                  ┃
+┃   时间线:                                                        ┃
+┃                                                                  ┃
+┃   0ms    ┃ setState(A) 触发                                    ┃  
+┃          ┃ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓            ┃  
+┃          ┃ ┃ 开始渲染组件 A (低优先级)              ┃            ┃
+┃          ┃ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛            ┃  
+┃          ┃           ┃                                           ┃
+┃   50ms   ┃ 用户点击 → setState(B) 触发 (高优先级)              ┃  
+┃          ┃           ┃                                           ┃
+┃          ┃           ▼                                           ┃
+┃          ┃ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓            ┃  
+┃          ┃ ┃ A 被中断，B 开始渲染                  ┃            ┃ 
+┃          ┃ ┃ (高优先级抢占低优先级)                 ┃            ┃
+┃          ┃ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛            ┃  
+┃          ┃           ┃                                           ┃
+┃   100ms  ┃           ┃ 完成 B 渲染                               ┃
+┃          ┃           ┃                                           ┃
+┃          ┃           ▼                                           ┃
+┃          ┃ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓            ┃  
+┃          ┃ ┃ 恢复 A 的渲染 (从中断点继续)           ┃            ┃
+┃          ┃ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛            ┃  
+┃          ┃           ┃                                           ┃
+┃   150ms  ┃           ┃ A 渲染完成                                ┃
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+
+</code></pre><p><strong>useTransition 示例：</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [isPending, startTransition] = <span class="hljs-title function_">useTransition</span>();
+  <span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleChange</span>(<span class="hljs-params">e</span>) {
+    <span class="hljs-comment">// 紧急：立即更新输入框</span>
+    <span class="hljs-title function_">setQuery</span>(e.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>);
+
+    <span class="hljs-comment">// 非紧急：延迟更新搜索结果</span>
+    <span class="hljs-title function_">startTransition</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 搜索逻辑 - 可以被中断</span>
+      <span class="hljs-title function_">fetchResults</span>(e.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>);
+    });
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{query}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleChange}</span> /&gt;</span>
+      {isPending ? <span class="hljs-tag">&lt;<span class="hljs-name">Spinner</span> /&gt;</span> : <span class="hljs-tag">&lt;<span class="hljs-name">Results</span> /&gt;</span>}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+</code></pre><hr>
+<h3 id="1.5-reactdiff">1.5 ReactDiff算法深入</h3>
+<h3 id="2.1-react-17-diff">2.1 React 17+ Diff 策略</h3>
+<h4 id="2.1.1">2.1.1 元素类型比较</h4>
+<p>React Diff 算法的核心策略是基于元素类型进行不同处理。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                    React Diff 元素类型比较                       ┃  
+┃                                                                  ┃  
+┃  1. 不同类型元素 → 销毁重建                                       ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┃   
+┃  ┃  &lt;div key="1"&gt;A&lt;/div&gt; ━━▶ &lt;span key="1"&gt;A&lt;/span&gt;   ┃     ┃       
+┃  ┃                                                          ┃     ┃ 
+┃  ┃  策略：直接销毁 div，新建 span                           ┃     ┃ 
+┃  ┃  div 及其子节点会被完全移除                              ┃     ┃ 
+┃  ┃  span 作为新节点被创建                                   ┃     ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┃      
+┃                                                                  ┃  
+┃  2. 同类型 DOM 元素 → 只更新属性                                  ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┃   
+┃  ┃  &lt;div className="old"&gt; ━━▶ &lt;div className="new"&gt;   ┃     ┃       
+┃  ┃                                                          ┃     ┃ 
+┃  ┃  策略：保留 DOM 节点，只更新变化的属性                    ┃     ┃
+┃  ┃  className: "old" → "new"                              ┃     ┃   
+┃  ┃  不重新创建 DOM 节点                                     ┃     ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┃      
+┃                                                                  ┃  
+┃  3. 同类型组件 → 调用组件更新                                     ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┃   
+┃  ┃  &lt;MyComponent prop={old} ━━▶ &lt;MyComponent prop={new}┃     ┃      
+┃  ┃                                                          ┃     ┃ 
+┃  ┃  策略：保留组件实例，更新 props                          ┃     ┃ 
+┃  ┃  调用 componentWillReceiveProps (如存在)               ┃     ┃   
+┃  ┃  调用 render() 获取新结果                                 ┃     ┃
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┃      
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><p><strong>源码层面：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// React Diff 核心逻辑（简化）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reconcileChildFibers</span>(<span class="hljs-params">returnFiber, newChild, lanes</span>) {
+  <span class="hljs-comment">// 判断元素类型</span>
+  <span class="hljs-keyword">const</span> isObject = <span class="hljs-keyword">typeof</span> newChild === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; newChild !== <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">if</span> (isObject) {
+    <span class="hljs-keyword">switch</span> (newChild.<span class="hljs-property">$typeof</span>) {
+      <span class="hljs-keyword">case</span> <span class="hljs-attr">REACT_ELEMENT_TYPE</span>:
+        <span class="hljs-comment">// 首次渲染或更新</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">placeChildFiber</span>(<span class="hljs-title function_">reconcileSingleElement</span>(...));
+      <span class="hljs-keyword">case</span> <span class="hljs-attr">REACT_PORTAL_TYPE</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">reconcileChildFibers</span>(...);
+    }
+  }
+
+  <span class="hljs-comment">// 处理数组（多个子元素）</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(newChild)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">reconcileChildrenArray</span>(...);
+  }
+
+  <span class="hljs-comment">// 处理字符串/数字</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">deleteRemainingChildren</span>(...);
+}
+</code></pre><h4 id="2.1.2-key">2.1.2 Key 的作用</h4>
+<p>Key 帮助 React 识别哪些元素发生了变化，是列表渲染优化的关键。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                         Key 的作用                               ┃ 
+┃                                                                  ┃ 
+┃  没有 key (不推荐):                                               ┃
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃  ┃  &lt;ul&gt;                                                    ┃    ┃ 
+┃  ┃    &lt;li&gt;A&lt;/li&gt; ━━▶ &lt;li&gt;A&lt;/li&gt;  ← 相同位置，保留          ┃    ┃  
+┃  ┃    &lt;li&gt;B&lt;/li&gt; ━━▶ &lt;li&gt;B&lt;/li&gt;  ← 相同位置，保留          ┃    ┃  
+┃  ┃    &lt;li&gt;C&lt;/li&gt; ━━▶ &lt;li&gt;C&lt;/li&gt;  ← 相同位置，保留          ┃    ┃  
+┃  ┃  &lt;/ul&gt;                                                   ┃    ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃ 
+┃  有 key (推荐):                                                  ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃  ┃  &lt;ul&gt;                                                    ┃    ┃ 
+┃  ┃    &lt;li key="a"&gt;A&lt;/li&gt; ━━▶ &lt;li key="a"&gt;A&lt;/li&gt;         ┃    ┃     
+┃  ┃    &lt;li key="b"&gt;B&lt;/li&gt; ━━▶ &lt;li key="b"&gt;B&lt;/li&gt;         ┃    ┃     
+┃  ┃    &lt;li key="c"&gt;C&lt;/li&gt; ━━▶ &lt;li key="c"&gt;C&lt;/li&gt;         ┃    ┃     
+┃  ┃  &lt;/ul&gt;                                                   ┃    ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃ 
+┃  列表重排场景:                                                    ┃
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃  ┃  初始:                                                   ┃    ┃ 
+┃  ┃  [A, B, C]                                               ┃    ┃ 
+┃  ┃   ↓ insert at beginning                                  ┃    ┃ 
+┃  ┃  [D, A, B, C]                                            ┃    ┃ 
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  无 key (错误做法):                                      ┃    ┃ 
+┃  ┃  A→D, B→A, C→B, 新建 C  ← 3 个更新 + 1 个新建           ┃    ┃  
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  有 key (正确做法):                                      ┃    ┃ 
+┃  ┃  新建 D, A→A, B→B, C→C  ← 1 个新建 + 3 个复用           ┃    ┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><p><strong>Key 使用原则：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 正确：使用稳定且唯一的 ID</span>
+items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{item.id}</span>&gt;</span>{item.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+));
+
+<span class="hljs-comment">// ✅ 正确：使用索引（仅当列表项顺序不变时）</span>
+items.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{index}</span>&gt;</span>{item.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+));
+
+<span class="hljs-comment">// ❌ 错误：使用随机数或索引作为 key</span>
+items.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{Math.random()}</span>&gt;</span>{item.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>  <span class="hljs-comment">// 每次渲染都是新 key</span>
+));
+
+<span class="hljs-comment">// ❌ 错误：在兄弟节点中使用重复的 key</span>
+items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> (
+  <span class="hljs-comment">// 错误：多个 item 可能有相同的 name</span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{item.name}</span>&gt;</span>{item.name}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+));
+</code></pre><hr>
+<h3 id="2.2-reconciliation">2.2 调和 (Reconciliation) 过程</h3>
+<h4 id="2.2.1">2.2.1 深度优先遍历</h4>
+<p>React 的调和过程采用深度优先遍历（DFS）算法处理 Fiber 树。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                  React 深度优先遍历示例                           ┃ 
+┃                                                                  ┃  
+┃   组件树结构:                                                    ┃  
+┃                                                                  ┃  
+┃        A                                                       ┃    
+┃       / \                                                      ┃    
+┃      B   C                                                     ┃    
+┃     / \   \                                                    ┃    
+┃    D   E   F                                                   ┃    
+┃                                                                  ┃  
+┃   遍历顺序: A → B → D → E → C → F                              ┃    
+┃                                                                  ┃  
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   beginWork(A)                                           ┃    ┃ 
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   beginWork(B)                                           ┃    ┃ 
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   beginWork(D) ━━▶ completeWork(D) ━━▶ 向上             ┃    ┃  
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   beginWork(E) ━━▶ completeWork(E) ━━▶ 向上              ┃    ┃ 
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   completeWork(B) ━━▶ 向上                               ┃    ┃ 
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   beginWork(C)                                           ┃    ┃ 
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   beginWork(F) ━━▶ completeWork(F) ━━▶ 向上              ┃    ┃ 
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   completeWork(C) ━━▶ 向上                               ┃    ┃ 
+┃   ┃      ┃                                                   ┃    ┃ 
+┃   ┃      ▼                                                   ┃    ┃ 
+┃   ┃   completeWork(A)                                         ┃    ┃
+┃   ┃                                                          ┃    ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><p><strong>遍历过程源码逻辑：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 简化的深度优先遍历逻辑</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">performUnitOfWork</span>(<span class="hljs-params">fiber</span>) {
+  <span class="hljs-comment">// 1. 处理当前节点 (beginWork)</span>
+  <span class="hljs-keyword">const</span> next = <span class="hljs-title function_">beginWork</span>(fiber);
+
+  <span class="hljs-keyword">if</span> (next === <span class="hljs-literal">null</span>) {
+    <span class="hljs-comment">// 2. 没有子节点，开始回溯 (completeWork)</span>
+    <span class="hljs-keyword">let</span> sibling = fiber.<span class="hljs-property">sibling</span>;
+    <span class="hljs-keyword">while</span> (sibling) {
+      <span class="hljs-title function_">completeUnitOfWork</span>(sibling);
+      sibling = sibling.<span class="hljs-property">sibling</span>;
+    }
+    <span class="hljs-comment">// 向上回溯到父节点</span>
+    <span class="hljs-keyword">return</span> fiber.<span class="hljs-property">return</span>;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 3. 有子节点，继续向下遍历</span>
+    <span class="hljs-keyword">return</span> next;
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">beginWork</span>(<span class="hljs-params">fiber</span>) {
+  <span class="hljs-comment">// 对比新旧 props</span>
+  <span class="hljs-comment">// 确定是否需要更新</span>
+  <span class="hljs-comment">// 协调子组件</span>
+  <span class="hljs-comment">// 返回第一个子 Fiber 或 null</span>
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">completeWork</span>(<span class="hljs-params">fiber</span>) {
+  <span class="hljs-comment">// 处理 DOM 节点更新</span>
+  <span class="hljs-comment">// 收集副作用</span>
+  <span class="hljs-comment">// 标记 Placement/Update/Deletion</span>
+}
+</code></pre><h4 id="2.2.2">2.2.2 状态更新批处理</h4>
+<p>React 18 引入了自动批处理（Automatic Batching），将多个状态更新合并为一次渲染。</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                    状态更新批处理机制                             ┃
+┃                                                                  ┃ 
+┃  React 18 之前 (手动批处理):                                     ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  setCount(c =&gt; c + 1);  // 触发一次渲染                 ┃    ┃  
+┃  ┃  setFlag(true);          // 触发第二次渲染               ┃    ┃ 
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  结果：2 次渲染                                          ┃    ┃ 
+┃  ┃                                                          ┃    ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃ 
+┃  React 18+ (自动批处理):                                         ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  setCount(c =&gt; c + 1);  // 加入更新队列                 ┃    ┃  
+┃  ┃  setFlag(true);          // 加入更新队列                 ┃    ┃ 
+┃  ┃  // 批量执行 → 1 次渲染                                 ┃    ┃  
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  结果：1 次渲染                                          ┃    ┃ 
+┃  ┃                                                          ┃    ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃ 
+┃  批处理规则:                                                     ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  在 React 事件处理器中：自动批处理                        ┃    ┃
+┃  ┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃    ┃    
+┃  ┃  ┃  function handleClick() {                        ┃  ┃    ┃   
+┃  ┃  ┃    setCount(c =&gt; c + 1);                         ┃  ┃    ┃   
+┃  ┃  ┃    setFlag(true);                               ┃  ┃    ┃    
+┃  ┃  ┃    setName('John');                             ┃  ┃    ┃    
+┃  ┃  ┃    // 批处理：只触发一次重渲染                     ┃  ┃    ┃ 
+┃  ┃  ┃  }                                              ┃  ┃    ┃    
+┃  ┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    ┃    
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  在 Promise/setTimeout 中：不再自动批处理 (React 18)    ┃    ┃  
+┃  ┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃    ┃    
+┃  ┃  ┃  Promise.resolve().then(() =&gt; {                 ┃  ┃    ┃    
+┃  ┃  ┃    setCount(c =&gt; c + 1);  // 单独渲染             ┃  ┃    ┃  
+┃  ┃  ┃    setFlag(true);        // 单独渲染               ┃  ┃    ┃ 
+┃  ┃  ┃  });                                             ┃  ┃    ┃   
+┃  ┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    ┃    
+┃  ┃                                                          ┃    ┃ 
+┃  ┃  使用 flushSync 强制同步:                                ┃    ┃ 
+┃  ┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃    ┃    
+┃  ┃  ┃  import { flushSync } from 'react-dom';          ┃  ┃    ┃   
+┃  ┃  ┃                                                    ┃  ┃    ┃ 
+┃  ┃  ┃  flushSync(() =&gt; {                               ┃  ┃    ┃   
+┃  ┃  ┃    setCount(c =&gt; c + 1);  // 同步执行             ┃  ┃    ┃  
+┃  ┃  ┃  });                                              ┃  ┃    ┃  
+┃  ┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    ┃    
+┃  ┃                                                          ┃    ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><p><strong>批处理流程图：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                    批处理工作流程                                 ┃ 
+┃                                                                  ┃  
+┃   用户交互/事件触发                                               ┃ 
+┃        ┃                                                          ┃ 
+┃        ▼                                                          ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃              批量更新队列 (Update Queue)                  ┃    ┃
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃    ┃   
+┃   ┃   ┃  Update 1: setCount(c =&gt; c + 1)                 ┃  ┃    ┃   
+┃   ┃   ┃  Update 2: setFlag(true)                        ┃  ┃    ┃   
+┃   ┃   ┃  Update 3: setName('John')                      ┃  ┃    ┃   
+┃   ┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    ┃   
+┃   ┃                                                          ┃    ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃        ┃                                                          ┃ 
+┃        ▼                                                          ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃              调度阶段 (Scheduler)                        ┃    ┃ 
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   根据优先级安排渲染任务                                  ┃    ┃
+┃   ┃   (可中断、可恢复)                                        ┃    ┃
+┃   ┃                                                          ┃    ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃        ┃                                                          ┃ 
+┃        ▼                                                          ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃              渲染阶段 (Render Phase)                     ┃    ┃ 
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   遍历更新队列，计算最终状态                              ┃    ┃
+┃   ┃   count: 0 + 1 = 1                                       ┃    ┃ 
+┃   ┃   flag: undefined → true                                ┃    ┃  
+┃   ┃   name: '' → 'John'                                      ┃    ┃ 
+┃   ┃                                                          ┃    ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃        ┃                                                          ┃ 
+┃        ▼                                                          ┃ 
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃  
+┃   ┃              提交阶段 (Commit Phase)                     ┃    ┃ 
+┃   ┃                                                          ┃    ┃ 
+┃   ┃   DOM 更新 (只执行一次)                                  ┃    ┃ 
+┃   ┃                                                          ┃    ┃ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃  
+┃        ┃                                                          ┃ 
+┃        ▼                                                          ┃ 
+┃   一次重渲染完成                                                   ┃
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><hr>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="1-7-浏览器工作原理.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第1卷 浏览器渲染原理</span>
+          </a>
+              <a href="2-2-Vue3核心特性.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第2卷 Vue框架</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

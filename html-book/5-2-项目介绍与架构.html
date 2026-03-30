@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第5卷-项目实战案例 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#2-fastdocument" class="toc-link "><span>第2章 FastDocument</span></a></li><li class="toc-item"><a href="#1.1" class="toc-link "><span>1.1 项目定位</span></a></li><li class="toc-item"><a href="#1.2" class="toc-link "><span>1.2 核心技术栈</span></a></li><li class="toc-item"><a href="#2.1" class="toc-link "><span>2.1 源代码目录结构</span></a></li><li class="toc-item"><a href="#3.1" class="toc-link "><span>3.1 完整组件树</span></a></li><li class="toc-item"><a href="#4.1-editor.tsx" class="toc-link "><span>4.1 文档编辑器组件 (Editor.tsx)</span></a></li><li class="toc-item"><a href="#4.2-virtualeditor.tsx" class="toc-link "><span>4.2 虚拟滚动编辑器 (VirtualEditor.tsx)</span></a></li><li class="toc-item"><a href="#4.3-meetingcontrolbar.tsx" class="toc-link "><span>4.3 会议控制栏 (MeetingControlBar.tsx)</span></a></li><li class="toc-item"><a href="#5.1-zustand-store" class="toc-link "><span>5.1 Zustand Store 完整列表</span></a></li><li class="toc-item"><a href="#5.2-document-store" class="toc-link "><span>5.2 Document Store 详细分析</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第5卷 项目实战案例 / 第2章 FastDocument</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第5卷 项目实战案例</span>
+            </div>
+            <h1 class="article-title">第5卷-项目实战案例</h1>
+          </header>
+
+          <div class="content"><h2 id="2-fastdocument">第2章 FastDocument</h2>
+<h3 id="1.1">1.1 项目定位</h3>
+<p>FastDocument 是一款面向团队协作的现代化文档编辑与管理平台，支持实时多人协作编辑、视频会议、版本历史管理等企业级功能。项目采用微前端架构设计，前端基于 Next.js 16，后端采用 NestJS 框架构建。</p>
+<h3 id="1.2">1.2 核心技术栈</h3>
+<h4 id="">前端技术栈</h4>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>版本</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Next.js</td>
+<td>16.1.6</td>
+<td>React 全栈框架，服务端渲染</td>
+</tr>
+<tr>
+<td>React</td>
+<td>19.2.3</td>
+<td>UI 组件库</td>
+</tr>
+<tr>
+<td>Zustand</td>
+<td>5.0.11</td>
+<td>轻量级状态管理</td>
+</tr>
+<tr>
+<td>Tailwind CSS</td>
+<td>4</td>
+<td>原子化 CSS 样式方案</td>
+</tr>
+<tr>
+<td>Framer Motion</td>
+<td>12.34.3</td>
+<td>声明式动画库</td>
+</tr>
+<tr>
+<td><a href="http://Socket.io">Socket.io</a> Client</td>
+<td>4.8.3</td>
+<td>WebSocket 实时通信客户端</td>
+</tr>
+<tr>
+<td>LiveKit Client</td>
+<td>2.17.2</td>
+<td>视频会议 WebRTC 客户端</td>
+</tr>
+<tr>
+<td>Ant Design</td>
+<td>6.3.0</td>
+<td>企业级 UI 组件库</td>
+</tr>
+</tbody>
+</table>
+<h4 id="">后端技术栈</h4>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>版本</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NestJS</td>
+<td>11.x</td>
+<td>Node.js 企业级框架</td>
+</tr>
+<tr>
+<td>TypeORM</td>
+<td>0.3.28</td>
+<td>ORM 数据库映射</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>15</td>
+<td>主数据库</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>7</td>
+<td>高速缓存与实时状态</td>
+</tr>
+<tr>
+<td><a href="http://Socket.io">Socket.io</a></td>
+<td>4.8.3</td>
+<td>WebSocket 实时通信服务端</td>
+</tr>
+<tr>
+<td>LiveKit Server SDK</td>
+<td>2.15.0</td>
+<td>视频会议服务端</td>
+</tr>
+<tr>
+<td>Passport JWT</td>
+<td>11.x</td>
+<td>身份认证</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="2.1">2.1 源代码目录结构</h3>
+<pre class="hljs"><code>src/
+┣━━ app/                          # Next.js App Router 页面
+┃   ┣━━ layout.tsx               # 根布局
+┃   ┣━━ page.tsx                 # 首页
+┃   ┣━━ login/page.tsx           # 登录页
+┃   ┗━━ share/[code]/page.tsx   # 分享页
+┃
+┣━━ components/                  # React 组件
+┃   ┣━━ Editor.tsx              # 主编辑器组件
+┃   ┣━━ VirtualEditor.tsx       # 虚拟滚动编辑器 (大文件优化)
+┃   ┣━━ Sidebar.tsx             # 侧边栏导航
+┃   ┣━━ Header.tsx               # 顶部导航
+┃   ┣━━ BubbleMenu.tsx           # 浮动气泡菜单
+┃   ┣━━ DocumentMenuBar.tsx      # 文档菜单栏
+┃   ┣━━ DocumentOutline.tsx       # 文档大纲
+┃   ┣━━ CommentPanel.tsx         # 评论面板
+┃   ┣━━ ChatDrawer.tsx           # 聊天抽屉
+┃   ┣━━ ShareDialog.tsx          # 分享对话框
+┃   ┣━━ NotificationPanel.tsx     # 通知面板
+┃   ┣━━ VersionHistoryPanel.tsx   # 版本历史面板
+┃   ┣━━ KnowledgeBaseView.tsx     # 知识库视图
+┃   ┣━━ KnowledgeTree.tsx         # 知识树
+┃   ┣━━ KnowledgeShareModal.tsx   # 知识库分享弹窗
+┃   ┣━━ MeetingLayout.tsx         # 会议布局
+┃   ┣━━ MeetingControlBar.tsx    # 会议控制栏
+┃   ┣━━ VideoConference.tsx      # 视频会议组件
+┃   ┣━━ ParticipantPanel.tsx      # 参与者面板
+┃   ┣━━ ChatPanel.tsx            # 聊天面板
+┃   ┣━━ ProjectView.tsx          # 项目视图
+┃   ┣━━ KanbanBoard.tsx           # 看板
+┃   ┣━━ TaskCard.tsx             # 任务卡片
+┃   ┣━━ CalendarView.tsx         # 日历视图
+┃   ┣━━ GanttChart.tsx           # 甘特图
+┃   ┣━━ MemosView.tsx           # 小记视图
+┃   ┣━━ VisualNodeMap.tsx        # 可视化节点图
+┃   ┣━━ Dashboard.tsx            # 仪表盘
+┃   ┣━━ ThemeProvider.tsx        # 主题提供者
+┃   ┣━━ DeviceSelector.tsx        # 设备选择器
+┃   ┣━━ NetworkIndicator.tsx      # 网络状态指示器
+┃   ┃
+┃   ┣━━ mobile/                  # 移动端组件
+┃   ┃   ┣━━ MobileDocumentList.tsx
+┃   ┃   ┣━━ MobileEditor.tsx
+┃   ┃   ┣━━ MobileHeader.tsx
+┃   ┃   ┣━━ MobileKnowledge.tsx
+┃   ┃   ┣━━ MobileLayout.tsx
+┃   ┃   ┣━━ MobileMeeting.tsx
+┃   ┃   ┣━━ MobileNavBar.tsx
+┃   ┃   ┣━━ MobileProject.tsx
+┃   ┃   ┗━━ MobileSidebar.tsx
+┃   ┃
+┃   ┗━━ tablet/                  # 平板组件
+┃       ┗━━ TabletLayout.tsx
+┃
+┣━━ store/                        # Zustand 状态管理
+┃   ┣━━ documentStore.ts         # 文档状态
+┃   ┣━━ userStore.ts             # 用户状态
+┃   ┣━━ meetingStore.ts          # 会议状态
+┃   ┣━━ knowledgeStore.ts        # 知识库状态
+┃   ┣━━ projectStore.ts          # 项目状态
+┃   ┣━━ commentStore.ts          # 评论状态
+┃   ┣━━ notificationStore.ts     # 通知状态
+┃   ┣━━ shareStore.ts            # 分享状态
+┃   ┣━━ themeStore.ts            # 主题状态
+┃   ┣━━ versionStore.ts          # 版本状态
+┃   ┣━━ searchStore.ts           # 搜索状态
+┃   ┣━━ responsiveStore.ts       # 响应式状态
+┃   ┗━━ mobileStore.ts           # 移动端状态
+┃
+┣━━ lib/                          # 工具函数
+┃   ┣━━ api.ts                   # API 客户端
+┃   ┣━━ socket.ts                # Socket.io 客户端
+┃   ┣━━ livekit.ts               # LiveKit 客户端
+┃   ┣━━ webrtc.ts                # WebRTC 管理
+┃   ┣━━ device.ts                # 设备管理
+┃   ┣━━ export.ts                # 导出功能
+┃   ┣━━ utils.ts                 # 通用工具
+┃   ┣━━ animations.tsx            # 动画
+┃   ┣━━ responsive.tsx            # 响应式
+┃   ┣━━ render-optimization.tsx   # 渲染优化
+┃   ┣━━ performance.ts            # 性能监控
+┃   ┣━━ usePerformance.ts         # 性能 Hook
+┃   ┣━━ perf-monitor.ts           # 性能监视器
+┃   ┣━━ api-performance.ts         # API 性能
+┃   ┗━━ browser-optimization.tsx  # 浏览器优化
+┃
+┣━━ types/                        # 类型定义
+┃   ┗━━ architecture.ts           # 架构类型
+┃
+┗━━ data/                         # 静态数据
+    ┣━━ templates.ts              # 模板
+    ┗━━ knowledgeSeed.ts          # 知识库种子数据
+</code></pre><hr>
+<h3 id="3.1">3.1 完整组件树</h3>
+<pre class="hljs"><code>App
+┣━━ Layout (app/layout.tsx)
+┃   ┣━━ ThemeProvider
+┃   ┣━━ Header (if needed)
+┃   ┣━━ Sidebar
+┃   ┃   ┗━━ DocumentTreeItem (recursive)
+┃   ┗━━ Page Content
+┃
+┣━━ Page: / (Home)
+┃   ┣━━ Dashboard
+┃   ┃   ┣━━ KanbanBoard
+┃   ┃   ┃   ┗━━ TaskCard
+┃   ┃   ┣━━ CalendarView
+┃   ┃   ┣━━ GanttChart
+┃   ┃   ┣━━ MemosView
+┃   ┃   ┗━━ VisualNodeMap
+┃   ┃
+┃   ┣━━ Editor (document page)
+┃   ┃   ┣━━ DocumentMenuBar
+┃   ┃   ┣━━ EditorToolbar (inline)
+┃   ┃   ┃   ┣━━ FormatButton (inline)
+┃   ┃   ┃   ┗━━ BlockRenderer[]
+┃   ┃   ┃       ┗━━ BlockTransformMenu
+┃   ┃   ┃       ┗━━ BlockContent (text/h1/h2/todo/callout/divider...)
+┃   ┃   ┣━━ BubbleMenu
+┃   ┃   ┣━━ DocumentOutline
+┃   ┃   ┣━━ ChatDrawer (conditional)
+┃   ┃   ┗━━ CommentPanel (conditional)
+┃   ┃
+┃   ┣━━ VirtualEditor (large documents &gt;100 blocks)
+┃   ┃   ┗━━ Same as Editor but with virtual scrolling
+┃   ┃
+┃   ┣━━ KnowledgeBaseView
+┃   ┃   ┣━━ KnowledgeTree
+┃   ┃   ┣━━ KnowledgeDocumentPage
+┃   ┃   ┃   ┗━━ Editor
+┃   ┃   ┣━━ KnowledgeShareModal
+┃   ┃   ┗━━ KnowledgeSettingsPanel
+┃   ┃
+┃   ┣━━ Meeting (VideoConference)
+┃   ┃   ┣━━ MeetingLayout
+┃   ┃   ┃   ┣━━ VideoConference (main)
+┃   ┃   ┃   ┃   ┣━━ RemoteParticipant[]
+┃   ┃   ┃   ┃   ┣━━ LocalParticipant
+┃   ┃   ┃   ┃   ┗━━ ScreenShare
+┃   ┃   ┃   ┣━━ MeetingControlBar
+┃   ┃   ┃   ┣━━ ParticipantPanel
+┃   ┃   ┃   ┣━━ ChatPanel
+┃   ┃   ┃   ┣━━ DeviceSelector
+┃   ┃   ┃   ┗━━ NetworkIndicator
+┃   ┃   ┗━━ MobileMeeting (mobile)
+┃   ┃
+┃   ┣━━ ProjectView
+┃   ┃   ┣━━ KanbanBoard
+┃   ┃   ┃   ┗━━ TaskCard
+┃   ┃   ┣━━ CalendarView
+┃   ┃   ┗━━ GanttChart
+┃   ┃
+┃   ┗━━ SharePage (/share/[code])
+┃
+┗━━ Login Page
+</code></pre><hr>
+<h3 id="4.1-editor.tsx">4.1 文档编辑器组件 (Editor.tsx)</h3>
+<p><strong>核心功能</strong>:</p>
+<ul>
+<li>块级编辑 (Block-based editing)</li>
+<li>实时协作 (Real-time collaboration)</li>
+<li>Markdown 触发器 (Markdown triggers)</li>
+<li>块类型转换 (Block transformation)</li>
+<li>撤销/重做 (Undo/Redo)</li>
+<li>大文件虚拟滚动 (Virtual scrolling for large docs)</li>
+</ul>
+<p><strong>块类型支持</strong>:</p>
+<ul>
+<li><code>text</code>: 普通文本</li>
+<li><code>h1/h2/h3</code>: 标题 (1-3级)</li>
+<li><code>todo</code>: 待办事项 (带复选框)</li>
+<li><code>callout</code>: 提示框</li>
+<li><code>divider</code>: 分隔线</li>
+<li><code>code</code>: 代码块</li>
+<li><code>image</code>: 图片</li>
+<li><code>table</code>: 表格</li>
+<li><code>mindmap</code>: 思维导图 (Mermaid)</li>
+<li><code>flowchart</code>: 流程图 (Mermaid)</li>
+<li><code>math</code>: 数学公式 (LaTeX)</li>
+</ul>
+<p><strong>Markdown 触发器</strong>:</p>
+<ul>
+<li><code># </code> -&gt; h1</li>
+<li><code>## </code> -&gt; h2</li>
+<li><code>### </code> -&gt; h3</li>
+<li><code>- </code> or <code>[] </code> -&gt; todo</li>
+<li><code>&gt; </code> -&gt; callout</li>
+<li><code>---</code> -&gt; divider</li>
+<li>
+<pre class="hljs"><code>
+</code></pre></li>
+</ul>
+<h3 id="4.2-virtualeditor.tsx">4.2 虚拟滚动编辑器 (VirtualEditor.tsx)</h3>
+<p><strong>适用场景</strong>: 文档块数量 &gt; 100 时自动启用</p>
+<p><strong>性能优化</strong>:</p>
+<pre class="hljs"><code><span class="hljs-comment">// 虚拟滚动配置</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ITEM_HEIGHT</span> = <span class="hljs-number">60</span>;     <span class="hljs-comment">// 估计块高度</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">OVERSCAN</span> = <span class="hljs-number">5</span>;         <span class="hljs-comment">// overscan 数量</span>
+
+<span class="hljs-comment">// 可见块计算</span>
+<span class="hljs-keyword">const</span> { visibleItems, totalHeight, startIndex, endIndex } = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> totalHeight = blocks.<span class="hljs-property">length</span> * <span class="hljs-variable constant_">ITEM_HEIGHT</span>;
+  <span class="hljs-keyword">const</span> startIdx = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">0</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(scrollTop / <span class="hljs-variable constant_">ITEM_HEIGHT</span>) - <span class="hljs-variable constant_">OVERSCAN</span>);
+  <span class="hljs-keyword">const</span> endIdx = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(
+    blocks.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>,
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>((scrollTop + containerHeight) / <span class="hljs-variable constant_">ITEM_HEIGHT</span>) + <span class="hljs-variable constant_">OVERSCAN</span>
+  );
+  <span class="hljs-comment">// ... 计算可见项</span>
+}, [blocks, scrollTop, containerHeight]);
+</code></pre><p><strong>性能监控</strong> (开发环境):</p>
+<ul>
+<li>渲染时间 (renderTime)</li>
+<li>帧率 (FPS)</li>
+<li>块数量 (blockCount)</li>
+<li>可见范围 (startIndex-endIndex)</li>
+<li>已加载分块数</li>
+</ul>
+<h3 id="4.3-meetingcontrolbar.tsx">4.3 会议控制栏 (MeetingControlBar.tsx)</h3>
+<p><strong>Props 接口</strong>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">MeetingControlBarProps</span> {
+  <span class="hljs-attr">isAudioEnabled</span>?: <span class="hljs-built_in">boolean</span>;           <span class="hljs-comment">// 音频状态</span>
+  <span class="hljs-attr">isVideoEnabled</span>?: <span class="hljs-built_in">boolean</span>;          <span class="hljs-comment">// 视频状态</span>
+  <span class="hljs-attr">isScreenSharing</span>?: <span class="hljs-built_in">boolean</span>;          <span class="hljs-comment">// 屏幕共享</span>
+  <span class="hljs-attr">isRecording</span>?: <span class="hljs-built_in">boolean</span>;             <span class="hljs-comment">// 录制状态</span>
+  <span class="hljs-attr">isHandRaised</span>?: <span class="hljs-built_in">boolean</span>;            <span class="hljs-comment">// 举手状态</span>
+  <span class="hljs-attr">isHost</span>?: <span class="hljs-built_in">boolean</span>;                  <span class="hljs-comment">// 是否主持人</span>
+  <span class="hljs-attr">layoutMode</span>?: <span class="hljs-title class_">LayoutMode</span>;           <span class="hljs-comment">// 布局模式</span>
+  <span class="hljs-attr">participantCount</span>?: <span class="hljs-built_in">number</span>;          <span class="hljs-comment">// 参与者数量</span>
+  <span class="hljs-attr">unreadMessageCount</span>?: <span class="hljs-built_in">number</span>;        <span class="hljs-comment">// 未读消息数</span>
+  <span class="hljs-attr">recordingDuration</span>?: <span class="hljs-built_in">number</span>;         <span class="hljs-comment">// 录制时长</span>
+  <span class="hljs-attr">onToggleAudio</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;        <span class="hljs-comment">// 切换音频</span>
+  <span class="hljs-attr">onToggleVideo</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;        <span class="hljs-comment">// 切换视频</span>
+  <span class="hljs-attr">onToggleScreenShare</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;  <span class="hljs-comment">// 切换屏幕共享</span>
+  <span class="hljs-attr">onToggleRecording</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;     <span class="hljs-comment">// 切换录制</span>
+  <span class="hljs-attr">onToggleHand</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;         <span class="hljs-comment">// 举手</span>
+  <span class="hljs-attr">onLeaveMeeting</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;        <span class="hljs-comment">// 离开会议</span>
+  <span class="hljs-attr">onEndMeeting</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;          <span class="hljs-comment">// 结束会议</span>
+  <span class="hljs-attr">onToggleChat</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;         <span class="hljs-comment">// 聊天</span>
+  <span class="hljs-attr">onToggleParticipants</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>; <span class="hljs-comment">// 参与者</span>
+  <span class="hljs-attr">onToggleSettings</span>?: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;     <span class="hljs-comment">// 设置</span>
+  <span class="hljs-attr">onChangeLayout</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">mode</span>: <span class="hljs-title class_">LayoutMode</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+}
+</code></pre><p><strong>布局模式</strong>:</p>
+<ul>
+<li><code>grid</code>: 宫格视图</li>
+<li><code>speaker</code>: 演讲者视图</li>
+<li><code>gallery</code>: 画廊视图</li>
+<li><code>sidebar</code>: 侧边栏模式</li>
+</ul>
+<hr>
+<h3 id="5.1-zustand-store">5.1 Zustand Store 完整列表</h3>
+<table>
+<thead>
+<tr>
+<th>Store 名称</th>
+<th>文件路径</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>documentStore</td>
+<td><code>/store/documentStore.ts</code></td>
+<td>文档编辑状态</td>
+</tr>
+<tr>
+<td>userStore</td>
+<td><code>/store/userStore.ts</code></td>
+<td>用户认证和资料</td>
+</tr>
+<tr>
+<td>meetingStore</td>
+<td><code>/store/meetingStore.ts</code></td>
+<td>视频会议状态</td>
+</tr>
+<tr>
+<td>knowledgeStore</td>
+<td><code>/store/knowledgeStore.ts</code></td>
+<td>知识库管理</td>
+</tr>
+<tr>
+<td>projectStore</td>
+<td><code>/store/projectStore.ts</code></td>
+<td>项目和任务管理</td>
+</tr>
+<tr>
+<td>commentStore</td>
+<td><code>/store/commentStore.ts</code></td>
+<td>评论管理</td>
+</tr>
+<tr>
+<td>notificationStore</td>
+<td><code>/store/notificationStore.ts</code></td>
+<td>通知中心</td>
+</tr>
+<tr>
+<td>shareStore</td>
+<td><code>/store/shareStore.ts</code></td>
+<td>分享状态</td>
+</tr>
+<tr>
+<td>themeStore</td>
+<td><code>/store/themeStore.ts</code></td>
+<td>主题状态</td>
+</tr>
+<tr>
+<td>versionStore</td>
+<td><code>/store/versionStore.ts</code></td>
+<td>版本历史</td>
+</tr>
+<tr>
+<td>searchStore</td>
+<td><code>/store/searchStore.ts</code></td>
+<td>搜索状态</td>
+</tr>
+<tr>
+<td>responsiveStore</td>
+<td><code>/store/responsiveStore.ts</code></td>
+<td>响应式布局</td>
+</tr>
+<tr>
+<td>mobileStore</td>
+<td><code>/store/mobileStore.ts</code></td>
+<td>移动端状态</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5.2-document-store">5.2 Document Store 详细分析</h3>
+<h4 id="">状态结构</h4>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">DocumentState</span> {
+  <span class="hljs-comment">// 核心数据</span>
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;                    <span class="hljs-comment">// 文档 ID</span>
+  <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;                 <span class="hljs-comment">// 文档标题</span>
+  <span class="hljs-attr">blocks</span>: <span class="hljs-title class_">Block</span>[];               <span class="hljs-comment">// 文档块列表</span>
+
+  <span class="hljs-comment">// 同步状态</span>
+  <span class="hljs-attr">isSaving</span>: <span class="hljs-built_in">boolean</span>;             <span class="hljs-comment">// 保存中</span>
+  <span class="hljs-attr">isOnline</span>: <span class="hljs-built_in">boolean</span>;             <span class="hljs-comment">// 后端连接状态</span>
+  <span class="hljs-attr">onlineUsers</span>: <span class="hljs-title class_">User</span>[];           <span class="hljs-comment">// 在线用户</span>
+  <span class="hljs-attr">typingUsers</span>: <span class="hljs-title class_">Record</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt;; <span class="hljs-comment">// 输入中用户</span>
+
+  <span class="hljs-comment">// 分块加载 (大文件优化)</span>
+  <span class="hljs-attr">chunkedLoading</span>: {
+    <span class="hljs-attr">loadedChunks</span>: <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">number</span>, <span class="hljs-title class_">Block</span>[]&gt;;
+    <span class="hljs-attr">totalBlocks</span>: <span class="hljs-built_in">number</span>;
+    <span class="hljs-attr">chunkSize</span>: <span class="hljs-built_in">number</span>;
+    <span class="hljs-attr">lastSyncTime</span>: <span class="hljs-title class_">Date</span> | <span class="hljs-literal">null</span>;
+  };
+  <span class="hljs-attr">isLoadingChunk</span>: <span class="hljs-built_in">boolean</span>;
+
+  <span class="hljs-comment">// UI 状态</span>
+  <span class="hljs-attr">selectedBlockId</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">focusedBlockId</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+
+  <span class="hljs-comment">// 撤销/重做</span>
+  <span class="hljs-attr">history</span>: { <span class="hljs-attr">blocks</span>: <span class="hljs-title class_">Block</span>[]; <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span> }[];
+  <span class="hljs-attr">historyIndex</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">canUndo</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">canRedo</span>: <span class="hljs-built_in">boolean</span>;
+}
+</code></pre><h4 id="block">Block 接口定义</h4>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Block</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;text&quot;</span> | <span class="hljs-string">&quot;h1&quot;</span> | <span class="hljs-string">&quot;h2&quot;</span> | <span class="hljs-string">&quot;h3&quot;</span> | <span class="hljs-string">&quot;todo&quot;</span> | <span class="hljs-string">&quot;callout&quot;</span> |
+       <span class="hljs-string">&quot;divider&quot;</span> | <span class="hljs-string">&quot;code&quot;</span> | <span class="hljs-string">&quot;image&quot;</span> | <span class="hljs-string">&quot;table&quot;</span> | <span class="hljs-string">&quot;mindmap&quot;</span> |
+       <span class="hljs-string">&quot;flowchart&quot;</span> | <span class="hljs-string">&quot;math&quot;</span>;
+  <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">properties</span>?: {
+    <span class="hljs-attr">checked</span>?: <span class="hljs-built_in">boolean</span>;
+    <span class="hljs-attr">style</span>?: <span class="hljs-built_in">string</span>;
+    <span class="hljs-attr">language</span>?: <span class="hljs-built_in">string</span>;
+    <span class="hljs-attr">url</span>?: <span class="hljs-built_in">string</span>;
+  };
+  <span class="hljs-attr">order</span>?: <span class="hljs-built_in">number</span>;
+}
+</code></pre><h4 id="actions">Actions 列表</h4>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fetchDocument(id)</code></td>
+<td>获取文档</td>
+</tr>
+<tr>
+<td><code>fetchDocuments()</code></td>
+<td>获取文档列表</td>
+</tr>
+<tr>
+<td><code>createDocument(title, parentId?, type?, blocks?)</code></td>
+<td>创建文档</td>
+</tr>
+<tr>
+<td><code>loadBlocksChunked(offset, limit)</code></td>
+<td>分块加载</td>
+</tr>
+<tr>
+<td><code>loadMoreBlocks()</code></td>
+<td>加载更多块</td>
+</tr>
+<tr>
+<td><code>syncBlocks()</code></td>
+<td>增量同步</td>
+</tr>
+<tr>
+<td><code>updateTitle(title)</code></td>
+<td>更新标题</td>
+</tr>
+<tr>
+<td><code>updateBlock(id, content, properties?, type?)</code></td>
+<td>更新块</td>
+</tr>
+<tr>
+<td><code>addBlock(type, afterId?)</code></td>
+<td>添加块</td>
+</tr>
+<tr>
+<td><code>removeBlock(id)</code></td>
+<td>删除块</td>
+</tr>
+<tr>
+<td><code>moveBlock(fromIndex, toIndex)</code></td>
+<td>移动块</td>
+</tr>
+<tr>
+<td><code>transformBlock(id, newType)</code></td>
+<td>块类型转换</td>
+</tr>
+<tr>
+<td><code>indentBlock(id, direction)</code></td>
+<td>块缩进</td>
+</tr>
+<tr>
+<td><code>updateBlocksBatch(blocks[])</code></td>
+<td>批量更新</td>
+</tr>
+<tr>
+<td><code>undo()</code> / <code>redo()</code></td>
+<td>撤销/重做</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5.3-meeting-store">5.3 Meeting Store 详细分析</h3>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">MeetingState</span> {
+  <span class="hljs-attr">meetings</span>: <span class="hljs-title class_">Meeting</span>[];
+  <span class="hljs-attr">currentMeeting</span>: <span class="hljs-title class_">Meeting</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">isInMeeting</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">isLoading</span>: <span class="hljs-built_in">boolean</span>;
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Meeting</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;instant&quot;</span> | <span class="hljs-string">&quot;scheduled&quot;</span>;
+  <span class="hljs-attr">status</span>: <span class="hljs-string">&quot;waiting&quot;</span> | <span class="hljs-string">&quot;active&quot;</span> | <span class="hljs-string">&quot;ended&quot;</span>;
+  <span class="hljs-attr">hostId</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">hostName</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">scheduledAt</span>?: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">startedAt</span>?: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">endedAt</span>?: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">participants</span>: <span class="hljs-title class_">MeetingParticipant</span>[];
+  <span class="hljs-attr">recordingEnabled</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">createdAt</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">updatedAt</span>: <span class="hljs-built_in">number</span>;
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">MeetingParticipant</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">isHost</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">isMuted</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">isVideoOn</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">joinedAt</span>: <span class="hljs-built_in">number</span>;
+}
+</code></pre><hr>
+<h3 id="6.1">6.1 后端模块结构</h3>
+<pre class="hljs"><code>backend/src/
+┣━━ auth/                         # 认证模块
+┃   ┣━━ auth.module.ts
+┃   ┣━━ auth.controller.ts
+┃   ┣━━ auth.service.ts
+┃   ┣━━ user.entity.ts
+┃   ┣━━ jwt-auth.guard.ts
+┃   ┗━━ invitation.service.ts
+┃
+┣━━ documents/                    # 文档模块
+┃   ┣━━ documents.module.ts
+┃   ┣━━ documents.controller.ts
+┃   ┣━━ documents.service.ts
+┃   ┣━━ documents.gateway.ts      # WebSocket 网关
+┃   ┣━━ document.entity.ts
+┃   ┣━━ block-lock.entity.ts
+┃   ┣━━ edit-operation.entity.ts
+┃   ┣━━ version.entity.ts
+┃   ┣━━ block-lock.service.ts
+┃   ┣━━ edit-operation.service.ts
+┃   ┣━━ operation-transform.service.ts
+┃   ┗━━ version.service.ts
+┃
+┣━━ comments/                     # 评论模块
+┣━━ meetings/                    # 会议模块
+┣━━ projects/                    # 项目模块
+┣━━ knowledge/                    # 知识库模块
+┣━━ share/                       # 分享模块
+┗━━ notifications/               # 通知模块
+</code></pre><h3 id="6.2-documents-gateway-websocket">6.2 Documents Gateway (WebSocket)</h3>
+<p><strong>Socket 事件</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>方向</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>joinDocument</code></td>
+<td>Client -&gt; Server</td>
+<td>加入文档房间</td>
+</tr>
+<tr>
+<td><code>updateBlock</code></td>
+<td>Client -&gt; Server</td>
+<td>更新块</td>
+</tr>
+<tr>
+<td><code>updateBlocksBatch</code></td>
+<td>Client -&gt; Server</td>
+<td>批量更新块</td>
+</tr>
+<tr>
+<td><code>loadBlocksChunked</code></td>
+<td>Client -&gt; Server</td>
+<td>分块加载请求</td>
+</tr>
+<tr>
+<td><code>syncBlocks</code></td>
+<td>Client -&gt; Server</td>
+<td>增量同步请求</td>
+</tr>
+<tr>
+<td><code>typing</code></td>
+<td>Client -&gt; Server</td>
+<td>输入状态</td>
+</tr>
+<tr>
+<td><code>chatMessage</code></td>
+<td>Client -&gt; Server</td>
+<td>聊天消息</td>
+</tr>
+<tr>
+<td><code>cursorMove</code></td>
+<td>Client -&gt; Server</td>
+<td>光标移动</td>
+</tr>
+<tr>
+<td><code>blockUpdated</code></td>
+<td>Server -&gt; Client</td>
+<td>块更新广播</td>
+</tr>
+<tr>
+<td><code>onlineUsersUpdate</code></td>
+<td>Server -&gt; Client</td>
+<td>在线用户更新</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6.3-document-entity">6.3 Document Entity</h3>
+<pre class="hljs"><code><span class="hljs-meta">@Entity</span>(<span class="hljs-string">&#x27;documents&#x27;</span>)
+<span class="hljs-meta">@Tree</span>(<span class="hljs-string">&quot;closure-table&quot;</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DocumentEntity</span> {
+  <span class="hljs-meta">@PrimaryGeneratedColumn</span>(<span class="hljs-string">&#x27;uuid&#x27;</span>)
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;varchar&#x27;</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">255</span> })
+  <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;varchar&#x27;</span>, <span class="hljs-attr">default</span>: <span class="hljs-string">&#x27;document&#x27;</span> })
+  <span class="hljs-attr">type</span>: <span class="hljs-built_in">string</span>;  <span class="hljs-comment">// &#x27;document&#x27; | &#x27;folder&#x27; | &#x27;workspace&#x27;</span>
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text&#x27;</span>, <span class="hljs-attr">nullable</span>: <span class="hljs-literal">true</span> })
+  <span class="hljs-attr">summary</span>: <span class="hljs-built_in">string</span>;  <span class="hljs-comment">// 智能摘要</span>
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;boolean&#x27;</span>, <span class="hljs-attr">default</span>: <span class="hljs-literal">false</span> })
+  <span class="hljs-attr">isStarred</span>: <span class="hljs-built_in">boolean</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;boolean&#x27;</span>, <span class="hljs-attr">default</span>: <span class="hljs-literal">false</span> })
+  <span class="hljs-attr">isDeleted</span>: <span class="hljs-built_in">boolean</span>;
+
+  <span class="hljs-meta">@OneToMany</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title class_">BlockEntity</span>, <span class="hljs-function">(<span class="hljs-params">block</span>) =&gt;</span> block.<span class="hljs-property">document</span>, { <span class="hljs-attr">cascade</span>: <span class="hljs-literal">true</span> })
+  <span class="hljs-attr">blocks</span>: <span class="hljs-title class_">BlockEntity</span>[];
+
+  <span class="hljs-meta">@TreeChildren</span>()
+  <span class="hljs-attr">children</span>: <span class="hljs-title class_">DocumentEntity</span>[];
+
+  <span class="hljs-meta">@TreeParent</span>()
+  <span class="hljs-attr">parent</span>: <span class="hljs-title class_">DocumentEntity</span>;
+}
+
+<span class="hljs-meta">@Entity</span>(<span class="hljs-string">&#x27;blocks&#x27;</span>)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BlockEntity</span> {
+  <span class="hljs-meta">@PrimaryGeneratedColumn</span>(<span class="hljs-string">&#x27;uuid&#x27;</span>)
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;varchar&#x27;</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">50</span> })
+  <span class="hljs-attr">type</span>: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text&#x27;</span>, <span class="hljs-attr">default</span>: <span class="hljs-string">&#x27;&#x27;</span> })
+  <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;jsonb&#x27;</span>, <span class="hljs-attr">nullable</span>: <span class="hljs-literal">true</span> })
+  <span class="hljs-attr">properties</span>: <span class="hljs-built_in">any</span>;
+
+  <span class="hljs-meta">@Column</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;int&#x27;</span>, <span class="hljs-attr">default</span>: <span class="hljs-number">0</span> })
+  <span class="hljs-attr">order</span>: <span class="hljs-built_in">number</span>;
+}
+</code></pre><hr>
+<h3 id="7.1">7.1 前端亮点</h3>
+<ol>
+<li><strong>块级编辑器架构</strong>: 原子化块设计，支持 12+ 种块类型</li>
+<li><strong>虚拟滚动优化</strong>: &gt;100 块自动启用虚拟滚动</li>
+<li><strong>实时协作</strong>: <a href="http://Socket.io">Socket.io</a> + 乐观更新</li>
+<li><strong>Markdown 触发器</strong>: 快捷输入转换</li>
+<li><strong>Slash 命令菜单</strong>: 快速块插入</li>
+<li><strong>Zustand 状态管理</strong>: 轻量级、持久化支持</li>
+<li><strong>响应式设计</strong>: 移动端/平板/桌面多端适配</li>
+</ol>
+<h3 id="7.2">7.2 后端亮点</h3>
+<ol>
+<li><strong>树形文档结构</strong>: Closure Table 实现层级</li>
+<li><strong>分块加载</strong>: 大文档性能优化</li>
+<li><strong>增量同步</strong>: 只同步变更部分</li>
+<li><strong>Redis 缓存</strong>: 热点数据缓存</li>
+<li><strong>WebSocket 网关</strong>: 实时协作</li>
+<li><strong>LiveKit 集成</strong>: 视频会议</li>
+</ol>
+<hr>
+<h3 id="8.1">8.1 文档编辑状态机</h3>
+<pre class="hljs"><code>                    Loading
+                        ┃
+                        ┃ fetchDocument()
+                        ▼
+              ┏━━━━━━━━━━━━━━━━━━━━━━━━┓
+              ┃                        ┃
+              ▼                        ▼
+       ┏━━━━━━━━━━━━┓           ━━━━━━━━━━┏━━━━━━━━━━━━┓
+       ┃  Online   ┃           ┃  Offline   ┃
+          
+       ┃ (Editing) ┃           ┃ (Cached)   ┃
+          
+       ┗━━━━━┳━━━━━━┛           ┗━━━━━┳━━━━━━┛
+         
+             ┃                        ┃
+             ┃ socket events         ┃ local operations
+             ▼                        ▼
+    ┏━━━━━━━━━━━━━━━━━┓     ━━━━━━━━┏━━━━━━━━━━━━━━━━━┓
+    ┃ Remote Update   ┃     ┃ Local Update    ┃
+       
+    ┃ (blockUpdated) ┃     ┃ (optimistic)   ┃
+         
+    ┗━━━━━━━━┳━━━━━━━━┛     ┗━━━━━━━━┳━━━━━━━━┛
+       
+             ┃                      ┃
+             ┃                      ┃ sync when online
+             ┃                      ▼
+             ┃              ┏━━━━━━━━━━━━━━━━━┓
+             ┃              ┃ Queue Changes   ┃
+             ┃              ┗━━━━━━━━┳━━━━━━━━┛
+             ┃                       ┃
+             ┗━━━━━━━━━━━┳━━━━━━━━━━━┛
+                         ┃
+                         ▼
+              ┏━━━━━━━━━━━━━━━━━━━━━━━━┓
+              ┃   Synced / Saved      ┃
+ 
+              ┗━━━━━━━━━━━━━━━━━━━━━━━━┛
+</code></pre><hr>
+<h3 id="9.1">9.1 实时协作流程图</h3>
+<pre class="hljs"><code>User A                              Server                          User B
+  ┃                                    ┃                                ┃
+  ┃━━━━ updateBlock() ━━━━━━━━━━━━━━━━▶┃                                ┃
+  ┃                                    ┃━━━━ broadcast blockUpdated ━━▶┃
+  ┃                                    ┃                                ┃
+  ┃◀━━━ update local state ━━━━━━━━━━━┃                                ┃
+  ┃                                    ┃                                ┃
+  ┃                                    ┃◀━━━━ updateBlock() ━━━━━━━━━━┃
+  ┃                                    ┃                                ┃
+  ┃◀━━━ apply remote update ━━━━━━━━━━┃                                ┃
+</code></pre></div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="5-1-核心技术实现.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第5卷 WebEnv-OS</span>
+          </a>
+              <a href="5-3-核心技术实现.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第5卷 UnoThree</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

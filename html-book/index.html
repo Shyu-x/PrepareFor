@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>前端面试题库 - 系统化准备前端面试</title>
+  <meta name="description" content="7卷完整知识体系，80+章节深度解析，1000+面试考点">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --text: #111827;
+      --text-light: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #f9fafb;
+      --bg-card: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    body {
+      font-family: 'Noto Sans SC', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* 封面区域 */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 3rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 40% 80%, rgba(5, 150, 105, 0.1) 0%, transparent 40%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      margin: 0 auto 2rem;
+      box-shadow: 0 20px 40px rgba(26, 86, 219, 0.3);
+    }
+
+    .hero h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .hero .subtitle {
+      font-size: 1.25rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2.5rem;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .cta:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(26, 86, 219, 0.4);
+    }
+
+    /* 内容区域 */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--text);
+    }
+
+    .volume-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .volume-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: all 0.3s;
+    }
+
+    .volume-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      transform: translateY(-4px);
+    }
+
+    .volume-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .volume-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      color: white;
+    }
+
+    .volume-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .volume-desc {
+      color: var(--text-light);
+      font-size: 0.9375rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .chapters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chapter-link {
+      padding: 0.375rem 0.875rem;
+      background: var(--bg);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 0.8125rem;
+      transition: all 0.2s;
+    }
+
+    .chapter-link:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--primary); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .stats { gap: 1.5rem; }
+      .stat-value { font-size: 1.75rem; }
+      .volume-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 封面 -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="logo"><i class="fas fa-graduation-cap"></i></div>
+      <h1>前端面试题库</h1>
+      <p class="subtitle">系统化准备前端面试 · 7卷完整知识体系 · 80+章节深度解析</p>
+      <div class="stats">
+        <div class="stat"><span class="stat-value">7</span><span class="stat-label">知识卷册</span></div>
+        <div class="stat"><span class="stat-value">80+</span><span class="stat-label">章节内容</span></div>
+        <div class="stat"><span class="stat-value">1000+</span><span class="stat-label">面试考点</span></div>
+      </div>
+      <a href="1-1-HTML核心原理.html" class="cta"><i class="fas fa-book-open"></i> 开始学习</a>
+    </div>
+  </section>
+
+  <!-- 卷内容 -->
+  <section class="container">
+    <h2 class="section-title">知识体系一览</h2>
+    <div class="volume-grid"><div class="volume-card">
+  <div class="volume-header">
+    <div class="volume-icon" style="background: linear-gradient(135deg, #1a56db, #1a56db99)">
+      <i class="fas fa-code"></i>
+    </div>
+    <div class="volume-title">第1卷 基础核心</div>
+  </div>
+  <p class="volume-desc">HTML、CSS、JavaScript核心基础，构建坚实的技术根基</p>
+  <div class="chapters"><a href="1-1-HTML核心原理.html" class="chapter-link">第1章 HTML与CSS</a><a href="1-2-JavaScript核心概念.html" class="chapter-link">第2章 JavaScript基础</a><a href="1-3-TypeScript基础.html" class="chapter-link">第3章 TypeScript类型系统</a><a href="1-4-HTTP协议.html" class="chapter-link">第4章 计算机网络</a><a href="1-5-基础算法.html" class="chapter-link">第5章 算法与数据结构</a><a href="1-6-Linux命令与运维.html" class="chapter-link">第6章 Linux运维基础</a><a href="1-7-浏览器工作原理.html" class="chapter-link">第7章 浏览器渲染原理</a></div>
+</div><div class="volume-card">
+  <div class="volume-header">
+    <div class="volume-icon" style="background: linear-gradient(135deg, #7c3aed, #7c3aed99)">
+      <i class="fas fa-layer-group"></i>
+    </div>
+    <div class="volume-title">第2卷 框架生态</div>
+  </div>
+  <p class="volume-desc">React、Vue、Node.js等主流框架生态，全面掌握现代前端</p>
+  <div class="chapters"><a href="2-1-React核心原理.html" class="chapter-link">第1章 React深入</a><a href="2-2-Vue3核心特性.html" class="chapter-link">第2章 Vue框架</a><a href="2-3-BFF架构.html" class="chapter-link">第3章 Node与BFF</a><a href="2-4-Canvas与SVG.html" class="chapter-link">第4章 可视化与WebGL</a><a href="2-5-跨端开发.html" class="chapter-link">第5章 音视频与跨端</a><a href="2-6-API路由与中间件.html" class="chapter-link">第6章 Next.js框架</a></div>
+</div><div class="volume-card">
+  <div class="volume-header">
+    <div class="volume-icon" style="background: linear-gradient(135deg, #059669, #05966999)">
+      <i class="fas fa-tools"></i>
+    </div>
+    <div class="volume-title">第3卷 工程实战</div>
+  </div>
+  <p class="volume-desc">工程化、构建工具、大厂实战经验，提升工程能力</p>
+  <div class="chapters"><a href="3-1-模块化开发.html" class="chapter-link">第1章 前端工程化</a><a href="3-2-Vite快速构建.html" class="chapter-link">第2章 构建工具</a><a href="3-3-工程案例分析.html" class="chapter-link">第3章 实际工程应用</a><a href="3-4-AI辅助开发.html" class="chapter-link">第4章 AI与大模型实战</a><a href="3-5-业务架构设计.html" class="chapter-link">第5章 工程化与业务架构</a><a href="3-6-大厂工程实践.html" class="chapter-link">第6章 大厂工程实践与代码规范</a></div>
+</div><div class="volume-card">
+  <div class="volume-header">
+    <div class="volume-icon" style="background: linear-gradient(135deg, #dc2626, #dc262699)">
+      <i class="fas fa-building"></i>
+    </div>
+    <div class="volume-title">第4卷 大厂面试专题</div>
+  </div>
+  <p class="volume-desc">各大厂面试真题与高频考点针对性突破</p>
+  <div class="chapters"><a href="4-1-MakerWorld面试题.html" class="chapter-link">第1章 拓竹科技</a><a href="4-2-微信事业群面试题.html" class="chapter-link">第2章 腾讯WXG</a><a href="4-3-qiankun微前端.html" class="chapter-link">第3章 蚂蚁集团</a><a href="4-4-迅雷面试题.html" class="chapter-link">第4章 迅雷</a><a href="4-5-手写代码.html" class="chapter-link">第5章 二面高频考点</a><a href="4-6-手写代码汇总.html" class="chapter-link">第6章 手写代码实战</a><a href="4-7-深度问题解析.html" class="chapter-link">第7章 面试官拷打专题</a></div>
+</div><div class="volume-card">
+  <div class="volume-header">
+    <div class="volume-icon" style="background: linear-gradient(135deg, #ea580c, #ea580c99)">
+      <i class="fas fa-project-diagram"></i>
+    </div>
+    <div class="volume-title">第5卷 项目实战案例</div>
+  </div>
+  <p class="volume-desc">完整项目实战案例深度解析，展现工程实力</p>
+  <div class="chapters"><a href="5-1-核心技术实现.html" class="chapter-link">第1章 WebEnv-OS</a><a href="5-2-核心技术实现.html" class="chapter-link">第2章 FastDocument</a><a href="5-3-核心技术实现.html" class="chapter-link">第3章 UnoThree</a></div>
+</div><div class="volume-card">
+  <div class="volume-header">
+    <div class="volume-icon" style="background: linear-gradient(135deg, #0891b2, #0891b299)">
+      <i class="fas fa-user-tie"></i>
+    </div>
+    <div class="volume-title">第6卷 面试技巧与总结</div>
+  </div>
+  <p class="volume-desc">面试技巧、简历优化、软技能全方位准备</p>
+  <div class="chapters"><a href="6-1-手写代码题库.html" class="chapter-link">第1章 手写代码题</a><a href="6-2-STAR法则.html" class="chapter-link">第2章 项目深挖</a><a href="6-3-简历优化.html" class="chapter-link">第3章 简历深度分析</a><a href="6-4-沟通技巧.html" class="chapter-link">第4章 面试软技能</a><a href="6-5-考点总结.html" class="chapter-link">第5章 高频考点速览</a><a href="6-6-知识大纲.html" class="chapter-link">第6章 题库大纲</a><a href="6-7-AI面试话术.html" class="chapter-link">第7章 AI辅助面试</a></div>
+</div><div class="volume-card">
+  <div class="volume-header">
+    <div class="volume-icon" style="background: linear-gradient(135deg, #4f46e5, #4f46e599)">
+      <i class="fas fa-comments"></i>
+    </div>
+    <div class="volume-title">第7卷 面经汇总</div>
+  </div>
+  <p class="volume-desc">真实面经汇总与经验分享，少走弯路</p>
+  <div class="chapters"><a href="7-1-面试问题大全.html" class="chapter-link">第1章 常见面试问题</a></div>
+</div></div>
+  </section>
+
+  <footer>
+    <p>持续更新中 · <a href="https://github.com/shyu/prepare-for">GitHub</a></p>
+  </footer>
+</body>
+</html>

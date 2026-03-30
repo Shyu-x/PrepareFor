@@ -1,0 +1,229 @@
+================================================================================
+                        FastDocument 后端架构图 (ASCII)
+================================================================================
+
+                              +------------------+
+                              |    NestJS 核心    |
+                              +--------+---------+
+                                       |
+         +-----------------------------+-----------------------------+
+         |                             |                             |
+         v                             v                             v
++------------------+      +------------------------+      +------------------+
+|  Documents 模块  |      |   Comments 模块        |      |  Projects 模块   |
++------------------+      +------------------------+      +------------------+
+|                  |      |                        |      |                  |
+| controller:      |      | controller:            |      | controller:      |
+| - GET /docs     |      | - GET /docs/:id/com    |      | - GET /projects |
+| - GET /docs/:id |      | - POST /docs/:id/com    |      | - POST /projects|
+| - POST /docs    |      | - PUT /comments/:id     |      | - GET /proj/:id |
+| - PUT /docs/:id |      | - DELETE /comments/:id  |      | - PUT /proj/:id  |
+| - DELETE /docs  |      | - POST /comments/:id/r  |      | - DELETE /proj  |
+|                  |      |                        |      |                  |
+| service:         |      | service:               |      | service:         |
+| - 文档 CRUD      |      | - 评论 CRUD            |      | - 项目 CRUD      |
+| - 块操作         |      | - 回复/反应            |      | - 任务 CRUD      |
+| - 版本历史       |      | - 批注管理             |      | - 看板管理       |
+|                  |      |                        |      |                  |
+| gateway:         |      | entity:                |      | entity:          |
+| - WebSocket      |      | - CommentEntity        |      | - ProjectEntity  |
+| - 实时同步       |      | - AnnotationEntity     |      | - TaskEntity     |
+|                  |      |                        |      |                  |
+| entity:          |      +------------------------+      +------------------+
+| - DocumentEntity |
+| - BlockEntity    |
+| - BlockLockEntity|
+| - EditOperation  |
+| - VersionEntity  |
++------------------+
+         |
+         +--------+---------+
+         |                  |
+         v                  v
++----------------+ +----------------+
+| Knowledge 模块 | |  Meetings 模块 |
++----------------+ +----------------+
+|                | |                |
+| controller:    | | controller:    |
+| - GET /spaces | | - GET /meetings|
+| - POST /space | | - POST /meet   |
+| - GET /bases  | | - GET /meet/:id|
+| - POST /bases | | - POST /join   |
+| - GET /tree   | | - POST /leave  |
+|                | | - GET /token  |
+| service:       | |                |
+| - 空间管理     | | service:       |
+| - 知识库管理   | | - 创建会议     |
+| - 节点管理     | | - 加入/离开    |
+|                | | - LiveKit令牌 |
+| entity:        | |                |
+| - SpaceEntity  | | entity:        |
+| - KnowledgeBase| | - MeetingEntity|
+| - KnowledgeNode| |                |
++----------------+ +----------------+
+
++----------------+ +----------------+ +----------------+
+|  Auth 模块     | |  Share 模块    | | Notifications  |
++----------------+ +----------------+ +----------------+
+|                | |                | |                |
+| controller:    | | controller:    | | controller:    |
+| - POST /login | | - POST /share | | - GET /notif   |
+|                | | - GET /:code | | - POST /notif  |
+| service:       | |                | | - PUT /notif/:i|
+| - 邀请码验证   | | service:       | |                |
+| - JWT 令牌     | | - 生成分享码   | | service:       |
+| - 用户认证     | | - 访问控制     | | - 通知管理     |
+|                | |                | | - 已读/未读    |
+| entity:        | | entity:        | |                |
+| - UserEntity   | | - ShareEntity  | | entity:        |
+|                | |                | | - Notification |
++----------------+ +----------------+ +----------------+
+
++----------------+ +--------------------------------------------------+
+|  Common 模块   | |              数据层                              |
++----------------+ +--------------------------------------------------+
+|                | |                                                  |
+| cache.service  | |  +----------------+       +----------------+   |
+| - Redis 缓存   | |  |  PostgreSQL    |       |     Redis      |   |
+| - 会话管理     | |  |  (Port 5432)  |       |  (Port 6379)   |   |
+|                | |  |                |       |                |   |
+| performance.   | |  | +-----------+  |       | +-----------+  |   |
+| monitor        | |  | |  User     |  |       | | Session   |  |   |
+| - 性能监控     | |  | +-----------+  |       | +-----------+  |   |
+| - 指标收集     | |  | |  Document |  |       | | Cache     |  |   |
+|                | |  | +-----------+  |       | +-----------+  |   |
++----------------+ | |  Comment    |  |       | | Pub/Sub   |  |   |
+                   | | +-----------+  |       | +-----------+  |   |
+                   | | |  Project   |  |       | | Rate Limit|  |   |
+                   | | +-----------+  |       | +-----------+  |   |
+                   | | |  Knowledge |  |       +----------------+   |
+                   | | +-----------+  |                             |
+                   | | |  Meeting   |  |                             |
+                   | | +-----------+  |                             |
+                   | | |  Share     |  |                             |
+                   | | +-----------+  |                             |
+                   | | |  Notif...  |  |                             |
+                   | | +-----------+  |                             |
+                   | +----------------+                             |
+                   +--------------------------------------------------+
+
+================================================================================
+                           数据库实体关系
+================================================================================
+
+  User (用户)
+    |
+    +-- documents: Document[] (创建/拥有的文档)
+    +-- comments: Comment[] (发布的评论)
+    +-- projects: Project[] (参与的项目)
+    +-- spaces: Space[] (管理的空间)
+    +-- meetings: Meeting[] (创建的会议)
+
+  Document (文档)
+    |
+    +-- blocks: Block[] (文档块)
+    +-- comments: Comment[] (文档评论)
+    +-- annotations: Annotation[] (批注)
+    +-- versions: Version[] (版本历史)
+    +-- owner: User (所有者)
+
+  Project (项目)
+    |
+    +-- tasks: Task[] (任务列表)
+    +-- owner: User (创建者)
+    +-- members: User[] (成员)
+
+  Space (空间)
+    |
+    +-- bases: KnowledgeBase[] (知识库)
+    +-- owner: User (所有者)
+    +-- members: User[] (成员)
+
+  KnowledgeBase (知识库)
+    |
+    +-- nodes: KnowledgeNode[] (文档节点)
+    +-- space: Space (所属空间)
+
+================================================================================
+                           WebSocket 实时协作架构
+================================================================================
+
+  Documents Gateway (WebSocket)
+  |
+  +-- Room Management
+  |    +-- joinRoom(documentId, userId)
+  |    +-- leaveRoom(documentId, userId)
+  |
+  +-- Event Handlers
+  |    +-- onBlockUpdate: 块更新
+  |    +-- onBlockDelete: 块删除
+  |    +-- onBlockAdd: 新增块
+  |    +-- onCursorMove: 光标移动
+  |    +-- onSelectionChange: 选区变化
+  |    +-- onChatMessage: 聊天消息
+  |
+  +-- Collaboration Features
+  |    +-- Operational Transform (操作转换)
+  |    +-- Block Locking (块锁)
+  |    +-- Presence (在线状态)
+
+================================================================================
+                           API 端点总览
+================================================================================
+
+  认证 (Auth)
+    POST /auth/login - 用户登录 (每日动态邀请码)
+
+  文档 (Documents)
+    GET    /documents          - 获取文档列表
+    GET    /documents/:id     - 获取单个文档
+    POST   /documents         - 创建文档
+    GET    /documents/tree     - 获取文档树
+    POST   /documents/:id/toggle-star - 收藏
+    POST   /documents/:id/trash       - 移至回收站
+    POST   /documents/:id/restore    - 恢复
+    DELETE /documents/:id            - 永久删除
+    POST   /documents/:id/analyze    - 智能分析
+
+  批注评论 (Comments)
+    GET    /documents/:id/comments      - 获取评论
+    POST   /documents/:id/comments      - 添加评论
+    PUT    /comments/:id               - 更新评论
+    DELETE /comments/:id               - 删除评论
+    POST   /comments/:id/reply         - 回复
+    POST   /comments/:id/react         - 反应
+
+  批注 (Annotations)
+    GET    /documents/:id/annotations   - 获取批注
+    POST   /documents/:id/annotations   - 创建批注
+    PUT    /annotations/:id             - 更新批注
+    DELETE /annotations/:id             - 删除批注
+    POST   /annotations/:id/resolve     - 解决批注
+
+  项目 (Projects)
+    GET    /projects             - 获取项目列表
+    POST   /projects            - 创建项目
+    GET    /projects/:id        - 获取项目详情
+    PUT    /projects/:id        - 更新项目
+    DELETE /projects/:id        - 删除项目
+    GET    /projects/:id/tasks  - 获取任务
+    POST   /projects/:id/tasks  - 创建任务
+    PUT    /tasks/:id           - 更新任务
+    DELETE /tasks/:id           - 删除任务
+
+  知识库 (Knowledge)
+    GET    /knowledge/spaces           - 获取空间列表
+    POST   /knowledge/spaces           - 创建空间
+    GET    /knowledge/spaces/:id/bases - 获取知识库
+    POST   /knowledge/spaces/:id/bases - 创建知识库
+    GET    /knowledge/bases/:id/tree  - 获取目录树
+
+  会议 (Meetings)
+    GET    /meetings         - 获取会议列表
+    POST   /meetings        - 创建会议
+    GET    /meetings/:id    - 获取会议详情
+    POST   /meetings/:id/join  - 加入会议
+    POST   /meetings/:id/leave - 离开会议
+    GET    /meetings/:id/token  - 获取令牌
+
+================================================================================

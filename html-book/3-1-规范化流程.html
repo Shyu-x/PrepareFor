@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第3卷-工程实战 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#1" class="toc-link "><span>第1章 前端工程化</span></a></li><li class="toc-item"><a href="#1.1-git" class="toc-link "><span>1.1 Git工作流</span></a></li><li class="toc-item"><a href="#1.2" class="toc-link "><span>1.2 分支管理策略</span></a></li><li class="toc-item"><a href="#1.2.1" class="toc-link "><span>1.2.1 常用分支类型</span></a></li><li class="toc-item"><a href="#1.2.2" class="toc-link "><span>1.2.2 分支命名规范</span></a></li><li class="toc-item"><a href="#1.3" class="toc-link "><span>1.3 代码审查</span></a></li><li class="toc-item"><a href="#1.3.1" class="toc-link "><span>1.3.1 代码审查流程</span></a></li><li class="toc-item"><a href="#" class="toc-link "><span>描述</span></a></li><li class="toc-item"><a href="#" class="toc-link "><span>变更类型</span></a></li><li class="toc-item"><a href="#" class="toc-link "><span>测试</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第3卷 工程实战 / 第1章 前端工程化</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第3卷 工程实战</span>
+            </div>
+            <h1 class="article-title">第3卷-工程实战</h1>
+          </header>
+
+          <div class="content"><h2 id="1">第1章 前端工程化</h2>
+<h3 id="1.1-git">1.1 Git工作流</h3>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>Git工作流是指团队在项目中如何使用Git进行代码管理和协作的流程规范。一个良好的Git工作流可以：</p>
+<ul>
+<li>提高团队协作效率</li>
+<li>减少代码冲突</li>
+<li>保证代码质量</li>
+<li>支持并行开发</li>
+<li>便于问题追溯</li>
+</ul>
+<p>常见的Git工作流有：Git Flow、GitHub Flow、GitLab Flow等，每种都有其适用场景。</p>
+</blockquote>
+<h4 id="1.1.1-git">1.1.1 Git基础</h4>
+<p><strong>初始化和配置</strong></p>
+<pre class="hljs"><code><span class="hljs-comment"># 初始化仓库</span>
+git init
+
+<span class="hljs-comment"># 配置用户信息</span>
+git config --global user.name <span class="hljs-string">&quot;Your Name&quot;</span>
+git config --global user.email <span class="hljs-string">&quot;your.email@example.com&quot;</span>
+
+<span class="hljs-comment"># 配置别名</span>
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.cm commit
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>配置Git别名可以显著提升开发效率，以下是一些推荐的别名配置：</p>
+<pre class="hljs"><code><span class="hljs-comment"># 高级别名配置</span>
+git config --global alias.lg <span class="hljs-string">&quot;log --color --graph --pretty=format:&#x27;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset&#x27; --abbrev-commit&quot;</span>
+git config --global alias.last <span class="hljs-string">&quot;log -1 HEAD --stat&quot;</span>
+git config --global alias.unstage <span class="hljs-string">&quot;reset HEAD --&quot;</span>
+git config --global alias.graph <span class="hljs-string">&quot;log --graph --oneline --all&quot;</span>
+</code></pre></blockquote>
+<p><strong>基本操作</strong></p>
+<pre class="hljs"><code><span class="hljs-comment"># 克隆仓库</span>
+git <span class="hljs-built_in">clone</span> https://github.com/user/repo.git
+
+<span class="hljs-comment"># 添加文件</span>
+git add filename.txt
+git add .  <span class="hljs-comment"># 添加所有文件</span>
+
+<span class="hljs-comment"># 提交</span>
+git commit -m <span class="hljs-string">&quot;Commit message&quot;</span>
+
+<span class="hljs-comment"># 查看状态</span>
+git status
+
+<span class="hljs-comment"># 查看差异</span>
+git diff
+
+<span class="hljs-comment"># 查看历史</span>
+git <span class="hljs-built_in">log</span>
+git <span class="hljs-built_in">log</span> --oneline
+
+<span class="hljs-comment"># 撤销操作</span>
+git checkout -- filename  <span class="hljs-comment"># 放弃工作区修改</span>
+git restore filename  <span class="hljs-comment"># 同上（新版）</span>
+git reset HEAD~1  <span class="hljs-comment"># 撤销最后一次提交</span>
+</code></pre><blockquote>
+<p><strong>特别说明（常见误区）</strong></p>
+<ul>
+<li><code>git checkout -- file</code> 和 <code>git restore file</code> 的区别：两者在新版本Git中作用相同，后者是更推荐的语法</li>
+<li><code>git reset</code> 的三种模式：soft（保留暂存区和工作区）、mixed（保留工作区，默认）、hard（丢弃所有修改）</li>
+<li>面试常考点：git reset、git revert、git checkout 的区别</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>帮助理解（类比）</strong></p>
+<ul>
+<li><code>git add</code> 就像是&quot;把文件放进收件箱&quot;</li>
+<li><code>git commit</code> 就像是&quot;把收件箱里的东西装进已发送文件夹&quot;</li>
+<li><code>git reset HEAD~1</code> 就像是&quot;从已发送文件夹里拿出来，放回收件箱&quot;</li>
+</ul>
+</blockquote>
+<h4 id="1.1.2">1.1.2 分支操作</h4>
+<pre class="hljs"><code><span class="hljs-comment"># 查看分支</span>
+git branch
+
+<span class="hljs-comment"># 创建分支</span>
+git branch feature-login
+git checkout -b feature-login  <span class="hljs-comment"># 创建并切换</span>
+
+<span class="hljs-comment"># 切换分支</span>
+git checkout feature-login
+
+<span class="hljs-comment"># 合并分支</span>
+git checkout main
+git merge feature-login
+
+<span class="hljs-comment"># 变基</span>
+git checkout feature-login
+git rebase main
+
+<span class="hljs-comment"># 删除分支</span>
+git branch -d feature-login
+git push origin --delete feature-login  <span class="hljs-comment"># 删除远程分支</span>
+</code></pre><blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>Git分支是Git最强大的功能之一，它允许你在不影响主线的情况下进行开发：</p>
+<ul>
+<li><strong>分支指针</strong>：分支本质上是一个指向特定提交的指针</li>
+<li><strong>HEAD</strong>：一个特殊的指针，指向当前检出的提交或分支</li>
+<li><strong>快速前进（Fast-forward）</strong>：当没有分叉时，Git直接移动指针</li>
+<li><strong>三方合并</strong>：当有分叉时，Git创建一个新的合并提交</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>面试考点</strong></p>
+<ul>
+<li>merge 和 rebase 的区别</li>
+<li>何时使用 rebase，何时使用 merge</li>
+<li>分支管理策略</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>帮助理解</strong></p>
+<p>想象你在一本书上做笔记：</p>
+<ul>
+<li>merge 就像是在书的最后一页加上新的注释章节</li>
+<li>rebase 就像是把你的注释直接插入到原始内容中</li>
+<li>rebase 保持历史线性，merge 保留完整历史</li>
+</ul>
+</blockquote>
+<h4 id="1.1.3">1.1.3 远程仓库操作</h4>
+<pre class="hljs"><code><span class="hljs-comment"># 添加远程仓库</span>
+git remote add origin https://github.com/user/repo.git
+
+<span class="hljs-comment"># 拉取</span>
+git fetch origin
+git pull origin main
+
+<span class="hljs-comment"># 推送</span>
+git push origin main
+git push -u origin feature-login
+</code></pre><blockquote>
+<p><strong>特别说明</strong></p>
+<ul>
+<li><code>git fetch</code> 和 <code>git pull</code> 的区别：fetch只下载不合并，pull是fetch+merge</li>
+<li>建议经常使用 <code>git fetch</code> 查看远程更新，再决定是否合并</li>
+</ul>
+</blockquote>
+<h4 id="1.1.4">1.1.4 标签管理</h4>
+<pre class="hljs"><code><span class="hljs-comment"># 创建标签</span>
+git tag v1.0.0
+git tag -a v1.0.0 -m <span class="hljs-string">&quot;Release v1.0.0&quot;</span>
+
+<span class="hljs-comment"># 查看标签</span>
+git tag
+git tag -l <span class="hljs-string">&quot;v1.*&quot;</span>
+
+<span class="hljs-comment"># 推送标签</span>
+git push origin v1.0.0
+git push origin --tags
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>标签常用于版本发布：</p>
+<pre class="hljs"><code><span class="hljs-comment"># 创建签名标签（需要GPG密钥）</span>
+git tag -s v1.0.0 -m <span class="hljs-string">&quot;Signed release v1.0.0&quot;</span>
+
+<span class="hljs-comment"># 删除本地标签</span>
+git tag -d v1.0.0
+</code></pre></blockquote>
+<h4 id="1.1.5">1.1.5 工作流模式</h4>
+<p><strong>Git Flow</strong></p>
+<pre class="hljs"><code>main:     ━━━━●━━━━━━━━━━●━━━━━━━━━━●━━━━━━━━━━
+               ↑          ↑          ↑
+            release    release    release
+                      /    \
+feature:  ●━━━●━━━●━━━●      ↓
+                       develop
+develop:  ━━━━●━━━●━━━●━━━●━━━●━━━●━━━●━━━●
+</code></pre><blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>Git Flow 是一个成熟的分支管理策略，适合有固定发布周期的项目：</p>
+<ul>
+<li><strong>main/master</strong>：生产环境代码，只接受合并</li>
+<li><strong>develop</strong>：开发主分支，集成所有功能分支</li>
+<li><strong>feature</strong>：功能分支，从develop创建，开发完成后合并回develop</li>
+<li><strong>release</strong>：发布分支，从develop创建，用于发布准备</li>
+<li><strong>hotfix</strong>：热修复分支，从main创建，用于紧急修复</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>适用场景</strong></p>
+<ul>
+<li>适合有明确版本发布周期的项目</li>
+<li>适合多人在同一项目上协作</li>
+<li>不适合持续发布的项目</li>
+</ul>
+</blockquote>
+<p><strong>GitHub Flow</strong></p>
+<pre class="hljs"><code><span class="hljs-comment"># 从main创建分支</span>
+git checkout -b feature/add-login
+
+<span class="hljs-comment"># 开发并提交</span>
+git add .
+git commit -m <span class="hljs-string">&quot;Add login feature&quot;</span>
+
+<span class="hljs-comment"># 推送并创建PR</span>
+git push -u origin feature/add-login
+<span class="hljs-comment"># 在GitHub创建Pull Request</span>
+</code></pre><blockquote>
+<p><strong>帮助理解</strong></p>
+<p>GitHub Flow 就像是一个&quot;随时可以发布&quot;的模式：</p>
+<ul>
+<li>每次开发都在新分支进行</li>
+<li>完成后通过PR合并到main</li>
+<li>合并后立即可以部署</li>
+<li>适合持续部署的互联网产品</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1.2">1.2 分支管理策略</h3>
+<h3 id="1.2.1">1.2.1 常用分支类型</h3>
+<pre class="hljs"><code>main (或 master)    - 生产环境代码
+develop             - 开发主分支
+feature/*           - 功能分支
+release/*           - 发布分支
+hotfix/*            - 热修复分支
+bugfix/*            - Bug修复分支
+</code></pre><blockquote>
+<p><strong>特别说明</strong></p>
+<p>分支命名规范可以提高代码仓库的可读性：</p>
+<ul>
+<li>feature/：新功能开发</li>
+<li>bugfix/：Bug修复</li>
+<li>hotfix/：紧急修复</li>
+<li>release/：发布准备</li>
+</ul>
+</blockquote>
+<h3 id="1.2.2">1.2.2 分支命名规范</h3>
+<pre class="hljs"><code><span class="hljs-comment"># 功能分支</span>
+feature/user-login
+feature/add-payment
+
+<span class="hljs-comment"># Bug修复</span>
+bugfix/fix-login-error
+bugfix/memory-leak
+
+<span class="hljs-comment"># 热修复</span>
+hotfix/security-patch
+
+<span class="hljs-comment"># 发布</span>
+release/1.0.0
+</code></pre><hr>
+<h3 id="1.3">1.3 代码审查</h3>
+<h3 id="1.3.1">1.3.1 代码审查流程</h3>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>代码审查（Code Review）是保证代码质量的重要环节，通过同行评审来：</p>
+<ul>
+<li>发现潜在bug</li>
+<li>保证代码风格一致</li>
+<li>分享知识</li>
+<li>提高整体代码质量</li>
+</ul>
+<p>一个有效的代码审查流程应该包括：审查清单、反馈规范、自动化工具集成。</p>
+</blockquote>
+<p><strong>Pull Request创建规范</strong></p>
+<pre class="hljs"><code><span class="hljs-section">## 描述</span>
+简要描述这个PR解决的问题或添加的功能
+
+<span class="hljs-section">## 变更类型</span>
+<span class="hljs-bullet">-</span> [ ] Bug修复
+<span class="hljs-bullet">-</span> [ ] 新功能
+<span class="hljs-bullet">-</span> [ ] 破坏性变更
+<span class="hljs-bullet">-</span> [ ] 文档更新
+
+<span class="hljs-section">## 测试</span>
+<span class="hljs-bullet">-</span> [ ] 单元测试通过
+<span class="hljs-bullet">-</span> [ ] 集成测试通过
+<span class="hljs-bullet">-</span> [ ] 手动测试
+</code></pre><p><strong>代码审查检查点</strong></p>
+<ol>
+<li>
+<p><strong>代码质量</strong></p>
+<ul>
+<li>代码是否清晰易读</li>
+<li>命名是否有意义</li>
+<li>函数是否保持单一职责</li>
+<li>是否有重复代码</li>
+</ul>
+</li>
+<li>
+<p><strong>功能正确性</strong></p>
+<ul>
+<li>代码是否实现了预期功能</li>
+<li>边界情况是否处理</li>
+<li>错误处理是否完善</li>
+</ul>
+</li>
+<li>
+<p><strong>性能</strong></p>
+<ul>
+<li>是否有性能问题</li>
+<li>是否有内存泄漏风险</li>
+</ul>
+</li>
+<li>
+<p><strong>安全性</strong></p>
+<ul>
+<li>是否有安全漏洞</li>
+<li>敏感数据是否正确处理</li>
+</ul>
+</li>
+<li>
+<p><strong>测试</strong></p>
+<ul>
+<li>是否有足够的测试覆盖</li>
+<li>测试用例是否正确</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>帮助理解</strong></p>
+<p>代码审查就像是一个&quot;集体Code Review&quot;：</p>
+<ul>
+<li>每个人都可以提出问题</li>
+<li>每个人都可以学习新技术</li>
+<li>团队整体水平会不断提升</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1.4-eslintprettier">1.4 ESLint与Prettier配置</h3>
+<h4 id="1.4.1-eslint">1.4.1 ESLint高级配置</h4>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>ESLint 是一个可配置的JavaScript和JSX检查工具，它：</p>
+<ul>
+<li>通过规则检测代码问题</li>
+<li>支持自定义规则</li>
+<li>可以自动修复部分问题</li>
+<li>与主流编辑器集成良好</li>
+</ul>
+<p>ESLint 的配置核心包括：环境（env）、规则（rules）、插件（plugins）、继承配置（extends）。</p>
+</blockquote>
+<p><strong>配置文件详解</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// .eslintrc.js</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">root</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">env</span>: {
+    <span class="hljs-attr">browser</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">es2021</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">node</span>: <span class="hljs-literal">true</span>
+  },
+  <span class="hljs-attr">extends</span>: [
+    <span class="hljs-string">&#x27;eslint:recommended&#x27;</span>,
+    <span class="hljs-string">&#x27;plugin:vue/vue3-essential&#x27;</span>,
+    <span class="hljs-string">&#x27;plugin:@typescript-eslint/recommended&#x27;</span>,
+    <span class="hljs-string">&#x27;prettier&#x27;</span>
+  ],
+  <span class="hljs-attr">parser</span>: <span class="hljs-string">&#x27;vue-eslint-parser&#x27;</span>,
+  <span class="hljs-attr">parserOptions</span>: {
+    <span class="hljs-attr">ecmaVersion</span>: <span class="hljs-string">&#x27;latest&#x27;</span>,
+    <span class="hljs-attr">sourceType</span>: <span class="hljs-string">&#x27;module&#x27;</span>
+  },
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-string">&#x27;vue&#x27;</span>, <span class="hljs-string">&#x27;@typescript-eslint&#x27;</span>],
+  <span class="hljs-attr">rules</span>: {
+    <span class="hljs-string">&#x27;no-console&#x27;</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;production&#x27;</span> ? <span class="hljs-string">&#x27;warn&#x27;</span> : <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;no-debugger&#x27;</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;production&#x27;</span> ? <span class="hljs-string">&#x27;warn&#x27;</span> : <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;prefer-const&#x27;</span>: <span class="hljs-string">&#x27;error&#x27;</span>,
+    <span class="hljs-string">&#x27;no-var&#x27;</span>: <span class="hljs-string">&#x27;error&#x27;</span>
+  }
+};
+</code></pre><blockquote>
+<p><strong>特别说明</strong></p>
+<ul>
+<li>extends 中的 ‘prettier’ 必须放在最后，用于关闭与 Prettier 冲突的 ESLint 规则</li>
+<li>生产环境应该更严格，开发环境可以适当放宽</li>
+<li>使用 <code>eslint --fix</code> 可以自动修复部分问题</li>
+</ul>
+</blockquote>
+<h4 id="1.4.2-prettier">1.4.2 Prettier高级配置</h4>
+<pre class="hljs"><code><span class="hljs-comment">// .prettierrc.json</span>
+<span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;semi&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;singleQuote&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;tabWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;useTabs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;trailingComma&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;none&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;printWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">100</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;bracketSpacing&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;arrowParens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;always&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>Prettier 是一个&quot;固执己见&quot;的代码格式化工具，它的核心理念是：</p>
+<ul>
+<li>有且只有一种&quot;正确&quot;的格式</li>
+<li>不需要配置太多选项</li>
+<li>保证团队代码风格完全一致</li>
+</ul>
+<p>Prettier 主要关注：代码格式（缩进、分号、引号等），不检查代码逻辑错误。</p>
+</blockquote>
+<h4 id="1.4.3-git-hooks">1.4.3 Git Hooks配置</h4>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>Git Hooks 是在Git执行特定操作时自动运行的脚本：</p>
+<ul>
+<li>pre-commit：提交前检查</li>
+<li>commit-msg：提交信息检查</li>
+<li>pre-push：推送前检查</li>
+<li>post-checkout：检出后操作</li>
+</ul>
+<p>Husky 是一个简化Git Hooks配置的工具。</p>
+</blockquote>
+<p><strong>使用Husky</strong></p>
+<pre class="hljs"><code><span class="hljs-comment"># 安装</span>
+npm install husky --save-dev
+
+<span class="hljs-comment"># 初始化</span>
+npx husky install
+
+<span class="hljs-comment"># 添加prepare脚本</span>
+npm pkg <span class="hljs-built_in">set</span> scripts.prepare=<span class="hljs-string">&quot;husky install&quot;</span>
+
+<span class="hljs-comment"># 创建pre-commit hook</span>
+npx husky add .husky/pre-commit <span class="hljs-string">&quot;npm run lint&quot;</span>
+</code></pre><p><strong>使用lint-staged</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// package.json</span>
+<span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;lint-staged&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;*.{js,ts,vue,jsx,tsx}&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+      <span class="hljs-string">&quot;eslint --fix&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-string">&quot;prettier --write&quot;</span>
+    <span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>一个完整的Git Hooks配置示例：</p>
+<pre class="hljs"><code><span class="hljs-comment"># commit-msg hook - 检查提交信息格式</span>
+npx husky add .husky/commit-msg <span class="hljs-string">&#x27;npx --no -- commitlint --edit &quot;$1&quot;&#x27;</span>
+
+<span class="hljs-comment"># pre-push hook - 运行测试</span>
+npx husky add .husky/pre-push <span class="hljs-string">&quot;npm test&quot;</span>
+</code></pre></blockquote>
+<hr>
+<h3 id="1.5">1.5 代码规范</h3>
+<h4 id="1.5.1">1.5.1 命名规范</h4>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>良好的命名是代码可读性的基础：</p>
+<ul>
+<li>变量名应该是名词，表示数据</li>
+<li>函数名应该是动词，表示行为</li>
+<li>布尔值应该用 is/has/can/should 开头</li>
+<li>类名应该用 PascalCase</li>
+<li>常量应该用 UPPER_SNAKE_CASE</li>
+</ul>
+</blockquote>
+<p><strong>变量和函数命名</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 变量命名</span>
+<span class="hljs-keyword">const</span> userName = <span class="hljs-string">&#x27;John&#x27;</span>;  <span class="hljs-comment">// 名词，表示数据</span>
+<span class="hljs-keyword">const</span> isActive = <span class="hljs-literal">true</span>;    <span class="hljs-comment">// 布尔值，以is/has/can/should开头</span>
+<span class="hljs-keyword">const</span> userList = [];      <span class="hljs-comment">// 复数形式表示数组</span>
+
+<span class="hljs-comment">// 函数命名 - 使用动词或动词短语</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getUserList</span>(<span class="hljs-params"></span>) {}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchUserInfo</span>(<span class="hljs-params"></span>) {}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">validateForm</span>(<span class="hljs-params"></span>) {}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">handleSubmit</span>(<span class="hljs-params"></span>) {}
+
+<span class="hljs-comment">// 类命名 - 使用PascalCase</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserService</span> {}
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ApiClient</span> {}
+
+<span class="hljs-comment">// 常量命名 - 使用大写和下划线</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MAX_RETRY_COUNT</span> = <span class="hljs-number">3</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">API_BASE_URL</span> = <span class="hljs-string">&#x27;https://api.example.com&#x27;</span>;
+</code></pre><blockquote>
+<p><strong>面试考点</strong></p>
+<ul>
+<li>命名的基本原则</li>
+<li>如何平衡命名长度和可读性</li>
+<li>常见命名反模式</li>
+</ul>
+</blockquote>
+<h4 id="1.5.2">1.5.2 代码组织规范</h4>
+<p><strong>文件组织</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 导入语句放在文件顶部</span>
+<span class="hljs-comment">// 标准库导入</span>
+<span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;fs&#x27;</span>;
+<span class="hljs-keyword">import</span> path <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;path&#x27;</span>;
+
+<span class="hljs-comment">// 第三方库导入</span>
+<span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span>;
+
+<span class="hljs-comment">// 内部模块导入</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">UserService</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/services/user&#x27;</span>;
+
+<span class="hljs-comment">// 2. 类型定义（TypeScript）</span>
+interface <span class="hljs-title class_">User</span> {
+  <span class="hljs-attr">id</span>: number;
+  <span class="hljs-attr">name</span>: string;
+}
+
+<span class="hljs-comment">// 3. 常量定义</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DEFAULT_TIMEOUT</span> = <span class="hljs-number">5000</span>;
+
+<span class="hljs-comment">// 4. 函数和类定义</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">formatUser</span>(<span class="hljs-params">user</span>) {
+  <span class="hljs-keyword">return</span> {
+    ...user,
+    <span class="hljs-attr">name</span>: user.<span class="hljs-property">name</span>.<span class="hljs-title function_">trim</span>()
+  };
+}
+
+<span class="hljs-comment">// 5. 导出</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">UserRepository</span>;
+<span class="hljs-keyword">export</span> { formatUser };
+</code></pre><blockquote>
+<p><strong>帮助理解</strong></p>
+<p>代码组织就像整理房间：</p>
+<ul>
+<li>衣服放衣柜（导入放顶部）</li>
+<li>书籍放书架（类型定义）</li>
+<li>工具放工具箱（常量和函数）</li>
+<li>东西要归类（按类型分组）</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1.6">1.6 自动化测试</h3>
+<h4 id="1.6.1">1.6.1 测试策略</h4>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>自动化测试是保证代码质量的重要手段，测试金字塔理论指导我们：</p>
+<ul>
+<li><strong>单元测试</strong>：最多，针对最小代码单元</li>
+<li><strong>集成测试</strong>：中等，测试模块间的协作</li>
+<li><strong>E2E测试</strong>：最少，模拟用户行为</li>
+</ul>
+<p>正确的测试策略可以：快速发现问题、防止回归、提高重构信心。</p>
+</blockquote>
+<p><strong>测试金字塔</strong></p>
+<pre class="hljs"><code>        /\
+       /  \
+      / E2E \        &lt;- 少量：端到端测试
+     /--------\
+    / 集成测试 \    &lt;- 中等：集成测试
+   /------------\
+  /  单元测试    \ &lt;- 大量：单元测试
+ /----------------\
+</code></pre><p><strong>测试覆盖率目标</strong></p>
+<ul>
+<li>语句覆盖率：80%+</li>
+<li>分支覆盖率：75%+</li>
+<li>函数覆盖率：80%+</li>
+<li>行覆盖率：80%+</li>
+</ul>
+<blockquote>
+<p><strong>特别说明</strong></p>
+<p>测试覆盖率只是一个指标，不是目标。过度追求覆盖率可能会导致：</p>
+<ul>
+<li>测试质量下降</li>
+<li>开发时间浪费</li>
+<li>维护成本增加</li>
+</ul>
+</blockquote>
+<h4 id="1.6.2">1.6.2 单元测试示例</h4>
+<p><strong>Jest配置详解</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// jest.config.js</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">testEnvironment</span>: <span class="hljs-string">&#x27;jsdom&#x27;</span>,
+  <span class="hljs-attr">testMatch</span>: [
+    <span class="hljs-string">&#x27;**/__tests__/**/*.[jt]s?(x)&#x27;</span>,
+    <span class="hljs-string">&#x27;**/?(*.)+(spec|test).[jt]s?(x)&#x27;</span>
+  ],
+  <span class="hljs-attr">transform</span>: {
+    <span class="hljs-string">&#x27;^.+\\.(ts|tsx|js|jsx|mjs){{CONTENT}}#x27;</span>: <span class="hljs-string">&#x27;babel-jest&#x27;</span>,
+    <span class="hljs-string">&#x27;^.+\\.vue{{CONTENT}}#x27;</span>: <span class="hljs-string">&#x27;@vue/vue3-jest&#x27;</span>
+  },
+  <span class="hljs-attr">moduleNameMapper</span>: {
+    <span class="hljs-string">&#x27;^@/(.*){{CONTENT}}#x27;</span>: <span class="hljs-string">&#x27;&lt;rootDir&gt;/src/$1&#x27;</span>
+  },
+  <span class="hljs-attr">setupFilesAfterEnv</span>: [<span class="hljs-string">&#x27;&lt;rootDir&gt;/tests/setupTests.js&#x27;</span>]
+};
+</code></pre><p><strong>测试文件示例</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// tests/unit/utils/format.spec.js</span>
+<span class="hljs-keyword">import</span> { formatDate, formatCurrency } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/utils/format&#x27;</span>;
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;formatDate&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;should format date correctly&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> date = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-string">&#x27;2023-01-15&#x27;</span>);
+    <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">formatDate</span>(date)).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;2023-01-15&#x27;</span>);
+  });
+});
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;formatCurrency&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;should format currency with default options&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">formatCurrency</span>(<span class="hljs-number">1000</span>)).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;$1,000.00&#x27;</span>);
+  });
+});
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>一个好的单元测试应该遵循AAA模式：</p>
+<ul>
+<li>Arrange：准备测试数据</li>
+<li>Act：执行被测操作</li>
+<li>Assert：验证结果</li>
+</ul>
+</blockquote>
+<h4 id="1.6.3">1.6.3 集成测试</h4>
+<pre class="hljs"><code><span class="hljs-comment">// tests/integration/api/user.spec.js</span>
+<span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;supertest&#x27;</span>;
+<span class="hljs-keyword">import</span> { app } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../src/app.js&#x27;</span>;
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;User API&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;GET /api/users&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;should return list of users&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">request</span>(app)
+        .<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/users&#x27;</span>)
+        .<span class="hljs-title function_">expect</span>(<span class="hljs-number">200</span>);
+
+      <span class="hljs-title function_">expect</span>(<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(response.<span class="hljs-property">body</span>)).<span class="hljs-title function_">toBe</span>(<span class="hljs-literal">true</span>);
+    });
+  });
+});
+</code></pre><h4 id="1.6.4">1.6.4 端到端测试</h4>
+<pre class="hljs"><code><span class="hljs-comment">// cypress/integration/login.spec.js</span>
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Login Flow&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">beforeEach</span>(<span class="hljs-function">() =&gt;</span> {
+    cy.<span class="hljs-title function_">visit</span>(<span class="hljs-string">&#x27;/login&#x27;</span>);
+  });
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;should display login form&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    cy.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;[data-testid=&quot;login-form&quot;]&#x27;</span>).<span class="hljs-title function_">should</span>(<span class="hljs-string">&#x27;be.visible&#x27;</span>);
+  });
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;should login successfully with valid credentials&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    cy.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;[data-testid=&quot;email-input&quot;]&#x27;</span>).<span class="hljs-title function_">type</span>(<span class="hljs-string">&#x27;test@example.com&#x27;</span>);
+    cy.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;[data-testid=&quot;password-input&quot;]&#x27;</span>).<span class="hljs-title function_">type</span>(<span class="hljs-string">&#x27;password123&#x27;</span>);
+    cy.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;[data-testid=&quot;submit-btn&quot;]&#x27;</span>).<span class="hljs-title function_">click</span>();
+    cy.<span class="hljs-title function_">url</span>().<span class="hljs-title function_">should</span>(<span class="hljs-string">&#x27;include&#x27;</span>, <span class="hljs-string">&#x27;/dashboard&#x27;</span>);
+  });
+});
+</code></pre><blockquote>
+<p><strong>帮助理解</strong></p>
+<p>三种测试就像三种&quot;检查&quot;：</p>
+<ul>
+<li>单元测试：检查零件是否合格</li>
+<li>集成测试：检查零件组装后是否正常工作</li>
+<li>E2E测试：检查整个产品是否满足用户需求</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1.7-cicd">1.7 CI/CD</h3>
+<h4 id="1.7.1-cicd">1.7.1 CI/CD基础概念</h4>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>CI/CD 是现代软件开发的核心实践：</p>
+<ul>
+<li><strong>CI（持续集成）</strong>：频繁地将代码集成到主干，每次集成都通过自动化构建和测试来验证</li>
+<li><strong>CD（持续交付）</strong>：在CI的基础上，将代码自动部署到测试环境</li>
+<li><strong>CD（持续部署）</strong>：在持续交付的基础上，将代码自动部署到生产环境</li>
+</ul>
+<p>CI/CD 的核心价值：快速反馈、降低风险、提高质量。</p>
+</blockquote>
+<p><strong>持续集成（CI）</strong></p>
+<ul>
+<li>频繁地将代码集成到主分支</li>
+<li>每次提交触发自动化构建和测试</li>
+<li>快速发现集成错误</li>
+</ul>
+<p><strong>持续交付（CD）</strong></p>
+<ul>
+<li>自动将代码部署到测试环境</li>
+<li>准备就绪后可以手动部署到生产</li>
+<li>确保代码始终可部署</li>
+</ul>
+<p><strong>持续部署</strong></p>
+<ul>
+<li>自动将代码部署到生产环境</li>
+<li>完全自动化部署流程</li>
+</ul>
+<h4 id="1.7.2-github-actions">1.7.2 GitHub Actions配置</h4>
+<p><strong>基础工作流配置</strong></p>
+<pre class="hljs"><code><span class="hljs-comment"># .github/workflows/ci.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span> <span class="hljs-string">Pipeline</span>
+
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>, <span class="hljs-string">develop</span>]
+  <span class="hljs-attr">pull_request:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">lint:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Lint</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Setup</span> <span class="hljs-string">Node.js</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;18&#x27;</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">dependencies</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">ci</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">ESLint</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">run</span> <span class="hljs-string">lint</span>
+
+  <span class="hljs-attr">test:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Test</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">needs:</span> <span class="hljs-string">lint</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Setup</span> <span class="hljs-string">Node.js</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;18&#x27;</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">tests</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">test</span>
+</code></pre><blockquote>
+<p><strong>特别说明</strong></p>
+<p>GitHub Actions 的核心概念：</p>
+<ul>
+<li><strong>workflow</strong>：工作流，一个完整的自动化流程</li>
+<li><strong>job</strong>：作业，一组要执行的步骤</li>
+<li><strong>step</strong>：步骤，具体的操作</li>
+<li><strong>action</strong>：动作，可重用的步骤单元</li>
+</ul>
+</blockquote>
+<h4 id="1.7.3">1.7.3 持续部署</h4>
+<pre class="hljs"><code><span class="hljs-comment"># .github/workflows/vercel.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">Vercel</span>
+
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">deploy:</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">Vercel</span> <span class="hljs-string">CLI</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">install</span> <span class="hljs-string">-g</span> <span class="hljs-string">vercel@latest</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Pull</span> <span class="hljs-string">Vercel</span> <span class="hljs-string">Environment</span> <span class="hljs-string">Info</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">vercel</span> <span class="hljs-string">pull</span> <span class="hljs-string">--yes</span> <span class="hljs-string">--environment=production</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">Project</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">vercel</span> <span class="hljs-string">build</span> <span class="hljs-string">--prod</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">Vercel</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">vercel</span> <span class="hljs-string">deploy</span> <span class="hljs-string">--prebuilt</span> <span class="hljs-string">--prod</span>
+</code></pre><h4 id="1.7.4-netlify">1.7.4 部署到Netlify</h4>
+<pre class="hljs"><code><span class="hljs-comment"># .github/workflows/netlify.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">Netlify</span>
+
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">build-and-deploy:</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Setup</span> <span class="hljs-string">Node.js</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;18&#x27;</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">dependencies</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">ci</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">run</span> <span class="hljs-string">build</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">Netlify</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">nwtgck/actions-netlify@v2.0</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">publish-dir:</span> <span class="hljs-string">&#x27;./dist&#x27;</span>
+          <span class="hljs-attr">production-branch:</span> <span class="hljs-string">main</span>
+</code></pre><blockquote>
+<p><strong>帮助理解</strong></p>
+<p>CI/CD 就像是一个&quot;自动化工厂&quot;：</p>
+<ul>
+<li>代码就像原材料</li>
+<li>CI 就是加工生产线（组装、测试）</li>
+<li>CD 就是物流系统（自动发货）</li>
+<li>最终产品快速、稳定地送到用户手中</li>
+</ul>
+</blockquote>
+<h3 id="1.8">1.8 自动化流程</h3>
+<h4 id="1.8.1">1.8.1 自动版本发布</h4>
+<pre class="hljs"><code><span class="hljs-comment"># .github/workflows/release.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">Release</span>
+
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">tags:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;v*&#x27;</span>
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">build:</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Setup</span> <span class="hljs-string">Node.js</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;18&#x27;</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">dependencies</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">ci</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">tests</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">test</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">run</span> <span class="hljs-string">build</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Publish</span> <span class="hljs-string">to</span> <span class="hljs-string">npm</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">npm</span> <span class="hljs-string">publish</span>
+        <span class="hljs-attr">env:</span>
+          <span class="hljs-attr">NODE_AUTH_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.NPM_TOKEN</span> <span class="hljs-string">}}</span>
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>自动发布流程：</p>
+<ol>
+<li>开发者push标签 <code>git tag v1.0.0</code></li>
+<li>GitHub Actions 检测到标签，触发发布流程</li>
+<li>自动运行测试、构建</li>
+<li>自动发布到 npm</li>
+<li>自动创建 GitHub Release</li>
+</ol>
+</blockquote>
+<h4 id="1.8.2">1.8.2 自动依赖更新</h4>
+<pre class="hljs"><code><span class="hljs-comment"># .github/workflows/dependabot.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">Dependabot</span>
+
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">schedule:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">cron:</span> <span class="hljs-string">&#x27;0 0 * * 0&#x27;</span>  <span class="hljs-comment"># 每周日检查</span>
+  <span class="hljs-attr">pull_request:</span>
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">dependabot:</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">if:</span> <span class="hljs-string">${{</span> <span class="hljs-string">github.actor</span> <span class="hljs-string">==</span> <span class="hljs-string">&#x27;dependabot[bot]&#x27;</span> <span class="hljs-string">}}</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Checkout</span> <span class="hljs-string">code</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Setup</span> <span class="hljs-string">Node.js</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/setup-node@v4</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">node-version:</span> <span class="hljs-string">&#x27;18&#x27;</span>
+
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Update</span> <span class="hljs-string">dependencies</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          npm install
+          ncu -u
+</span></code></pre><hr>
+<p><em>本章节完</em></p>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="2-6-API路由与中间件.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第2卷 Next.js框架</span>
+          </a>
+              <a href="3-2-Vite快速构建.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第3卷 构建工具</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

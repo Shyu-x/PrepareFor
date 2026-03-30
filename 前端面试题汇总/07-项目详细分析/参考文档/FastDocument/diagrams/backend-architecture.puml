@@ -1,0 +1,124 @@
+@startuml Backend_Architecture
+!theme plain
+hide stereotype
+
+skinparam rectangle {
+    BackgroundColor #f8f9fa
+    BorderColor #0d9488
+    FontName Microsoft YaHei
+    RoundCorner 10
+}
+
+skinparam database {
+    BackgroundColor #e0f2fe
+    BorderColor #0284c7
+}
+
+skinparam storage {
+    BackgroundColor #dcfce7
+    BorderColor #22c55e
+}
+
+' 定义包
+package "NestJS 核心" as Core {
+    rectangle "main.ts\n入口文件" as Main
+    rectangle "app.module.ts\n主模块" as AppModule
+    rectangle "app.controller.ts\n健康检查" as AppController
+    rectangle "app.service.ts\n业务服务" as AppService
+}
+
+package "Documents 模块" as DocModule {
+    rectangle "documents.controller.ts" as DocController
+    rectangle "documents.service.ts" as DocService
+    rectangle "documents.gateway.ts\n(WebSocket)" as DocGateway
+    rectangle "document.entity.ts\n实体" as DocEntity
+    rectangle "block-lock.service.ts\n块锁服务" as BlockLock
+    rectangle "operation-transform.service.ts\n操作转换" as OpTransform
+    rectangle "version.service.ts\n版本管理" as VersionSvc
+}
+
+package "Comments 模块" as CommentModule {
+    rectangle "comments.controller.ts" as CommentController
+    rectangle "comments.service.ts" as CommentService
+    rectangle "comment.entity.ts" as CommentEntity
+    rectangle "annotation.entity.ts" as AnnotationEntity
+    rectangle "annotations.controller.ts" as AnnotController
+    rectangle "annotations.service.ts" as AnnotService
+}
+
+package "Projects 模块" as ProjectModule {
+    rectangle "projects.controller.ts" as ProjectController
+    rectangle "projects.service.ts" as ProjectService
+    rectangle "project.entity.ts" as ProjectEntity
+}
+
+package "Knowledge 模块" as KnowledgeModule {
+    rectangle "knowledge.controller.ts" as KnowledgeController
+    rectangle "knowledge.service.ts" as KnowledgeService
+    rectangle "knowledge.entity.ts" as KnowledgeEntity
+}
+
+package "Meetings 模块" as MeetingsModule {
+    rectangle "meetings.controller.ts" as MeetingsController
+    rectangle "meetings.service.ts" as MeetingsService
+    rectangle "meeting.entity.ts" as MeetingEntity
+}
+
+package "Auth 模块" as AuthModule {
+    rectangle "auth.controller.ts" as AuthController
+    rectangle "auth.service.ts" as AuthService
+    rectangle "auth.module.ts" as AuthMod
+    rectangle "user.entity.ts" as UserEntity
+    rectangle "jwt-auth.guard.ts\nJWT 守卫" as JwtGuard
+    rectangle "invitation.service.ts\n邀请码服务" as InvitationSvc
+}
+
+package "Share 模块" as ShareModule {
+    rectangle "share.controller.ts" as ShareController
+    rectangle "share.service.ts" as ShareService
+    rectangle "share.entity.ts" as ShareEntity
+}
+
+package "Notifications 模块" as NotifModule {
+    rectangle "notifications.controller.ts" as NotifController
+    rectangle "notifications.service.ts" as NotifService
+    rectangle "notification.entity.ts" as NotifEntity
+}
+
+package "Common 模块" as CommonModule {
+    rectangle "cache.service.ts\n缓存服务" as CacheService
+    rectangle "performance-monitor.service.ts\n性能监控" as PerfMonSvc
+}
+
+package "数据层" as DataLayer {
+    database "PostgreSQL\n(Port 5432)" as PostgreSQL
+    storage "Redis\n(Port 6379)" as Redis
+}
+
+' 绘制依赖关系
+Core --> DocModule
+Core --> CommentModule
+Core --> ProjectModule
+Core --> KnowledgeModule
+Core --> MeetingsModule
+Core --> AuthModule
+Core --> ShareModule
+Core --> NotifModule
+Core --> CommonModule
+
+DocModule --> DataLayer : CRUD
+CommentModule --> DataLayer
+ProjectModule --> DataLayer
+KnowledgeModule --> DataLayer
+MeetingsModule --> DataLayer
+AuthModule --> DataLayer
+ShareModule --> DataLayer
+NotifModule --> DataLayer
+CommonModule --> Redis : 缓存
+
+' 实体关系
+DocEntity -[hidden]- CommentEntity
+DocEntity -[hidden]- AnnotationEntity
+DocEntity -[hidden]- ProjectEntity
+
+@enduml

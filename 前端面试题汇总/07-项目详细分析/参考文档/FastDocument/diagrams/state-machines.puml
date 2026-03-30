@@ -1,0 +1,287 @@
+' FastDocument 状态机 PlantUML 综合图
+' 作者: FastDocument 团队
+' 描述: 项目中所有核心状态机的 PlantUML 定义
+
+' ============================================================
+' 1. 文档状态机
+' ============================================================
+
+@startuml Document_Lifecycle
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<deleted>> #FFEBEE
+    BackgroundColor<<archived>> #E3F2FD
+    BackgroundColor<<published>> #FFF3E0
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Draft : 创建新文档
+Draft --> Published : 发布文档
+Draft --> Archived : 归档文档
+Draft --> Trash : 移至回收站
+Published --> Published : 更新内容
+Published --> Archived : 归档文档
+Published --> Trash : 移至回收站
+Archived --> Published : 取消归档
+Archived --> Trash : 移至回收站
+Trash --> Draft : 从回收站恢复
+Trash --> [*] : 永久删除
+@enduml
+
+' ============================================================
+' 2. 块锁状态机
+' ============================================================
+
+@startuml Block_Lock_State
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<locked>> #FFEBEE
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Unlocked
+
+Unlocked --> Locked : 用户开始编辑块
+Locked --> Unlocked : 用户停止编辑 / 锁超时
+Locked --> Locked : 续期锁
+@enduml
+
+' ============================================================
+' 3. 块编辑状态机
+' ============================================================
+
+@startuml Block_Edit_State
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<syncing>> #FFF8E1
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Saved
+
+Saved --> Editing : 用户聚焦块
+Editing --> Syncing : 内容发生变化
+Syncing --> Saved : 同步成功
+Syncing --> Saved : 降级本地保存
+@enduml
+
+' ============================================================
+' 4. 评论状态机
+' ============================================================
+
+@startuml Comment_Lifecycle
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<resolved>> #E3F2FD
+    BackgroundColor<<archived>> #F3E5F5
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Open
+
+Open --> Resolved : 解决评论
+Resolved --> Open : 重新打开
+Resolved --> Archived : 归档已解决评论
+Archived --> Open : 恢复评论
+Open --> Open : 添加回复/反应/编辑
+@enduml
+
+' ============================================================
+' 5. 批注状态机
+' ============================================================
+
+@startuml Annotation_State
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<resolved>> #E3F2FD
+    BackgroundColor<<archived>> #F3E5F5
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Active
+
+Active --> Resolved : 解决批注
+Resolved --> Active : 重新打开
+Resolved --> Archived : 归档批注
+Archived --> Active : 恢复批注
+Active --> Active : 编辑内容/指派用户
+@enduml
+
+' ============================================================
+' 6. 任务状态机
+' ============================================================
+
+@startuml Task_Status
+skinparam state {
+    BackgroundColor #FFF8E1
+    BackgroundColor<<in_progress>> #E3F2FD
+    BackgroundColor<<done>> #E8F5E9
+    BackgroundColor<<blocked>> #FFEBEE
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Todo
+
+Todo --> InProgress : 开始任务
+InProgress --> Done : 完成任务
+InProgress --> Todo : 退回任务
+InProgress --> Blocked : 阻塞任务
+Blocked --> InProgress : 解除阻塞
+Blocked --> Todo : 取消阻塞
+Done --> Todo : 重新打开
+@enduml
+
+' ============================================================
+' 7. 任务优先级状态机
+' ============================================================
+
+@startuml Task_Priority
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<high>> #FFF8E1
+    BackgroundColor<<urgent>> #FFEBEE
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Low
+Low --> Medium : 提高优先级
+Medium --> Low : 降低优先级
+Medium --> High : 提高优先级
+High --> Medium : 降低优先级
+High --> Urgent : 紧急提升
+Urgent --> High : 降低优先级
+@enduml
+
+' ============================================================
+' 8. 会议状态机
+' ============================================================
+
+@startuml Meeting_Lifecycle
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<active>> #E3F2FD
+    BackgroundColor<<ended>> #F3E5F5
+    BackgroundColor<<cancelled>> #FFEBEE
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Scheduled
+
+Scheduled --> Active : 会议开始
+Scheduled --> Cancelled : 会议取消
+Active --> Ended : 会议结束
+Cancelled --> [*]
+Ended --> [*]
+@enduml
+
+' ============================================================
+' 9. 会议参与者状态机
+' ============================================================
+
+@startuml Meeting_Participant
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<joined>> #E3F2FD
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Invited
+
+Invited --> Joined : 加入会议
+Joined --> Left : 离开会议
+Left --> [*]
+Joined --> Joined : 切换音视频/静音
+@enduml
+
+' ============================================================
+' 10. 空间状态机
+' ============================================================
+
+@startuml Space_State
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<archived>> #F3E5F5
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Active
+Active --> Archived : 归档空间
+Archived --> Active : 恢复空间
+@enduml
+
+' ============================================================
+' 11. 知识库节点类型状态机
+' ============================================================
+
+@startuml KnowledgeNode_Types
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<document>> #E3F2FD
+    BackgroundColor<<folder>> #FFF8E1
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Space
+
+Space --> Base : 创建知识库
+Base --> Folder : 创建文件夹
+Folder --> Document : 创建文档
+Folder --> Folder : 嵌套文件夹
+@enduml
+
+' ============================================================
+' 12. 知识库成员权限状态机
+' ============================================================
+
+@startuml Knowledge_Member_Role
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<owner>> #FFF8E1
+    BackgroundColor<<admin>> #E3F2FD
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Owner
+
+Owner --> Admin : 转让所有权
+Admin --> Owner : 接受转让
+Admin --> Member : 降级
+Member --> Admin : 提升
+Member --> Editor : 提升权限
+Editor --> Member : 降低权限
+
+note right of Owner: 角色: 'owner'\n所有者，完全控制权
+note right of Admin: 角色: 'admin'\n管理员
+note right of Editor: 角色: 'editor'\n编辑者
+note right of Member: 角色: 'reader'\n查看者
+@enduml
+
+' ============================================================
+' 13. 分享状态机
+' ============================================================
+
+@startuml Share_State
+skinparam state {
+    BackgroundColor #E8F5E9
+    BackgroundColor<<shared>> #E3F2FD
+    BorderColor #333333
+    FontName Consolas
+}
+
+[*] --> Private
+Private --> Shared : 开启分享
+Shared --> Private : 关闭分享
+Shared --> Shared : 更新分享设置
+@enduml

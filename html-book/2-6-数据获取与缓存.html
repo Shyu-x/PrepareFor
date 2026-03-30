@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2卷-框架生态 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#6-next.js" class="toc-link "><span>第6章 Next.js框架</span></a></li><li class="toc-item"><a href="#6.4" class="toc-link "><span>6.4 数据获取与缓存</span></a></li><li class="toc-item"><a href="#6.4" class="toc-link "><span>6.4 数据获取与缓存</span></a></li><li class="toc-item"><a href="#6.4.1" class="toc-link "><span>6.4.1 数据获取概述</span></a></li><li class="toc-item"><a href="#6.4.2-cache-components-next.js-16" class="toc-link "><span>6.4.2 Cache Components (Next.js 16 新特性)</span></a></li><li class="toc-item"><a href="#6.4.3-fetch-api" class="toc-link "><span>6.4.3 Fetch API 缓存策略</span></a></li><li class="toc-item"><a href="#6.4.3" class="toc-link "><span>6.4.3 路由级缓存配置</span></a></li><li class="toc-item"><a href="#6.4.4-revalidating" class="toc-link "><span>6.4.4 重新验证（Revalidating）</span></a></li><li class="toc-item"><a href="#6.4.5-updating-data" class="toc-link "><span>6.4.5 数据更新（Updating Data）</span></a></li><li class="toc-item"><a href="#6.4.6-use-apinext.js-15" class="toc-link "><span>6.4.6 use() API（Next.js 15+）</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第2卷 框架生态 / 第6章 Next.js框架</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第2卷 框架生态</span>
+            </div>
+            <h1 class="article-title">第2卷-框架生态</h1>
+          </header>
+
+          <div class="content"><h2 id="6-next.js">第6章 Next.js框架</h2>
+<h3 id="6.4">6.4 数据获取与缓存</h3>
+<hr>
+<h2 id="6.4">6.4 数据获取与缓存</h2>
+<h3 id="6.4.1">6.4.1 数据获取概述</h3>
+<p><strong>参考答案：</strong></p>
+<p>Next.js App Router 提供了多种数据获取方式：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  
+┃                    数据获取方式对比                               ┃
+┃                                                                  ┃
+ 
+┃  1. fetch API (推荐)                                             ┃
+ 
+┃     ┣━━ Server Components 中使用                                  ┃
+┃     ┣━━ 细粒度缓存控制                                            ┃
+┃     ┗━━ 支持 ISR/SSG/SSR                                         ┃
+ 
+┃                                                                  ┃
+ 
+┃  2. 数据库客户端                                                 ┃
+ 
+┃     ┣━━ Prisma/Drizzle/其他 ORM                                  ┃
+ 
+┃     ┣━━ 直接在 Server Components 中查询                          ┃
+ 
+┃     ┗━━ 自动类型推断                                              ┃
+┃                                                                  ┃
+ 
+┃  3. 第三方 SDK                                                   ┃
+ 
+┃     ┣━━ CMS SDK                                                  ┃
+ 
+┃     ┣━━ 认证 SDK                                                 ┃
+ 
+┃     ┗━━ API 客户端                                               ┃
+ 
+┃                                                                  ┃
+ 
+┃  4. Server Actions                                              ┃
+  
+┃     ┣━━ 表单提交                                                 ┃
+ 
+┃     ┗━━ 数据变更                                                 ┃
+ 
+┃                                                                  ┃
+ 
+┃  5. Cache Components (Next.js 16 新特性)                         ┃
+ 
+┃     ┣━━ 显式缓存声明                                              ┃
+┃     ┣━━ 编译器自动生成缓存键                                      ┃
+┃     ┗━━ 按需失效                                                  ┃
+┃                                                                  ┃
+ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  
+
+</code></pre><hr>
+<h3 id="6.4.2-cache-components-next.js-16">6.4.2 Cache Components (Next.js 16 新特性)</h3>
+<p><strong>参考答案：</strong></p>
+<p>Next.js 16 引入了显式缓存机制，这是与之前版本最大的区别。</p>
+<p><strong>核心概念：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+     
+┃                    Cache Components vs 传统缓存                      ┃
+┃                                                                  ┃
+    
+┃  Next.js 15 及之前 (隐式缓存)                                      ┃
+  
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃
+     
+┃  ┃  fetch 默认缓存                                            ┃   ┃
+   
+┃  ┃  组件默认不缓存                                            ┃   ┃
+   
+┃  ┃  缓存行为难以预测                                          ┃   ┃
+   
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ┃
+     
+┃                                                                  ┃
+    
+┃  Next.js 16 (显式缓存)                                           ┃
+    
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃
+     
+┃  ┃  'use cache' 指令声明缓存                                  ┃   ┃
+   
+┃  ┃  动态代码默认每次执行                                       ┃   ┃
+  
+┃  ┃  缓存行为完全可控                                          ┃   ┃
+   
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ┃
+     
+┃                                                                  ┃
+    
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+     
+
+</code></pre><p><strong>基本用法：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/page.tsx</span>
+
+<span class="hljs-comment">// 缓存整个组件</span>
+<span class="hljs-string">&#x27;use cache&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">CachedPage</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchData</span>()
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{data.content}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+}
+
+<span class="hljs-comment">// 缓存组件函数</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use cache&#x27;</span>
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>)
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>()
+}
+
+<span class="hljs-comment">// 缓存带标签的数据</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchPosts</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use cache&#x27;</span>
+  <span class="hljs-title function_">cacheTag</span>(<span class="hljs-string">&#x27;posts&#x27;</span>)
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/posts&#x27;</span>)
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>()
+}
+
+<span class="hljs-comment">// 缓存带过期时间</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchUser</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use cache&#x27;</span>
+  <span class="hljs-title function_">cacheTag</span>(<span class="hljs-string">&#x27;user&#x27;</span>)
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/user&#x27;</span>, {
+    <span class="hljs-attr">next</span>: { <span class="hljs-attr">revalidate</span>: <span class="hljs-number">3600</span> }  <span class="hljs-comment">// 1小时后过期</span>
+  })
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>()
+}
+</code></pre><p><strong>缓存配置选项：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 基础缓存 - 永久缓存</span>
+<span class="hljs-string">&#x27;use cache&#x27;</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">StaticPage</span>(<span class="hljs-params"></span>) { }
+
+<span class="hljs-comment">// 带标签的缓存 - 可按需失效</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use cache&#x27;</span>
+  <span class="hljs-title function_">cacheTag</span>(<span class="hljs-string">&#x27;posts&#x27;</span>, <span class="hljs-string">&#x27;featured&#x27;</span>)
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-comment">// 带过期时间 - ISR</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use cache&#x27;</span>
+  <span class="hljs-title function_">cacheTag</span>(<span class="hljs-string">&#x27;products&#x27;</span>)
+  <span class="hljs-comment">// 1小时后重新验证</span>
+}
+
+<span class="hljs-comment">// 动态数据 - 不缓存</span>
+<span class="hljs-comment">// 在 Next.js 16 中，所有不带 &#x27;use cache&#x27; 的代码默认动态执行</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">DynamicPage</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 每次请求都会执行</span>
+  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchDynamicData</span>()
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{data}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+}
+</code></pre><p><strong>按需失效：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/api/revalidate/route.ts</span>
+<span class="hljs-keyword">import</span> { revalidateTag } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/cache&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">NextRequest</span>, <span class="hljs-title class_">NextResponse</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/server&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">POST</span>(<span class="hljs-params"><span class="hljs-attr">request</span>: <span class="hljs-title class_">NextRequest</span></span>) {
+  <span class="hljs-keyword">const</span> tag = request.<span class="hljs-property">nextUrl</span>.<span class="hljs-property">searchParams</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;tag&#x27;</span>)
+
+  <span class="hljs-comment">// 失效指定标签的缓存</span>
+  <span class="hljs-title function_">revalidateTag</span>(tag!)
+
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">NextResponse</span>.<span class="hljs-title function_">json</span>({
+    <span class="hljs-attr">revalidated</span>: <span class="hljs-literal">true</span>,
+    tag,
+    <span class="hljs-attr">timestamp</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>()
+  })
+}
+</code></pre><p><strong>与 fetch 缓存的关系：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// Next.js 16 中两种缓存方式可以共存</span>
+
+<span class="hljs-comment">// 方式1: fetch 缓存</span>
+<span class="hljs-keyword">const</span> data1 = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>, {
+  <span class="hljs-attr">next</span>: { <span class="hljs-attr">tags</span>: [<span class="hljs-string">&#x27;my-data&#x27;</span>] }
+})
+
+<span class="hljs-comment">// 方式2: Cache Components</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getCachedData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use cache&#x27;</span>
+  <span class="hljs-title function_">cacheTag</span>(<span class="hljs-string">&#x27;my-data&#x27;</span>)
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data2&#x27;</span>)
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>()
+}
+
+<span class="hljs-comment">// 两者可以使用相同的标签，便于统一管理</span>
+</code></pre><p><strong>面试考点：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">问题</th>
+<th style="text-align:left">答案要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Cache Components 与 fetch 缓存的区别？</td>
+<td style="text-align:left">Cache Components 是组件级缓存，fetch 是请求级缓存</td>
+</tr>
+<tr>
+<td style="text-align:left">为什么要引入显式缓存？</td>
+<td style="text-align:left">之前隐式缓存行为难以预测，显式缓存更可控</td>
+</tr>
+<tr>
+<td style="text-align:left">如何选择使用哪种缓存？</td>
+<td style="text-align:left">静态内容用 Cache Components，外部 API 用 fetch 缓存</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="6.4.3-fetch-api">6.4.3 Fetch API 缓存策略</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/page.tsx</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Page</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 1. 静态数据（默认）- 类似 getStaticProps</span>
+  <span class="hljs-keyword">const</span> staticData = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>, {
+    <span class="hljs-attr">cache</span>: <span class="hljs-string">&#x27;force-cache&#x27;</span>,  <span class="hljs-comment">// 默认，可以省略</span>
+  })
+
+  <span class="hljs-comment">// 2. 动态数据 - 类似 getServerSideProps</span>
+  <span class="hljs-keyword">const</span> dynamicData = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>, {
+    <span class="hljs-attr">cache</span>: <span class="hljs-string">&#x27;no-store&#x27;</span>,
+  })
+
+  <span class="hljs-comment">// 3. ISR - 每10秒重新验证 - 类似 revalidate</span>
+  <span class="hljs-keyword">const</span> revalidatedData = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>, {
+    <span class="hljs-attr">next</span>: { <span class="hljs-attr">revalidate</span>: <span class="hljs-number">10</span> },
+  })
+
+  <span class="hljs-comment">// 4. 基于标签的缓存</span>
+  <span class="hljs-keyword">const</span> taggedData = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>, {
+    <span class="hljs-attr">next</span>: { <span class="hljs-attr">tags</span>: [<span class="hljs-string">&#x27;posts&#x27;</span>] },
+  })
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{/* render data */}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+}
+</code></pre><p><strong>缓存策略对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">策略</th>
+<th style="text-align:left">cache 选项</th>
+<th style="text-align:left">next 选项</th>
+<th style="text-align:left">效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">静态</td>
+<td style="text-align:left"><code>force-cache</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">永久缓存，构建时确定</td>
+</tr>
+<tr>
+<td style="text-align:left">动态</td>
+<td style="text-align:left"><code>no-store</code></td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">每次请求获取</td>
+</tr>
+<tr>
+<td style="text-align:left">ISR</td>
+<td style="text-align:left"><code>force-cache</code></td>
+<td style="text-align:left"><code>{ revalidate: 60 }</code></td>
+<td style="text-align:left">定时重新验证</td>
+</tr>
+<tr>
+<td style="text-align:left">标签</td>
+<td style="text-align:left"><code>force-cache</code></td>
+<td style="text-align:left"><code>{ tags: ['x'] }</code></td>
+<td style="text-align:left">按标签重新验证</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="6.4.3">6.4.3 路由级缓存配置</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/posts/page.tsx</span>
+
+<span class="hljs-comment">// 设置整个路由段的默认缓存策略</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> revalidate = <span class="hljs-number">60</span>  <span class="hljs-comment">// 每60秒重新验证</span>
+
+<span class="hljs-comment">// 强制动态渲染</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> dynamic = <span class="hljs-string">&#x27;force-dynamic&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">PostsPage</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> posts = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchPosts</span>()
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">PostList</span> <span class="hljs-attr">posts</span>=<span class="hljs-string">{posts}</span> /&gt;</span></span>
+}
+</code></pre><p><strong>不同页面的缓存配置：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 静态页面 - 永远不重新验证</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> revalidate = <span class="hljs-literal">false</span>
+
+<span class="hljs-comment">// ISR 页面 - 每小时重新验证</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> revalidate = <span class="hljs-number">3600</span>
+
+<span class="hljs-comment">// 动态页面 - 每次请求渲染</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> dynamic = <span class="hljs-string">&#x27;force-dynamic&#x27;</span>
+
+<span class="hljs-comment">// 按需重新验证</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> dynamic = <span class="hljs-string">&#x27;force-dynamic&#x27;</span>
+<span class="hljs-comment">// 配合 revalidateTag 使用</span>
+</code></pre><hr>
+<h3 id="6.4.4-revalidating">6.4.4 重新验证（Revalidating）</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>按时间重新验证：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 方法1: fetch 配置</span>
+<span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/posts&#x27;</span>, {
+  <span class="hljs-attr">next</span>: { <span class="hljs-attr">revalidate</span>: <span class="hljs-number">60</span> },  <span class="hljs-comment">// 60秒</span>
+})
+
+<span class="hljs-comment">// 方法2: 路由配置</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> revalidate = <span class="hljs-number">60</span>  <span class="hljs-comment">// 整个路由</span>
+</code></pre><p><strong>按标签重新验证：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 获取数据时添加标签</span>
+<span class="hljs-keyword">const</span> posts = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/posts&#x27;</span>, {
+  <span class="hljs-attr">next</span>: { <span class="hljs-attr">tags</span>: [<span class="hljs-string">&#x27;posts&#x27;</span>] },
+})
+
+<span class="hljs-comment">// 后端 API 中手动重新验证</span>
+<span class="hljs-comment">// src/app/api/revalidate/route.ts</span>
+<span class="hljs-keyword">import</span> { revalidateTag } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/cache&#x27;</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">NextRequest</span>, <span class="hljs-title class_">NextResponse</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/server&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">POST</span>(<span class="hljs-params"><span class="hljs-attr">request</span>: <span class="hljs-title class_">NextRequest</span></span>) {
+  <span class="hljs-keyword">const</span> tag = request.<span class="hljs-property">nextUrl</span>.<span class="hljs-property">searchParams</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;tag&#x27;</span>)
+
+  <span class="hljs-keyword">if</span> (tag) {
+    <span class="hljs-title function_">revalidateTag</span>(tag)
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">NextResponse</span>.<span class="hljs-title function_">json</span>({ <span class="hljs-attr">revalidated</span>: <span class="hljs-literal">true</span>, tag })
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">NextResponse</span>.<span class="hljs-title function_">json</span>({ <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;Missing tag&#x27;</span> }, { <span class="hljs-attr">status</span>: <span class="hljs-number">400</span> })
+}
+</code></pre><p><strong>revalidatePath：</strong></p>
+<pre class="hljs"><code><span class="hljs-string">&#x27;use server&#x27;</span>
+
+<span class="hljs-keyword">import</span> { revalidatePath } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/cache&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">updatePost</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">data</span>: <span class="hljs-built_in">any</span></span>) {
+  <span class="hljs-keyword">await</span> db.<span class="hljs-property">post</span>.<span class="hljs-title function_">update</span>({
+    <span class="hljs-attr">where</span>: { id },
+    data,
+  })
+
+  <span class="hljs-comment">// 重新验证指定路径</span>
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">&#x27;/posts&#x27;</span>)
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">`/posts/<span class="hljs-subst">${id}</span>`</span>)
+}
+</code></pre><hr>
+<h3 id="6.4.5-updating-data">6.4.5 数据更新（Updating Data）</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>使用 Server Actions 更新数据：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/actions.ts</span>
+<span class="hljs-string">&#x27;use server&#x27;</span>
+
+<span class="hljs-keyword">import</span> { db } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/lib/db&#x27;</span>
+<span class="hljs-keyword">import</span> { revalidatePath } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/cache&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createPost</span>(<span class="hljs-params"><span class="hljs-attr">formData</span>: <span class="hljs-title class_">FormData</span></span>) {
+  <span class="hljs-keyword">const</span> title = formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;title&#x27;</span>) <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>
+  <span class="hljs-keyword">const</span> content = formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;content&#x27;</span>) <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>
+
+  <span class="hljs-keyword">const</span> post = <span class="hljs-keyword">await</span> db.<span class="hljs-property">post</span>.<span class="hljs-title function_">create</span>({
+    <span class="hljs-attr">data</span>: { title, content },
+  })
+
+  <span class="hljs-comment">// 重新验证页面</span>
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">&#x27;/posts&#x27;</span>)
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">`/posts/<span class="hljs-subst">${post.id}</span>`</span>)
+
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">success</span>: <span class="hljs-literal">true</span>, post }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">updatePost</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">data</span>: <span class="hljs-title class_">Partial</span>&lt;<span class="hljs-title class_">Post</span>&gt;</span>) {
+  <span class="hljs-keyword">const</span> post = <span class="hljs-keyword">await</span> db.<span class="hljs-property">post</span>.<span class="hljs-title function_">update</span>({
+    <span class="hljs-attr">where</span>: { id },
+    data,
+  })
+
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">&#x27;/posts&#x27;</span>)
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">`/posts/<span class="hljs-subst">${id}</span>`</span>)
+
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">success</span>: <span class="hljs-literal">true</span>, post }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">deletePost</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-keyword">await</span> db.<span class="hljs-property">post</span>.<span class="hljs-title function_">delete</span>({
+    <span class="hljs-attr">where</span>: { id },
+  })
+
+  <span class="hljs-title function_">revalidatePath</span>(<span class="hljs-string">&#x27;/posts&#x27;</span>)
+}
+</code></pre><p><strong>表单中的数据更新：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/posts/new/page.tsx</span>
+<span class="hljs-keyword">import</span> { createPost } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/app/actions&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">NewPostPage</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">{createPost}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        标题
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;title&quot;</span> <span class="hljs-attr">required</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        内容
+        <span class="hljs-tag">&lt;<span class="hljs-name">textarea</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;content&quot;</span> <span class="hljs-attr">required</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>创建<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
+  )
+}
+</code></pre><hr>
+<h3 id="6.4.6-use-apinext.js-15">6.4.6 use() API（Next.js 15+）</h3>
+<p><strong>参考答案：</strong></p>
+<p>React 19 的 use() API 可用于在组件中读取 Promise。</p>
+<p><strong>在 Server Component 中使用：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/page.tsx</span>
+<span class="hljs-keyword">import</span> { getPosts } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/lib/posts&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Page</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 直接 await promise</span>
+  <span class="hljs-keyword">const</span> posts = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getPosts</span>()
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">PostList</span> <span class="hljs-attr">posts</span>=<span class="hljs-string">{posts}</span> /&gt;</span></span>
+}
+</code></pre><p><strong>在 Client Component 中使用 use()：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/components/PostList.tsx</span>
+<span class="hljs-string">&#x27;use client&#x27;</span>
+
+<span class="hljs-keyword">import</span> { use } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">PostList</span>(<span class="hljs-params">{ postsPromise }: { postsPromise: <span class="hljs-built_in">Promise</span>&lt;Post[]&gt; }</span>) {
+  <span class="hljs-keyword">const</span> posts = <span class="hljs-title function_">use</span>(postsPromise)
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      {posts.map((post) =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{post.id}</span>&gt;</span>{post.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+  )
+}
+</code></pre><pre class="hljs"><code><span class="hljs-comment">// src/app/page.tsx</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">PostList</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/components/PostList&#x27;</span>
+<span class="hljs-keyword">import</span> { getPosts } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/lib/posts&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Page</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> postsPromise = <span class="hljs-title function_">getPosts</span>()
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">main</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Blog Posts<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">PostList</span> <span class="hljs-attr">postsPromise</span>=<span class="hljs-string">{postsPromise}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span></span>
+  )
+}
+</code></pre><p><strong>与 Suspense 配合：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/components/DeferredPostList.tsx</span>
+<span class="hljs-string">&#x27;use client&#x27;</span>
+
+<span class="hljs-keyword">import</span> { use, <span class="hljs-title class_">Suspense</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">PostContent</span>(<span class="hljs-params">{ postsPromise }: { postsPromise: <span class="hljs-built_in">Promise</span>&lt;Post[]&gt; }</span>) {
+  <span class="hljs-keyword">const</span> posts = <span class="hljs-title function_">use</span>(postsPromise)
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{posts.map(p =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{p.id}</span>&gt;</span>{p.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">DeferredPostList</span>(<span class="hljs-params">{ postsPromise }: <span class="hljs-title class_">Props</span></span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">div</span>&gt;</span>加载中...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>}&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">PostContent</span> <span class="hljs-attr">postsPromise</span>=<span class="hljs-string">{postsPromise}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
+  )
+}
+</code></pre><hr>
+<h3 id="6.4.7">6.4.7 数据请求优化</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>并行请求：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/app/page.tsx</span>
+
+<span class="hljs-comment">// 串行（慢）</span>
+<span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUser</span>()
+<span class="hljs-keyword">const</span> posts = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getPosts</span>()
+
+<span class="hljs-comment">// 并行（快）</span>
+<span class="hljs-keyword">const</span> [user, posts] = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([
+  <span class="hljs-title function_">getUser</span>(),
+  <span class="hljs-title function_">getPosts</span>()
+])
+</code></pre><p><strong>串行依赖请求：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 需要顺序获取</span>
+<span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUser</span>()
+<span class="hljs-keyword">const</span> settings = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUserSettings</span>(user.<span class="hljs-property">id</span>)  <span class="hljs-comment">// 依赖 user</span>
+
+<span class="hljs-comment">// 优化：可以合并 API 或使用并行</span>
+</code></pre><p><strong>预加载数据：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// src/lib/preload.ts</span>
+<span class="hljs-keyword">import</span> { cache } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getUser = <span class="hljs-title function_">cache</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/user&#x27;</span>)
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>()
+})
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getUserPosts = <span class="hljs-title function_">cache</span>(<span class="hljs-title function_">async</span> (<span class="hljs-attr">userId</span>: <span class="hljs-built_in">string</span>) =&gt; {
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/users/<span class="hljs-subst">${userId}</span>/posts`</span>)
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>()
+})
+
+<span class="hljs-comment">// 使用 - 预加载</span>
+<span class="hljs-title function_">getUser</span>()           <span class="hljs-comment">// 预加载</span>
+<span class="hljs-title function_">getUserPosts</span>(id)    <span class="hljs-comment">// 预加载</span>
+
+<span class="hljs-comment">// 页面中</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Page</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUser</span>()       <span class="hljs-comment">// 使用缓存</span>
+  <span class="hljs-keyword">const</span> posts = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getUserPosts</span>(user.<span class="hljs-property">id</span>)  <span class="hljs-comment">// 使用缓存</span>
+}
+</code></pre><hr>
+<h3 id="6.4.8">6.4.8 面试常见问题</h3>
+<p><strong>Q1: Next.js 的缓存机制是怎样的？</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">缓存类型</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Data Cache</td>
+<td style="text-align:left">fetch 响应的缓存</td>
+</tr>
+<tr>
+<td style="text-align:left">Full Route Cache</td>
+<td style="text-align:left">渲染输出的 HTML</td>
+</tr>
+<tr>
+<td style="text-align:left">Router Cache</td>
+<td style="text-align:left">预加载的路由段</td>
+</tr>
+<tr>
+<td style="text-align:left">Request Memoization</td>
+<td style="text-align:left">请求级别的内存缓存</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Q2: ISR 和 SSR 有什么区别？</strong></p>
+<ul>
+<li>ISR: 静态生成，定期重新验证，兼顾性能和新鲜度</li>
+<li>SSR: 每次请求动态渲染，保证最新但速度慢</li>
+</ul>
+<p><strong>Q3: 如何实现按需重新验证？</strong></p>
+<ol>
+<li>使用 revalidateTag 标签</li>
+<li>在 Server Action 中调用 revalidatePath</li>
+<li>通过 API Route 调用 revalidateTag</li>
+</ol>
+<p><strong>Q4: Next.js 15 的缓存有什么变化？</strong></p>
+<ul>
+<li>fetch 请求默认不缓存</li>
+<li>需要显式设置 cache: ‘force-cache’</li>
+<li>这与之前的默认行为不同</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>面试提示</strong>：数据获取和缓存是 Next.js 最重要的概念之一，特别是 ISR、缓存策略和 Server Actions 的配合使用。</p>
+</blockquote>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="2-5-跨端开发.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第2卷 音视频与跨端</span>
+          </a>
+              <a href="3-1-模块化开发.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第3卷 前端工程化</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

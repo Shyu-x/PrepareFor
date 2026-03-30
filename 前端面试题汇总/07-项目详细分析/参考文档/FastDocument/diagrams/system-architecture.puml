@@ -1,0 +1,80 @@
+@startuml FastDocument_System_Architecture
+!theme plain
+hide stereotype
+
+skinparam rectangle {
+    BackgroundColor #f8f9fa
+    BorderColor #0d9488
+    FontName Microsoft YaHei
+}
+
+skinparam database {
+    BackgroundColor #e0f2fe
+    BorderColor #0ea5e9
+}
+
+skinparam node {
+    BackgroundColor #fef3c7
+    BorderColor #f59e0b
+}
+
+skinparam storage {
+    BackgroundColor #dcfce7
+    BorderColor #22c55e
+}
+
+' 定义包
+package "前端层 (Frontend)" as FE {
+    node "Next.js 16\nApp Router" as NextJS
+    node "React 19" as React
+    node "Tailwind CSS v4" as Tailwind
+    node "Ant Design 6" as AntD
+    node "Zustand\n状态管理" as Zustand
+}
+
+package "API 网关层 (API Gateway)" as API_GW {
+    node "Nginx\n反向代理" as Nginx
+    node "Socket.io\nWebSocket" as SocketIO
+}
+
+package "业务服务层 (Business Services)" as BS {
+    node "NestJS\nREST API" as NestJS
+    node "Documents\n文档管理" as Documents
+    node "Comments\n批注评论" as Comments
+    node "Projects\n项目管理" as Projects
+    node "Knowledge\n知识库" as Knowledge
+    node "Meetings\n视频会议" as Meetings
+    node "Auth\n认证服务" as Auth
+    node "Share\n分享服务" as Share
+    node "Notifications\n通知服务" as Notifications
+}
+
+package "数据层 (Data Layer)" as DL {
+    database "PostgreSQL\n主数据库" as PostgreSQL
+    storage "Redis\n缓存/Session" as Redis
+    storage "LiveKit\n音视频" as LiveKit
+}
+
+package "基础设施层 (Infrastructure)" as Infra {
+    node "Docker\n容器化" as Docker
+    node "PM2\n进程管理" as PM2
+}
+
+' 客户端连接
+actor "用户浏览器" as Browser
+
+' 绘制连接关系
+Browser --> NextJS : HTTPS/HTTP
+Browser --> SocketIO : WebSocket
+
+Nginx --> NestJS : API 请求
+NestJS --> PostgreSQL : SQL 查询
+NestJS --> Redis : 缓存读写
+NestJS --> LiveKit : 音视频流
+
+SocketIO --> NestJS : 实时协作
+SocketIO --> Redis : 消息队列
+
+' 设置布局
+left to right direction
+@enduml

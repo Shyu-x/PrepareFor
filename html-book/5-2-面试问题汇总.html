@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第5卷-项目实战案例 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#2-fastdocument" class="toc-link "><span>第2章 FastDocument</span></a></li><li class="toc-item"><a href="#1.1-1" class="toc-link "><span>1.1 问题1：编辑器架构是怎么样的？为什么选择块级编辑器？</span></a></li><li class="toc-item"><a href="#2json-html" class="toc-link "><span>问题 2：编辑器的内容怎么存储？JSON 还是 HTML？</span></a></li><li class="toc-item"><a href="#3" class="toc-link "><span>问题 3：怎么做编辑器的撤销/重做？</span></a></li><li class="toc-item"><a href="#2.1-4" class="toc-link "><span>2.1 问题4：多人同时编辑一个文档，怎么解决冲突？</span></a></li><li class="toc-item"><a href="#5" class="toc-link "><span>问题 5：如何保证协作的实时性？</span></a></li><li class="toc-item"><a href="#3.1-6" class="toc-link "><span>3.1 问题6：大文档性能如何优化？</span></a></li><li class="toc-item"><a href="#4.1-7" class="toc-link "><span>4.1 问题7：视频会议如何实现？</span></a></li><li class="toc-item"><a href="#5.1-8" class="toc-link "><span>5.1 问题8：项目架构是如何设计的？</span></a></li><li class="toc-item"><a href="#6.1-q" class="toc-link "><span>6.1 Q: 遇到的最大技术挑战是什么？</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第5卷 项目实战案例 / 第2章 FastDocument</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第5卷 项目实战案例</span>
+            </div>
+            <h1 class="article-title">第5卷-项目实战案例</h1>
+          </header>
+
+          <div class="content"><h2 id="2-fastdocument">第2章 FastDocument</h2>
+<blockquote>
+<p>FastDocument 是一款面向团队协作的现代化文档编辑与管理平台，支持实时多人协作编辑、视频会议、版本历史管理等企业级功能。</p>
+</blockquote>
+<hr>
+<h3 id="1.1-1">1.1 问题1：编辑器架构是怎么样的？为什么选择块级编辑器？</h3>
+<p><strong>考察点：</strong> 编辑器架构、ProseMirror、选型理由</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="">块级编辑器核心架构</h4>
+<p>FastDocument 采用自定义块编辑器架构，核心特点：</p>
+<ol>
+<li><strong>原子化块设计</strong>：每个内容块独立管理（text, h1, h2, todo, code, image 等）</li>
+<li><strong>块级操作</strong>：支持拖拽排序、分块加载、块类型转换</li>
+<li><strong>独立渲染</strong>：每个块独立渲染，便于实现虚拟滚动</li>
+<li><strong>协作友好</strong>：以块为最小变更单元，冲突粒度更细</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Block</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;           <span class="hljs-comment">// 唯一标识</span>
+  <span class="hljs-attr">type</span>: <span class="hljs-title class_">BlockType</span>;      <span class="hljs-comment">// 块类型</span>
+  <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span>;      <span class="hljs-comment">// 文本内容</span>
+  <span class="hljs-attr">properties</span>?: {
+    <span class="hljs-attr">checked</span>?: <span class="hljs-built_in">boolean</span>;  <span class="hljs-comment">// todo 项</span>
+    <span class="hljs-attr">language</span>?: <span class="hljs-built_in">string</span>; <span class="hljs-comment">// 代码语言</span>
+    <span class="hljs-attr">url</span>?: <span class="hljs-built_in">string</span>;      <span class="hljs-comment">// 图片 URL</span>
+  };
+  <span class="hljs-attr">order</span>?: <span class="hljs-built_in">number</span>;       <span class="hljs-comment">// 排序</span>
+}
+</code></pre><h4 id="">与富文本编辑器的对比</h4>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>块级编辑器</th>
+<th>富文本编辑器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据结构</td>
+<td>JSON 块数组</td>
+<td>HTML/XML</td>
+</tr>
+<tr>
+<td>冲突粒度</td>
+<td>块级</td>
+<td>文档级</td>
+</tr>
+<tr>
+<td>局部更新</td>
+<td>高效</td>
+<td>困难</td>
+</tr>
+<tr>
+<td>虚拟滚动</td>
+<td>原生支持</td>
+<td>需深度定制</td>
+</tr>
+<tr>
+<td>协作</td>
+<td>更友好</td>
+<td>复杂</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="2json-html">问题 2：编辑器的内容怎么存储？JSON 还是 HTML？</h3>
+<p><strong>考察点：</strong> 数据结构设计、数据格式选型</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="fastdocument-json">FastDocument 采用 JSON 块级结构</h4>
+<pre class="hljs"><code><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;doc-123&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;我的文档&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;blocks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;block-1&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;h1&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;标题&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;block-2&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;text&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;这是普通文本&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;block-3&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;todo&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;待办事项&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;properties&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;checked&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><p><strong>JSON 存储的优点：</strong></p>
+<ul>
+<li>语义化清晰，结构明确</li>
+<li>局部更新高效（修改单个块不影响其他块）</li>
+<li>协作冲突粒度细（以块为单位）</li>
+<li>易于进行数据分析、搜索、导出</li>
+<li>类型安全，便于校验</li>
+</ul>
+<hr>
+<h3 id="3">问题 3：怎么做编辑器的撤销/重做？</h3>
+<p><strong>考察点：</strong> 历史管理、编辑器原理</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="">方案：操作日志 + 状态快照</h4>
+<pre class="hljs"><code><span class="hljs-keyword">interface</span> <span class="hljs-title class_">DocumentState</span> {
+  <span class="hljs-attr">history</span>: { <span class="hljs-attr">blocks</span>: <span class="hljs-title class_">Block</span>[]; <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span> }[];
+  <span class="hljs-attr">historyIndex</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">canUndo</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">canRedo</span>: <span class="hljs-built_in">boolean</span>;
+}
+
+<span class="hljs-comment">// 撤销操作</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">undo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (historyIndex &gt; <span class="hljs-number">0</span>) {
+    historyIndex--;
+    <span class="hljs-keyword">const</span> prevState = history[historyIndex];
+    <span class="hljs-title function_">applyState</span>(prevState);
+  }
+}
+
+<span class="hljs-comment">// 重做操作</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">redo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (historyIndex &lt; history.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>) {
+    historyIndex++;
+    <span class="hljs-keyword">const</span> nextState = history[historyIndex];
+    <span class="hljs-title function_">applyState</span>(nextState);
+  }
+}
+</code></pre><hr>
+<h3 id="2.1-4">2.1 问题4：多人同时编辑一个文档，怎么解决冲突？</h3>
+<p><strong>考察点：</strong> CRDT、Yjs、冲突解决</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="">两种主流方案对比</h4>
+<p><strong>方案一：OT (Operational Transformation)</strong></p>
+<ul>
+<li>中心服务器转换操作</li>
+<li>Google Docs 早期使用</li>
+<li>需要中心服务器，复杂度高</li>
+</ul>
+<p><strong>方案二：CRDT (无冲突复制数据类型)</strong></p>
+<ul>
+<li>每个客户端独立操作，最终自动合并</li>
+<li>Yjs、Automerge 等库采用</li>
+<li>去中心化，更适合分布式</li>
+</ul>
+<h4 id="fastdocument">FastDocument 采用的方案</h4>
+<p>项目使用 <strong><a href="http://Socket.io">Socket.io</a> 事件流 + 乐观更新</strong>：</p>
+<ol>
+<li><strong>本地先更新</strong>：用户操作立即反映到 UI</li>
+<li><strong>发送到服务端</strong>：通过 WebSocket 发送变更</li>
+<li><strong>服务端广播</strong>：广播给房间内其他用户</li>
+<li><strong>冲突处理</strong>：块级变更，冲突概率更低</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 乐观更新示例</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">handleUpdateBlock</span>(<span class="hljs-params"><span class="hljs-attr">blockId</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">content</span>: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-comment">// 1. 本地立即更新</span>
+  <span class="hljs-title function_">updateLocalBlock</span>(blockId, content);
+
+  <span class="hljs-comment">// 2. 发送到服务端</span>
+  socket.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;updateBlock&#x27;</span>, { docId, blockId, content });
+}
+</code></pre><hr>
+<h3 id="5">问题 5：如何保证协作的实时性？</h3>
+<p><strong>考察点：</strong> WebSocket、实时通信</p>
+<p><strong>参考答案：</strong></p>
+<ol>
+<li><strong>WebSocket 全双工通信</strong></li>
+<li><strong>心跳检测</strong>：定时 ping/pong 检测连接状态</li>
+<li><strong>断线重连</strong>：自动重连并恢复状态</li>
+<li><strong>增量同步</strong>：只同步变更部分，减少带宽</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 心跳检测</span>
+<span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">if</span> (socket.<span class="hljs-property">connected</span>) {
+    socket.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;ping&#x27;</span>);
+  }
+}, <span class="hljs-number">30000</span>);
+
+<span class="hljs-comment">// 断线重连</span>
+socket.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;disconnect&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">reconnect</span>();
+});
+</code></pre><hr>
+<h3 id="3.1-6">3.1 问题6：大文档性能如何优化？</h3>
+<p><strong>考察点：</strong> 性能优化、虚拟滚动</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="fastdocument">FastDocument 的优化策略</h4>
+<ol>
+<li><strong>虚拟滚动</strong>：文档 &gt; 100 块时启用</li>
+<li><strong>分块加载</strong>：大文档从服务端分块获取</li>
+<li><strong>增量同步</strong>：只同步变更的块</li>
+<li><strong>React 优化</strong>：useMemo、React.memo 减少重渲染</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 虚拟滚动配置</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ITEM_HEIGHT</span> = <span class="hljs-number">60</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">OVERSCAN</span> = <span class="hljs-number">5</span>;
+
+<span class="hljs-comment">// 超过阈值自动启用</span>
+<span class="hljs-keyword">const</span> useVirtualEditor = blocks.<span class="hljs-property">length</span> &gt; <span class="hljs-number">100</span>;
+</code></pre><hr>
+<h3 id="4.1-7">4.1 问题7：视频会议如何实现？</h3>
+<p><strong>考察点：</strong> WebRTC、LiveKit</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="livekit">LiveKit 集成</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 获取 Token</span>
+<span class="hljs-keyword">const</span> token = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/meeting/token&#x27;</span>, {
+  <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+  <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ roomId, userName })
+});
+
+<span class="hljs-comment">// 2. 连接房间</span>
+<span class="hljs-keyword">const</span> room = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Room</span>();
+<span class="hljs-keyword">await</span> room.<span class="hljs-title function_">connect</span>(livekitUrl, token);
+
+<span class="hljs-comment">// 3. 控制媒体</span>
+<span class="hljs-keyword">await</span> room.<span class="hljs-property">localParticipant</span>.<span class="hljs-title function_">setMicrophoneEnabled</span>(<span class="hljs-literal">true</span>);
+<span class="hljs-keyword">await</span> room.<span class="hljs-property">localParticipant</span>.<span class="hljs-title function_">setCameraEnabled</span>(<span class="hljs-literal">true</span>);
+</code></pre><hr>
+<h3 id="5.1-8">5.1 问题8：项目架构是如何设计的？</h3>
+<p><strong>考察点：</strong> 系统设计、架构思维</p>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>前端架构
+┣━━ UI 层
+┃   ┣━━ Editor (块编辑器)
+┃   ┣━━ VirtualEditor (虚拟滚动)
+┃   ┗━━ Meeting (视频会议)
+┃
+┣━━ 状态层 (Zustand)
+┃   ┣━━ documentStore (文档)
+┃   ┣━━ meetingStore (会议)
+┃   ┗━━ userStore (用户)
+┃
+┗━━ 通信层
+    ┣━━ Socket.io (实时协作)
+    ┗━━ LiveKit (视频会议)
+
+后端架构 (NestJS)
+┣━━ 认证模块
+┣━━ 文档模块 (WebSocket 网关)
+┣━━ 会议模块 (LiveKit)
+┗━━ 分享模块
+</code></pre><hr>
+<h3 id="6.1-q">6.1 Q: 遇到的最大技术挑战是什么？</h3>
+<p><strong>回答框架</strong>：</p>
+<ol>
+<li>描述挑战场景</li>
+<li>尝试的解决方案</li>
+<li>最终方案</li>
+<li>学到的经验</li>
+</ol>
+<p><strong>示例</strong>：</p>
+<blockquote>
+<p>在实现大文档编辑器时，遇到滚动卡顿的问题。最初尝试使用普通渲染，但 500+ 块的文档导致严重掉帧。</p>
+<p>后来采用虚拟滚动方案，只渲染可见区域内的块，结合分块加载从服务端获取数据。</p>
+<p>最终成功支持了 1000+ 块的大型文档，滚动帧率保持在 55FPS 以上。</p>
+</blockquote>
+<hr>
+<h3 id="7.1">7.1 核心技术亮点</h3>
+<table>
+<thead>
+<tr>
+<th>亮点</th>
+<th>技术深度</th>
+<th>业务价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>块级编辑器</td>
+<td>12+ 种块类型</td>
+<td>Notion-like 体验</td>
+</tr>
+<tr>
+<td>虚拟滚动</td>
+<td>&gt;100 块自动启用</td>
+<td>大文档流畅</td>
+</tr>
+<tr>
+<td>实时协作</td>
+<td><a href="http://Socket.io">Socket.io</a></td>
+<td>多人同时编辑</td>
+</tr>
+<tr>
+<td>视频会议</td>
+<td>LiveKit</td>
+<td>面对面沟通</td>
+</tr>
+<tr>
+<td>版本历史</td>
+<td>快照回滚</td>
+<td>内容可追溯</td>
+</tr>
+</tbody>
+</table>
+<h3 id="">与竞品对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>FastDocument</th>
+<th>Notion</th>
+<th>Google Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>块类型</td>
+<td>12+ 种</td>
+<td>丰富</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>协作</td>
+<td>实时</td>
+<td>实时</td>
+<td>实时</td>
+</tr>
+<tr>
+<td>视频会议</td>
+<td>内置</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>虚拟滚动</td>
+<td>支持</td>
+<td>支持</td>
+<td>否</td>
+</tr>
+<tr>
+<td>开源</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="8.1-30">8.1 30 秒电梯陈述</h3>
+<p>我在 FastDocument 里负责&quot;协作编辑链路&quot;的核心交付，覆盖 <code>Editor</code>、<code>VirtualEditor</code>、实时同步与版本历史。项目目标是把团队文档协作从&quot;单人编辑 + 低效沟通&quot;升级到&quot;多人实时协同 + 可追溯版本&quot;。我主导了块级编辑器与增量同步方案，解决了大文档卡顿与多人冲突问题，核心收益是：编辑流畅度显著提升、协作延迟可控、线上故障定位时间缩短，满足企业场景下稳定性与审计要求。</p>
+<hr>
+<h3 id="8.2-3">8.2 3 分钟深挖版本</h3>
+<ol>
+<li>
+<p><strong>业务目标拆解</strong></p>
+<ul>
+<li>协作效率：减少&quot;等待他人释放文档&quot;的阻塞</li>
+<li>稳定与可信：支持版本回滚、评论追踪、分享权限</li>
+<li>可扩展：后续接入知识库、会议、任务看板的统一入口</li>
+</ul>
+</li>
+<li>
+<p><strong>关键技术决策</strong></p>
+<ul>
+<li>文档数据模型采用块级结构而非整文字符串，降低冲突面，便于局部更新</li>
+<li>前端状态采用 <code>Zustand</code>，按域拆分 store，避免巨型全局状态</li>
+<li>大文档场景启用 <code>VirtualEditor</code>，将渲染复杂度从&quot;与总块数线性增长&quot;改为&quot;与可视窗口相关&quot;</li>
+<li>实时链路采用 Socket 事件 + 乐观更新，兼顾交互响应与最终一致性</li>
+</ul>
+</li>
+<li>
+<p><strong>难点与解法</strong></p>
+<ul>
+<li>难点 A：多人同时编辑同一区域导致内容抖动
+<ul>
+<li>解法：块级最小变更单元 + 服务端顺序广播 + 客户端幂等处理</li>
+</ul>
+</li>
+<li>难点 B：大文档滚动和输入耦合导致掉帧
+<ul>
+<li>解法：虚拟滚动 + 分层 memo + 高频事件节流</li>
+</ul>
+</li>
+<li>难点 C：断网/弱网下用户感知差
+<ul>
+<li>解法：本地操作队列 + 在线恢复后增量回放</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="8.3-kpi">8.3 KPI 面试官高压问题</h3>
+<h4 id="">代码锚点版追问</h4>
+<ol>
+<li><code>documentStore.ts</code> 里为什么把 <code>chunkSize</code> 设为 50？你做过哪些压测对比？</li>
+<li><code>loadBlocksChunked()</code> 与 <code>syncBlocks()</code> 同时触发时如何避免块顺序错乱？</li>
+<li><code>block-lock</code> 与 <code>edit-operation</code> 各自解决什么并发问题？</li>
+<li><code>VirtualEditor.tsx</code> 与 <code>Editor.tsx</code> 的切换条件是什么？</li>
+</ol>
+<h4 id="3">业务价值（3 问）</h4>
+<ol>
+<li>你说提升了协作效率，具体是哪个环节变快？基线是多少？</li>
+<li>如果没有这个项目，业务会损失什么，能量化吗？</li>
+<li>你做的不是&quot;锦上添花&quot;吗？为什么是&quot;必须做&quot;？</li>
+</ol>
+<h4 id="3">架构取舍（3 问）</h4>
+<ol start="4">
+<li>为什么不用单一富文本模型而要块级模型？复杂度怎么控？</li>
+<li>为什么用 <code>Zustand</code> 而不是 Redux Toolkit？</li>
+<li>为什么实时协作先做事件流，而不是一步上 CRDT？</li>
+</ol>
+<h4 id="3">性能（3 问）</h4>
+<ol start="7">
+<li>大文档多少块开始退化？阈值如何确定？</li>
+<li>虚拟滚动会不会影响搜索、评论锚点、目录跳转？</li>
+<li>输入延迟、滚动帧率、首屏时间你分别怎么测？</li>
+</ol>
+<h4 id="3">稳定性（3 问）</h4>
+<ol start="10">
+<li>Socket 断开重连后，如何保证状态不乱序？</li>
+<li>线上出现&quot;内容丢失&quot;投诉，你 30 分钟内怎么定位？</li>
+<li>版本回滚是否可能覆盖他人最新内容？</li>
+</ol>
+<hr>
+<h3 id="8.4">8.4 可量化指标看板</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>指标定义</th>
+<th>目标值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编辑体验</td>
+<td>输入到渲染完成 P95</td>
+<td>≤ 120ms</td>
+</tr>
+<tr>
+<td>渲染性能</td>
+<td>长文档滚动帧率 P95</td>
+<td>≥ 55 FPS</td>
+</tr>
+<tr>
+<td>协作延迟</td>
+<td>远端变更可见延迟 P95</td>
+<td>≤ 300ms</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>协作链路月可用性</td>
+<td>≥ 99.9%</td>
+</tr>
+<tr>
+<td>数据安全</td>
+<td>内容丢失事故数</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="8.5-90">8.5 90 天演进计划</h3>
+<ol>
+<li>
+<p><strong>0-30 天：稳定性补强</strong></p>
+<ul>
+<li>建立协作链路 SLO 与错误预算</li>
+<li>完成断网重连、乱序重放专项压测</li>
+</ul>
+</li>
+<li>
+<p><strong>31-60 天：性能治理</strong></p>
+<ul>
+<li>建立编辑器性能基线（输入、滚动、首屏）</li>
+<li>对热点组件做渲染火焰图治理</li>
+</ul>
+</li>
+<li>
+<p><strong>61-90 天：能力产品化</strong></p>
+<ul>
+<li>抽象协作 SDK，统一文档/知识库/评论协议</li>
+<li>建立版本审计报表，支持管理端追踪</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><strong>文档结束（已增强面试版本）</strong></p>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="5-1-核心技术实现.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第5卷 WebEnv-OS</span>
+          </a>
+              <a href="5-3-核心技术实现.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第5卷 UnoThree</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

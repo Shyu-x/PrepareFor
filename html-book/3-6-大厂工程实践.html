@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第3卷-工程实战 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#6" class="toc-link "><span>第6章 大厂工程实践与代码规范</span></a></li><li class="toc-item"><a href="#6.1" class="toc-link "><span>6.1 字节跳动前端工程化实践</span></a></li><li class="toc-item"><a href="#6.1.1" class="toc-link "><span>6.1.1 字节跳动前端工程化体系</span></a></li><li class="toc-item"><a href="#6.1.2-monorepo" class="toc-link "><span>6.1.2 Monorepo 工程架构</span></a></li><li class="toc-item"><a href="#6.1.3" class="toc-link "><span>6.1.3 微前端实践</span></a></li><li class="toc-item"><a href="#6.1.4" class="toc-link "><span>6.1.4 构建系统优化</span></a></li><li class="toc-item"><a href="#6.2-google" class="toc-link "><span>6.2 Google 前端代码规范</span></a></li><li class="toc-item"><a href="#6.2.1-google-javascript" class="toc-link "><span>6.2.1 Google JavaScript 风格指南核心要点</span></a></li><li class="toc-item"><a href="#6.2.2" class="toc-link "><span>6.2.2 具体代码示例</span></a></li><li class="toc-item"><a href="#6.2.3-jsdoc" class="toc-link "><span>6.2.3 JSDoc 注释规范</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第3卷 工程实战 / 第6章 大厂工程实践与代码规范</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第3卷 工程实战</span>
+            </div>
+            <h1 class="article-title">第3卷-工程实战</h1>
+          </header>
+
+          <div class="content"><h2 id="6">第6章 大厂工程实践与代码规范</h2>
+<hr>
+<h2 id="6.1">6.1 字节跳动前端工程化实践</h2>
+<h3 id="6.1.1">6.1.1 字节跳动前端工程化体系</h3>
+<p><strong>参考答案：</strong></p>
+<p>字节跳动作为国内头部互联网公司，其前端工程化实践具有很强的参考价值。整体架构包括以下四大核心模块：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+    
+┃                   字节跳动前端工程化架构                            ┃
+┃                                                                  ┃
+   
+┃  ┏━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━┓          ┃
+        
+┃  ┃  模块化工具  ┃  ┃  微前端方案  ┃  ┃ 构建系统    ┃          ┃
+      
+┃  ┃  (BFF/VM)   ┃  ┃  (tf.js)    ┃  ┃ (自研Bundler)┃          ┃
+       
+┃  ┗━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━┛          ┃
+        
+┃                                                                  ┃
+   
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓    ┃
+    
+┃  ┃                    诊断工具                               ┃    ┃
+  
+┃  ┃            (Rcoder/Perfs)                               ┃    ┃
+    
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛    ┃
+    
+┃                                                                  ┃
+   
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+    
+
+</code></pre><p><strong>核心实践：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">领域</th>
+<th style="text-align:left">实践</th>
+<th style="text-align:left">价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">模块化</td>
+<td style="text-align:left">自研模块化工具</td>
+<td style="text-align:left">降低多项目维护成本，提高代码复用率</td>
+</tr>
+<tr>
+<td style="text-align:left">微前端</td>
+<td style="text-align:left">升级微前端方案</td>
+<td style="text-align:left">降低多人协作成本</td>
+</tr>
+<tr>
+<td style="text-align:left">构建系统</td>
+<td style="text-align:left">自研Build System</td>
+<td style="text-align:left">加快巨型应用构建速度</td>
+</tr>
+<tr>
+<td style="text-align:left">质量保障</td>
+<td style="text-align:left">诊断工具</td>
+<td style="text-align:left">防止应用质量劣化</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="6.1.2-monorepo">6.1.2 Monorepo 工程架构</h3>
+<p><strong>参考答案：</strong></p>
+<p>字节跳动大量使用 Monorepo 架构来管理前端代码：</p>
+<p><strong>目录结构：</strong></p>
+<pre class="hljs"><code>my-monorepo/
+┣━━ packages/
+┃   ┣━━ ui/                    # 共享 UI 组件库
+┃   ┃   ┣━━ src/
+┃   ┃   ┣━━ package.json
+┃   ┃   ┗━━ tsconfig.json
+┃   ┃
+┃   ┣━━ utils/                 # 共享工具库
+┃   ┃   ┣━━ src/
+┃   ┃   ┣━━ package.json
+┃   ┃   ┗━━ tsconfig.json
+┃   ┃
+┃   ┣━━ hooks/                 # 共享 Hooks
+┃   ┃   ┣━━ src/
+┃   ┃   ┗━━ package.json
+┃   ┃
+┃   ┗━━ config/                # 共享配置
+┃       ┣━━ typescript/
+┃       ┣━━ eslint/
+┃       ┗━━ tailwind/
+┃
+┣━━ apps/
+┃   ┣━━ web/                   # 主 Web 应用
+┃   ┣━━ admin/                 # 管理后台
+┃   ┗━━ mobile/                # 移动端 Web
+┃
+┣━━ package.json               # 根目录 package.json
+┣━━ pnpm-workspace.yaml       # pnpm workspace 配置
+┗━━ turbo.json                # Turborepo 配置
+</code></pre><p><strong>pnpm-workspace.yaml：</strong></p>
+<pre class="hljs"><code><span class="hljs-attr">packages:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;packages/*&#x27;</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;apps/*&#x27;</span>
+</code></pre><p><strong>turbo.json：</strong></p>
+<pre class="hljs"><code><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;$schema&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://turbo.build/schema.json&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;pipeline&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;build&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;dependsOn&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;^build&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;outputs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;dist/**&quot;</span><span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;lint&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;test&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;cache&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;persistent&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><hr>
+<h3 id="6.1.3">6.1.3 微前端实践</h3>
+<p><strong>参考答案：</strong></p>
+<p>字节跳动的微前端方案主要解决以下问题：</p>
+<ol>
+<li><strong>多团队协作</strong>：不同团队独立开发、独立部署</li>
+<li><strong>技术栈迁移</strong>：渐进式迁移遗留系统</li>
+<li><strong>模块复用</strong>：跨应用共享业务组件</li>
+</ol>
+<p><strong>微前端架构：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+   
+┃                        微前端架构                                  ┃
+┃                                                                  ┃
+  
+┃  主应用 (Container)                                              ┃
+  
+┃  ┣━━ 路由管理                                                    ┃
+  
+┃  ┣━━ 公共依赖加载                                                ┃
+  
+┃  ┗━━ 子应用注册                                                  ┃
+  
+┃                                                                  ┃
+  
+┃  ┏━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━┓        ┃
+      
+┃  ┃  子应用 A     ┃  ┃  子应用 B     ┃  ┃  子应用 C     ┃        ┃
+   
+┃  ┃  (React)      ┃  ┃  (Vue)       ┃  ┃  (Angular)   ┃        ┃
+     
+┃  ┗━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━┛        ┃
+      
+┃                                                                  ┃
+  
+┃  通信机制：                                                      ┃
+  
+┃  ┣━━ URL 路由同步                                               ┃
+   
+┃  ┣━━ 自定义事件                                                  ┃
+  
+┃  ┗━━ Shared State                                               ┃
+   
+┃                                                                  ┃
+  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+   
+
+</code></pre><hr>
+<h3 id="6.1.4">6.1.4 构建系统优化</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>字节跳动构建优化实践：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// webpack.config.ts 优化示例</span>
+
+<span class="hljs-comment">// 1. 持久化缓存</span>
+<span class="hljs-attr">cache</span>: {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;filesystem&#x27;</span>,
+  <span class="hljs-attr">cacheDirectory</span>: path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">&#x27;.webpack-cache&#x27;</span>),
+  <span class="hljs-attr">buildDependencies</span>: {
+    <span class="hljs-attr">config</span>: [__filename],
+  },
+},
+
+<span class="hljs-comment">// 2. 并行处理</span>
+<span class="hljs-attr">parallelism</span>: <span class="hljs-number">100</span>,
+
+<span class="hljs-comment">// 3. 动态导入优化</span>
+<span class="hljs-attr">optimization</span>: {
+  <span class="hljs-attr">splitChunks</span>: {
+    <span class="hljs-attr">chunks</span>: <span class="hljs-string">&#x27;all&#x27;</span>,
+    <span class="hljs-attr">cacheGroups</span>: {
+      <span class="hljs-attr">vendor</span>: {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/[\\/]node_modules[\\/]/</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;vendors&#x27;</span>,
+        <span class="hljs-attr">priority</span>: <span class="hljs-number">10</span>,
+      },
+      <span class="hljs-attr">common</span>: {
+        <span class="hljs-attr">minChunks</span>: <span class="hljs-number">2</span>,
+        <span class="hljs-attr">priority</span>: <span class="hljs-number">5</span>,
+        <span class="hljs-attr">reuseExistingChunk</span>: <span class="hljs-literal">true</span>,
+      },
+    },
+  },
+},
+
+<span class="hljs-comment">// 4. SWC 替换 Babel</span>
+<span class="hljs-attr">experiments</span>: {
+  <span class="hljs-attr">swcLoader</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">swcMinify</span>: <span class="hljs-literal">true</span>,
+},
+</code></pre><hr>
+<blockquote>
+<p><strong>面试提示</strong>：字节跳动面试常问工程化问题，重点关注模块化构建、微前端方案和性能优化。</p>
+</blockquote>
+<hr>
+<h2 id="6.2-google">6.2 Google 前端代码规范</h2>
+<h3 id="6.2.1-google-javascript">6.2.1 Google JavaScript 风格指南核心要点</h3>
+<p><strong>参考答案：</strong></p>
+<p>Google JavaScript Style Guide 是业界最知名的代码规范之一：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+    
+┃                 Google JavaScript 规范核心要点                      ┃
+┃                                                                  ┃
+   
+┃  1. 缩进：使用 2 个空格缩进，不使用 Tab                         ┃
+    
+┃                                                                  ┃
+   
+┃  2. 分号：每条语句必须以分号结尾                                 ┃
+   
+┃                                                                  ┃
+   
+┃  3. 命名：                                                      ┃
+    
+┃     - 变量/函数：lowerCamelCase                                 ┃
+    
+┃     - 常量：UPPER_SNAKE_CASE                                    ┃
+    
+┃     - 类：UpperCamelCase                                         ┃
+   
+┃                                                                  ┃
+   
+┃  4. 字符串：优先使用单引号                                      ┃
+    
+┃                                                                  ┃
+   
+┃  5. 数组/对象：                                                  ┃
+   
+┃     - 使用字面量创建                                             ┃
+   
+┃     - 末尾添加逗号                                               ┃
+   
+┃                                                                  ┃
+   
+┃  6. 函数：                                                       ┃
+   
+┃     - 尽量使用箭头函数                                           ┃
+   
+┃     - 避免嵌套过深                                               ┃
+   
+┃                                                                  ┃
+   
+┃  7. 模块：                                                       ┃
+   
+┃     - 使用 ES6 模块 (import/export)                             ┃
+    
+┃     - 优先使用具名导出                                           ┃
+   
+┃                                                                  ┃
+   
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+    
+
+</code></pre><hr>
+<h3 id="6.2.2">6.2.2 具体代码示例</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>变量声明：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 使用 const 和 let，避免 var</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PI</span> = <span class="hljs-number">3.14</span>;
+<span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+
+<span class="hljs-comment">// ✅ 常量使用大写加下划线</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MAX_COUNT</span> = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DEFAULT_NAME</span> = <span class="hljs-string">&#x27;guest&#x27;</span>;
+
+<span class="hljs-comment">// ❌ 避免使用 var</span>
+<span class="hljs-keyword">var</span> oldStyle = <span class="hljs-string">&#x27;deprecated&#x27;</span>;
+</code></pre><p><strong>函数命名：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 动词前缀</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getUser</span>(<span class="hljs-params"></span>) { }
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">setName</span>(<span class="hljs-params"></span>) { }
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) { }
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">handleClick</span>(<span class="hljs-params"></span>) { }
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">validateForm</span>(<span class="hljs-params"></span>) { }
+
+<span class="hljs-comment">// ✅ 布尔值使用 is/has/can 前缀</span>
+<span class="hljs-keyword">const</span> isActive = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">const</span> hasPermission = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">const</span> canEdit = <span class="hljs-literal">true</span>;
+</code></pre><p><strong>字符串：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 使用单引号</span>
+<span class="hljs-keyword">const</span> name = <span class="hljs-string">&#x27;John&#x27;</span>;
+<span class="hljs-keyword">const</span> message = <span class="hljs-string">&#x27;Hello World&#x27;</span>;
+
+<span class="hljs-comment">// ✅ 字符串拼接</span>
+<span class="hljs-keyword">const</span> fullName = firstName + <span class="hljs-string">&#x27; &#x27;</span> + lastName;
+<span class="hljs-keyword">const</span> url = <span class="hljs-string">`/api/users/<span class="hljs-subst">${userId}</span>`</span>;
+
+<span class="hljs-comment">// ✅ 模板字符串</span>
+<span class="hljs-keyword">const</span> greeting = <span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>!`</span>;
+</code></pre><p><strong>对象和数组：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 使用字面量创建</span>
+<span class="hljs-keyword">const</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">30</span> };
+<span class="hljs-keyword">const</span> numbers = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+
+<span class="hljs-comment">// ✅ 对象方法简写</span>
+<span class="hljs-keyword">const</span> utils = {
+  <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>) {
+    <span class="hljs-keyword">return</span> a + b;
+  },
+  <span class="hljs-comment">// ❌ 避免</span>
+  <span class="hljs-comment">// add: function(a, b) { return a + b; }</span>
+};
+
+<span class="hljs-comment">// ✅ 展开运算符</span>
+<span class="hljs-keyword">const</span> clone = { ...original };
+<span class="hljs-keyword">const</span> merged = { ...first, ...second };
+<span class="hljs-keyword">const</span> arr = [...first, ...second];
+</code></pre><hr>
+<h3 id="6.2.3-jsdoc">6.2.3 JSDoc 注释规范</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">/**
+ * 计算两个数的和
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">number</span>} <span class="hljs-variable">a</span> - 第一个数
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">number</span>} <span class="hljs-variable">b</span> - 第二个数
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">number</span>} 两数之和
+ * <span class="hljs-doctag">@example</span>
+ * add(1, 2) // returns 3
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a + b;
+}
+
+<span class="hljs-comment">/**
+ * 用户类
+ * <span class="hljs-doctag">@class</span>
+ * <span class="hljs-doctag">@constructor</span>
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">string</span>} <span class="hljs-variable">name</span> - 用户名
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">string</span>} <span class="hljs-variable">email</span> - 用户邮箱
+ */</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> {
+  <span class="hljs-comment">/**
+   * 创建用户
+   * <span class="hljs-doctag">@param</span> {<span class="hljs-type">string</span>} <span class="hljs-variable">name</span>
+   * <span class="hljs-doctag">@param</span> {<span class="hljs-type">string</span>} <span class="hljs-variable">email</span>
+   */</span>
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">name, email</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">email</span> = email;
+  }
+
+  <span class="hljs-comment">/**
+   * 获取用户信息
+   * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Object</span>} 用户信息对象
+   */</span>
+  <span class="hljs-title function_">getInfo</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">name</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>,
+      <span class="hljs-attr">email</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">email</span>,
+    };
+  }
+}
+</code></pre><hr>
+<h2 id="6.3">6.3 阿里巴巴前端代码规范</h2>
+<h3 id="6.3.1">6.3.1 命名规范</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>项目命名：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment"># ✅ 全部小写，以中划线分隔</span>
+mall-management-system
+user-center
+admin-web
+
+<span class="hljs-comment"># ❌ 避免</span>
+mallManagementSystem
+MallManagementSystem
+</code></pre><p><strong>目录命名：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment"># ✅ 小写加中划线，有复数使用复数形式</span>
+scripts styles components images utils
+pages views layouts
+
+<span class="hljs-comment"># ✅ Vue 组件目录使用 kebab-case</span>
+components/
+┣━━ head-search/
+ 
+┣━━ page-loading/
+┣━━ authorized/
+  
+┗━━ notice-icon/
+ 
+</code></pre><p><strong>文件命名：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ JS/CSS/HTML 文件使用小写加中划线</span>
+user-service.<span class="hljs-property">js</span>
+main-header.<span class="hljs-property">scss</span>
+index.<span class="hljs-property">html</span>
+
+<span class="hljs-comment">// ✅ Vue 组件使用 kebab-case</span>
+user-list.<span class="hljs-property">vue</span>
+login-form.<span class="hljs-property">vue</span>
+</code></pre><hr>
+<h3 id="6.3.2-html">6.3.2 HTML 规范</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">&lt;!-- ✅ DOCTYPE 大写 --&gt;</span>
+<span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- ✅ 使用语义化标签 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">header</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">nav</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/&quot;</span>&gt;</span>首页<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/about&quot;</span>&gt;</span>关于<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/contact&quot;</span>&gt;</span>联系<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">nav</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">main</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">article</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>文章标题<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>文章内容...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">article</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">footer</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span><span class="hljs-symbol">&amp;copy;</span> 2024 公司名称<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- ✅ 使用双引号 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;logo.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Logo&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/api&quot;</span>&gt;</span>API<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- ✅ 自闭合标签 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;image.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;描述&quot;</span>&gt;</span>
+</code></pre><hr>
+<h3 id="6.3.3-css">6.3.3 CSS 规范</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>BEM 命名：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">/* Block */</span>
+<span class="hljs-selector-class">.card</span> { }
+
+<span class="hljs-comment">/* Element */</span>
+<span class="hljs-selector-class">.card__header</span> { }
+<span class="hljs-selector-class">.card__body</span> { }
+<span class="hljs-selector-class">.card__footer</span> { }
+
+<span class="hljs-comment">/* Modifier */</span>
+<span class="hljs-selector-class">.card--featured</span> { }
+<span class="hljs-selector-class">.card--disabled</span> { }
+
+<span class="hljs-comment">/* 结合使用 */</span>
+<span class="hljs-selector-class">.card__header--large</span> { }
+</code></pre><p><strong>样式组织顺序：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">/* 1. 布局样式 */</span>
+<span class="hljs-selector-class">.display</span> { <span class="hljs-attribute">display</span>: block; }
+<span class="hljs-selector-class">.flex</span> { <span class="hljs-attribute">display</span>: flex; }
+<span class="hljs-selector-class">.grid</span> { <span class="hljs-attribute">display</span>: grid; }
+
+<span class="hljs-comment">/* 2. 盒模型 */</span>
+<span class="hljs-selector-class">.width</span> { <span class="hljs-attribute">width</span>: <span class="hljs-number">100px</span>; }
+<span class="hljs-selector-class">.height</span> { <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>; }
+<span class="hljs-selector-class">.padding</span> { <span class="hljs-attribute">padding</span>: <span class="hljs-number">16px</span>; }
+<span class="hljs-selector-class">.margin</span> { <span class="hljs-attribute">margin</span>: <span class="hljs-number">16px</span>; }
+
+<span class="hljs-comment">/* 3. 排版 */</span>
+<span class="hljs-selector-class">.font-size</span> { <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span>; }
+<span class="hljs-selector-class">.color</span> { <span class="hljs-attribute">color</span>: <span class="hljs-number">#333</span>; }
+<span class="hljs-selector-class">.text-align</span> { <span class="hljs-attribute">text-align</span>: center; }
+
+<span class="hljs-comment">/* 4. 视觉效果 */</span>
+<span class="hljs-selector-class">.background</span> { <span class="hljs-attribute">background</span>: <span class="hljs-number">#fff</span>; }
+<span class="hljs-selector-class">.border</span> { <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#ddd</span>; }
+<span class="hljs-selector-class">.border-radius</span> { <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>; }
+<span class="hljs-selector-class">.box-shadow</span> { <span class="hljs-attribute">box-shadow</span>: <span class="hljs-number">0</span> <span class="hljs-number">2px</span> <span class="hljs-number">4px</span> <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0.1</span>); }
+
+<span class="hljs-comment">/* 5. 动画 */</span>
+<span class="hljs-selector-class">.transition</span> { <span class="hljs-attribute">transition</span>: all <span class="hljs-number">0.3s</span>; }
+<span class="hljs-selector-class">.animation</span> { <span class="hljs-attribute">animation</span>: fadeIn <span class="hljs-number">0.3s</span>; }
+</code></pre><hr>
+<h3 id="6.3.4-javascript">6.3.4 JavaScript 规范</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 使用 const/let，不使用 var</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">API_BASE_URL</span> = <span class="hljs-string">&#x27;https://api.example.com&#x27;</span>;
+<span class="hljs-keyword">let</span> currentUser = <span class="hljs-literal">null</span>;
+
+<span class="hljs-comment">// ✅ 命名规范</span>
+<span class="hljs-comment">// 变量/函数：lowerCamelCase</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getUserInfo</span>(<span class="hljs-params"></span>) { }
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">handleUserClick</span>(<span class="hljs-params"></span>) { }
+<span class="hljs-keyword">const</span> userList = [];
+<span class="hljs-keyword">const</span> isLoading = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// ✅ 动词前缀</span>
+<span class="hljs-comment">// 添加 addUser</span>
+<span class="hljs-comment">// 删除 deleteUser</span>
+<span class="hljs-comment">// 修改 updateUser</span>
+<span class="hljs-comment">// 查询 getUser / getUserList / getUserDetail</span>
+
+<span class="hljs-comment">// ✅ 条件判断</span>
+<span class="hljs-comment">// 使用严格相等 ===</span>
+<span class="hljs-keyword">if</span> (value === <span class="hljs-string">&#x27;test&#x27;</span>) { }
+<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">&#x27;undefined&#x27;</span>) { }
+
+<span class="hljs-comment">// ✅ 避免嵌套过深（最多3层）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">process</span>(<span class="hljs-params">data</span>) {
+  <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">if</span> (data.<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;success&#x27;</span>) {
+    <span class="hljs-keyword">return</span> data.<span class="hljs-property">result</span>;
+  }
+
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-comment">// ✅ 使用解构</span>
+<span class="hljs-keyword">const</span> { name, age } = user;
+<span class="hljs-keyword">const</span> [first, second] = array;
+
+<span class="hljs-comment">// ✅ 异步处理</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url);
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+    <span class="hljs-keyword">return</span> data;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Fetch error:&#x27;</span>, error);
+    <span class="hljs-keyword">throw</span> error;
+  }
+}
+
+<span class="hljs-comment">// ✅ console 使用规范</span>
+<span class="hljs-comment">// 生产环境移除 console.log</span>
+<span class="hljs-comment">// 仅在开发环境使用</span>
+<span class="hljs-keyword">if</span> (process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;development&#x27;</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Debug info:&#x27;</span>, data);
+}
+</code></pre><hr>
+<h2 id="6.4-airbnb">6.4 Airbnb 代码规范</h2>
+<h3 id="6.4.1">6.4.1 核心原则</h3>
+<p><strong>参考答案：</strong></p>
+<p>Airbnb JavaScript Style Guide 是最受欢迎的 JS 规范之一：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+  
+┃                   Airbnb 规范核心原则                             ┃
+┃                                                                  ┃
+ 
+┃  1. 类型安全                                                    ┃
+  
+┃     - 优先使用 TypeScript                                        ┃
+ 
+┃     - 明确参数和返回类型                                         ┃
+ 
+┃                                                                  ┃
+ 
+┃  2. 函数设计                                                    ┃
+  
+┃     - 函数单一职责                                               ┃
+ 
+┃     - 参数不超过 3 个                                            ┃
+ 
+┃     - 使用默认参数                                               ┃
+ 
+┃                                                                  ┃
+ 
+┃  3. 组件规范 (React)                                           ┃
+   
+┃     - 函数组件优先                                               ┃
+ 
+┃     - 使用 Hooks                                                ┃
+  
+┃     - propTypes 定义                                            ┃
+  
+┃                                                                  ┃
+ 
+┃  4. 模块化                                                      ┃
+  
+┃     - 具名导出                                                   ┃
+ 
+┃     - import 顺序规范                                           ┃
+  
+┃                                                                  ┃
+ 
+┃  5. 异步                                                        ┃
+  
+┃     - async/await 优先                                          ┃
+  
+┃     - Promise 作为后备                                           ┃
+ 
+┃                                                                  ┃
+ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+  
+
+</code></pre><hr>
+<h3 id="6.4.2">6.4.2 详细规则</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>类型：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 基本类型</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span> = <span class="hljs-string">&#x27;John&#x27;</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">age</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">30</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">isActive</span>: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// ✅ 数组</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">names</span>: <span class="hljs-built_in">string</span>[] = [<span class="hljs-string">&#x27;John&#x27;</span>, <span class="hljs-string">&#x27;Jane&#x27;</span>];
+<span class="hljs-keyword">const</span> <span class="hljs-attr">users</span>: <span class="hljs-title class_">Array</span>&lt;<span class="hljs-title class_">User</span>&gt; = [];
+
+<span class="hljs-comment">// ✅ 对象</span>
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">User</span> {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">email</span>?: <span class="hljs-built_in">string</span>;  <span class="hljs-comment">// 可选属性</span>
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">user</span>: <span class="hljs-title class_">User</span> = {
+  <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>,
+};
+
+<span class="hljs-comment">// ✅ 函数类型</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Callback</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">error</span>: <span class="hljs-title class_">Error</span> | <span class="hljs-literal">null</span>, <span class="hljs-attr">result</span>?: <span class="hljs-built_in">any</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">handleCallback</span>: <span class="hljs-title class_">Callback</span> = <span class="hljs-function">(<span class="hljs-params">err, result</span>) =&gt;</span> { };
+</code></pre><p><strong>函数：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 使用默认参数</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createUser</span>(<span class="hljs-params"><span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">age</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">18</span></span>) {
+  <span class="hljs-keyword">return</span> { name, age };
+}
+
+<span class="hljs-comment">// ✅ 返回类型明确</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getUserById</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-title class_">User</span> | <span class="hljs-literal">null</span> {
+  <span class="hljs-keyword">return</span> users.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">u</span> =&gt;</span> u.<span class="hljs-property">id</span> === id) || <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-comment">// ✅ 箭头函数优先</span>
+<span class="hljs-keyword">const</span> add = (<span class="hljs-attr">a</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">b</span>: <span class="hljs-built_in">number</span>): <span class="hljs-function"><span class="hljs-params">number</span> =&gt;</span> a + b;
+
+<span class="hljs-comment">// ✅ 使用解构</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">processUser</span>(<span class="hljs-params">{ name, age }: <span class="hljs-title class_">User</span></span>): <span class="hljs-built_in">string</span> {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${name}</span> is <span class="hljs-subst">${age}</span> years old`</span>;
+}
+</code></pre><p><strong>React 组件：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ✅ 函数组件</span>
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">ButtonProps</span> {
+  <span class="hljs-attr">onClick</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+  <span class="hljs-attr">children</span>: <span class="hljs-title class_">React</span>.<span class="hljs-property">ReactNode</span>;
+  <span class="hljs-attr">variant</span>?: <span class="hljs-string">&#x27;primary&#x27;</span> | <span class="hljs-string">&#x27;secondary&#x27;</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Button</span>(<span class="hljs-params">{
+  onClick,
+  children,
+  variant = <span class="hljs-string">&#x27;primary&#x27;</span>
+}: <span class="hljs-title class_">ButtonProps</span></span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
+      <span class="hljs-attr">className</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">btn</span> <span class="hljs-attr">btn--</span>${<span class="hljs-attr">variant</span>}`}
+      <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onClick}</span>
+    &gt;</span>
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// ✅ 使用 useCallback 优化回调</span>
+<span class="hljs-keyword">const</span> handleClick = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;clicked&#x27;</span>);
+}, []);
+
+<span class="hljs-comment">// ✅ 使用 useMemo 优化计算</span>
+<span class="hljs-keyword">const</span> filteredList = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">return</span> list.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item.<span class="hljs-property">active</span>);
+}, [list]);
+</code></pre><hr>
+<h2 id="6.5">6.5 工程化实践总结</h2>
+<h3 id="6.5.1">6.5.1 代码规范工具链</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+   
+┃                    代码规范工具链                                  ┃
+┃                                                                  ┃
+  
+┃  编辑器层                                                        ┃
+  
+┃  ┣━━ VS Code 配置                                               ┃
+   
+┃  ┣━━ EditorConfig                                               ┃
+   
+┃  ┗━━ Prettier 保存时格式化                                      ┃
+   
+┃                                                                  ┃
+  
+┃  检查层                                                          ┃
+  
+┃  ┣━━ ESLint - JavaScript 检查                                   ┃
+   
+┃  ┣━━ stylelint - CSS 检查                                       ┃
+   
+┃  ┗━━ commitlint - 提交信息检查                                  ┃
+   
+┃                                                                  ┃
+  
+┃  Git 层                                                          ┃
+  
+┃  ┣━━ husky - Git 钩子                                           ┃
+   
+┃  ┣━━ lint-staged - 暂存区检查                                   ┃
+   
+┃  ┗━━ conventional-changelog - 提交规范                           ┃
+  
+┃                                                                  ┃
+  
+┃  CI/CD 层                                                        ┃
+  
+┃  ┣━━ GitHub Actions                                              ┃
+  
+┃  ┣━━ GitLab CI                                                   ┃
+  
+┃  ┗━━ Jenkins                                                     ┃
+  
+┃                                                                  ┃
+  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+   
+
+</code></pre><hr>
+<h3 id="6.5.2-eslint">6.5.2 ESLint 配置示例</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// .eslintrc.js</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">root</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">env</span>: {
+    <span class="hljs-attr">browser</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">es2021</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">node</span>: <span class="hljs-literal">true</span>,
+  },
+  <span class="hljs-attr">extends</span>: [
+    <span class="hljs-string">&#x27;eslint:recommended&#x27;</span>,
+    <span class="hljs-string">&#x27;plugin:react/recommended&#x27;</span>,
+    <span class="hljs-string">&#x27;plugin:@typescript-eslint/recommended&#x27;</span>,
+    <span class="hljs-string">&#x27;plugin:react-hooks/recommended&#x27;</span>,
+    <span class="hljs-string">&#x27;prettier&#x27;</span>, <span class="hljs-comment">// 必须放在最后</span>
+  ],
+  <span class="hljs-attr">parser</span>: <span class="hljs-string">&#x27;@typescript-eslint/parser&#x27;</span>,
+  <span class="hljs-attr">parserOptions</span>: {
+    <span class="hljs-attr">ecmaFeatures</span>: {
+      <span class="hljs-attr">jsx</span>: <span class="hljs-literal">true</span>,
+    },
+    <span class="hljs-attr">ecmaVersion</span>: <span class="hljs-string">&#x27;latest&#x27;</span>,
+    <span class="hljs-attr">sourceType</span>: <span class="hljs-string">&#x27;module&#x27;</span>,
+  },
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-string">&#x27;react&#x27;</span>, <span class="hljs-string">&#x27;@typescript-eslint&#x27;</span>, <span class="hljs-string">&#x27;react-hooks&#x27;</span>],
+  <span class="hljs-attr">rules</span>: {
+    <span class="hljs-comment">// React</span>
+    <span class="hljs-string">&#x27;react/react-in-jsx-scope&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;react/prop-types&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;react-hooks/rules-of-hooks&#x27;</span>: <span class="hljs-string">&#x27;error&#x27;</span>,
+    <span class="hljs-string">&#x27;react-hooks/exhaustive-deps&#x27;</span>: <span class="hljs-string">&#x27;warn&#x27;</span>,
+
+    <span class="hljs-comment">// TypeScript</span>
+    <span class="hljs-string">&#x27;@typescript-eslint/no-unused-vars&#x27;</span>: [<span class="hljs-string">&#x27;error&#x27;</span>, { <span class="hljs-attr">argsIgnorePattern</span>: <span class="hljs-string">&#x27;^_&#x27;</span> }],
+    <span class="hljs-string">&#x27;@typescript-eslint/explicit-function-return-type&#x27;</span>: <span class="hljs-string">&#x27;off&#x27;</span>,
+    <span class="hljs-string">&#x27;@typescript-eslint/no-explicit-any&#x27;</span>: <span class="hljs-string">&#x27;warn&#x27;</span>,
+
+    <span class="hljs-comment">// General</span>
+    <span class="hljs-string">&#x27;no-console&#x27;</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;production&#x27;</span> ? <span class="hljs-string">&#x27;error&#x27;</span> : <span class="hljs-string">&#x27;warn&#x27;</span>,
+    <span class="hljs-string">&#x27;no-debugger&#x27;</span>: process.<span class="hljs-property">env</span>.<span class="hljs-property">NODE_ENV</span> === <span class="hljs-string">&#x27;production&#x27;</span> ? <span class="hljs-string">&#x27;error&#x27;</span> : <span class="hljs-string">&#x27;off&#x27;</span>,
+  },
+  <span class="hljs-attr">settings</span>: {
+    <span class="hljs-attr">react</span>: {
+      <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;detect&#x27;</span>,
+    },
+  },
+};
+</code></pre><hr>
+<h3 id="6.5.3-prettier">6.5.3 Prettier 配置</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// .prettierrc</span>
+<span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;printWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">100</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;tabWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;useTabs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;semi&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;singleQuote&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;quoteProps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;as-needed&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;jsxSingleQuote&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;trailingComma&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;es5&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;bracketSpacing&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;jsxBracketSameLine&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;arrowParens&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;always&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;endOfLine&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;lf&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><hr>
+<h3 id="6.5.4-git">6.5.4 Git 提交规范</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>Commit Message 格式：</strong></p>
+<pre class="hljs"><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+
+&lt;body&gt;
+
+&lt;footer&gt;
+</code></pre><p><strong>Type 类型：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">feat</td>
+<td style="text-align:left">新功能</td>
+</tr>
+<tr>
+<td style="text-align:left">fix</td>
+<td style="text-align:left">Bug 修复</td>
+</tr>
+<tr>
+<td style="text-align:left">docs</td>
+<td style="text-align:left">文档更新</td>
+</tr>
+<tr>
+<td style="text-align:left">style</td>
+<td style="text-align:left">格式调整</td>
+</tr>
+<tr>
+<td style="text-align:left">refactor</td>
+<td style="text-align:left">重构</td>
+</tr>
+<tr>
+<td style="text-align:left">test</td>
+<td style="text-align:left">测试相关</td>
+</tr>
+<tr>
+<td style="text-align:left">chore</td>
+<td style="text-align:left">构建/工具</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示例：</strong></p>
+<pre class="hljs"><code>feat(user): add login API
+
+- implement login with JWT
+- add token refresh logic
+- add logout functionality
+
+Closes #123
+</code></pre><hr>
+<h2 id="6.6">6.6 面试常见问题</h2>
+<p><strong>Q1: 大厂前端工程化主要解决哪些问题？</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">问题</th>
+<th style="text-align:left">解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">多项目维护成本高</td>
+<td style="text-align:left">Monorepo 架构</td>
+</tr>
+<tr>
+<td style="text-align:left">代码复用困难</td>
+<td style="text-align:left">组件库/工具库抽取</td>
+</tr>
+<tr>
+<td style="text-align:left">构建速度慢</td>
+<td style="text-align:left">自研构建工具/缓存优化</td>
+</tr>
+<tr>
+<td style="text-align:left">多人协作困难</td>
+<td style="text-align:left">微前端方案</td>
+</tr>
+<tr>
+<td style="text-align:left">质量难以保证</td>
+<td style="text-align:left">自动化测试/诊断工具</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Q2: 代码规范如何落地？</strong></p>
+<ol>
+<li><strong>工具层</strong>：ESLint + Prettier + EditorConfig</li>
+<li><strong>Git 层</strong>：husky + lint-staged + commitlint</li>
+<li><strong>CI 层</strong>：CI 流水线强制检查</li>
+<li><strong>文化层</strong>：代码评审 + 培训</li>
+</ol>
+<p><strong>Q3: 如何选择代码规范？</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">推荐规范</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">React 项目</td>
+<td style="text-align:left">Airbnb + TypeScript</td>
+</tr>
+<tr>
+<td style="text-align:left">Vue 项目</td>
+<td style="text-align:left">阿里规范 + TypeScript</td>
+</tr>
+<tr>
+<td style="text-align:left">简单项目</td>
+<td style="text-align:left">Google 规范简化版</td>
+</tr>
+<tr>
+<td style="text-align:left">企业级</td>
+<td style="text-align:left">自定义规范集合</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p><strong>面试提示</strong>：大厂工程化实践是高级前端工程师的必备知识，需要理解背后的原理和实际应用场景。代码规范是团队协作的基础，不仅要会用，还要理解为什么这样设计。</p>
+</blockquote>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="3-5-业务架构设计.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第3卷 工程化与业务架构</span>
+          </a>
+              <a href="4-1-MakerWorld面试题.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第4卷 拓竹科技</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第5卷-项目实战案例 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#3-unothree" class="toc-link "><span>第3章 UnoThree</span></a></li><li class="toc-item"><a href="#1.1-13d" class="toc-link "><span>1.1 问题1：3D 渲染性能如何优化？</span></a></li><li class="toc-item"><a href="#22d3d" class="toc-link "><span>问题 2：2D/3D 模式如何切换？</span></a></li><li class="toc-item"><a href="#2.1-3uno" class="toc-link "><span>2.1 问题3：UNO 游戏规则如何实现？</span></a></li><li class="toc-item"><a href="#4" class="toc-link "><span>问题 4：多人游戏状态如何同步？</span></a></li><li class="toc-item"><a href="#3.1-5ai" class="toc-link "><span>3.1 问题5：AI 对手如何实现？</span></a></li><li class="toc-item"><a href="#4.1-6" class="toc-link "><span>4.1 问题6：游戏性能如何优化？</span></a></li><li class="toc-item"><a href="#5.1-7" class="toc-link "><span>5.1 问题7：项目架构是如何设计的？</span></a></li><li class="toc-item"><a href="#6.1-q" class="toc-link "><span>6.1 Q: 遇到的最大技术挑战是什么？</span></a></li><li class="toc-item"><a href="#7.1" class="toc-link "><span>7.1 核心技术亮点</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第5卷 项目实战案例 / 第3章 UnoThree</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第5卷 项目实战案例</span>
+            </div>
+            <h1 class="article-title">第5卷-项目实战案例</h1>
+          </header>
+
+          <div class="content"><h2 id="3-unothree">第3章 UnoThree</h2>
+<blockquote>
+<p>UnoThree 是一个完整实现的 UNO 牌游戏的多人在线对战平台，支持 2D 和 3D 两种渲染模式。</p>
+</blockquote>
+<hr>
+<h3 id="1.1-13d">1.1 问题1：3D 渲染性能如何优化？</h3>
+<p><strong>考察点：</strong> Three.js、性能优化</p>
+<p><strong>参考答案：</strong></p>
+<ol>
+<li><strong>使用 useMemo 缓存计算结果</strong></li>
+</ol>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> cameraConfig = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 计算相机位置</span>
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">position</span>: cameraPos, <span class="hljs-attr">fov</span>: cameraFov };
+}, [gameState?.<span class="hljs-property">players</span>.<span class="hljs-property">length</span>]);
+</code></pre><ol start="2">
+<li><strong>使用 React Spring 实现动画</strong></li>
+</ol>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> { springPos, springScale } = <span class="hljs-title function_">useSpring</span>({
+  <span class="hljs-attr">springPos</span>: [position[<span class="hljs-number">0</span>], position[<span class="hljs-number">1</span>] + offset, position[<span class="hljs-number">2</span>]],
+  <span class="hljs-attr">springScale</span>: hovered ? <span class="hljs-number">1.25</span> : <span class="hljs-number">1</span>,
+  <span class="hljs-attr">config</span>: { <span class="hljs-attr">mass</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">tension</span>: <span class="hljs-number">350</span>, <span class="hljs-attr">friction</span>: <span class="hljs-number">35</span> }
+});
+</code></pre><ol start="3">
+<li><strong>粒子系统优化</strong></li>
+</ol>
+<ul>
+<li>使用 BufferGeometry</li>
+<li>限制粒子数量</li>
+<li>使用 useFrame 更新而非 React 状态</li>
+</ul>
+<hr>
+<h3 id="22d3d">问题 2：2D/3D 模式如何切换？</h3>
+<p><strong>考察点：</strong> 渲染模式切换、组件懒加载</p>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> [viewMode, setViewMode] = useState&lt;<span class="hljs-string">&#x27;2d&#x27;</span> | <span class="hljs-string">&#x27;3d&#x27;</span> | <span class="hljs-string">&#x27;classic&#x27;</span>&gt;(<span class="hljs-string">&#x27;3d&#x27;</span>);
+
+<span class="hljs-comment">// 经典模式懒加载</span>
+<span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">if</span> (viewMode === <span class="hljs-string">&#x27;classic&#x27;</span> &amp;&amp; !<span class="hljs-title class_">ClassicGame</span>) {
+    <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../components/game/classic/ClassicGame&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-variable language_">module</span></span>) =&gt;</span> {
+      <span class="hljs-title function_">setClassicGame</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">ClassicGame</span>);
+    });
+  }
+}, [viewMode]);
+</code></pre><hr>
+<h3 id="2.1-3uno">2.1 问题3：UNO 游戏规则如何实现？</h3>
+<p><strong>考察点：</strong> 游戏状态机、规则引擎</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="">核心规则</h4>
+<ol>
+<li><strong>出牌条件</strong>：颜色匹配、类型匹配、数字匹配</li>
+<li><strong>功能牌效果</strong>：
+<ul>
+<li>Skip：跳过下家</li>
+<li>Reverse：反转方向</li>
+<li>Draw Two：下家摸2张</li>
+<li>Wild：变色</li>
+<li>Wild Draw Four：下家摸4张并变色</li>
+</ul>
+</li>
+<li><strong>UNO 机制</strong>：剩1张时必须喊UNO</li>
+</ol>
+<h4 id="">实现方式</h4>
+<pre class="hljs"><code><span class="hljs-title function_">isPlayable</span>(<span class="hljs-attr">card</span>: <span class="hljs-title class_">Card</span>, <span class="hljs-attr">topCard</span>: <span class="hljs-title class_">Card</span>, <span class="hljs-attr">currentColor</span>: <span class="hljs-title class_">CardColor</span>): <span class="hljs-built_in">boolean</span> {
+  <span class="hljs-keyword">return</span> card.<span class="hljs-property">color</span> === <span class="hljs-title class_">CardColor</span>.<span class="hljs-property">WILD</span> ||
+         card.<span class="hljs-property">color</span> === currentColor ||
+         card.<span class="hljs-property">type</span> === topCard.<span class="hljs-property">type</span>;
+}
+</code></pre><hr>
+<h3 id="4">问题 4：多人游戏状态如何同步？</h3>
+<p><strong>考察点：</strong> WebSocket、实时通信</p>
+<p><strong>参考答案：</strong></p>
+<ol>
+<li><strong>服务端为真源</strong>：游戏状态存储在后端</li>
+<li><strong>WebSocket 广播</strong>：状态变更实时广播</li>
+<li><strong>乐观更新</strong>：本地先更新，再等待服务器确认</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 客户端</span>
+socket.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;gameStateUpdate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> {
+  useGameStore.<span class="hljs-title function_">getState</span>().<span class="hljs-title function_">setGameState</span>(state);
+});
+
+<span class="hljs-comment">// 服务端</span>
+<span class="hljs-title function_">broadcastState</span>(<span class="hljs-params"><span class="hljs-attr">roomId</span>: <span class="hljs-built_in">string</span></span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">server</span>.<span class="hljs-title function_">to</span>(roomId).<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;gameStateUpdate&#x27;</span>, gameState);
+}
+</code></pre><hr>
+<h3 id="3.1-5ai">3.1 问题5：AI 对手如何实现？</h3>
+<p><strong>考察点：</strong> AI 算法、决策系统</p>
+<p><strong>参考答案：</strong></p>
+<h4 id="">三种难度</h4>
+<ul>
+<li><strong>简单（EASY）</strong>：随机选择可出卡牌</li>
+<li><strong>中等（MEDIUM）</strong>：优先打出颜色最多的普通牌，保留万能牌</li>
+<li><strong>困难（HARD）</strong>：攻击策略 + 综合评估</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-title function_">getBestMove</span>(<span class="hljs-attr">hand</span>: <span class="hljs-title class_">Card</span>[], <span class="hljs-attr">topCard</span>: <span class="hljs-title class_">Card</span>, <span class="hljs-attr">difficulty</span>: <span class="hljs-title class_">AIDifficulty</span>): <span class="hljs-title class_">Card</span> {
+  <span class="hljs-keyword">const</span> playable = hand.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">isPlayable</span>(c, topCard));
+
+  <span class="hljs-keyword">if</span> (difficulty === <span class="hljs-string">&#x27;EASY&#x27;</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">random</span>(playable);
+  }
+
+  <span class="hljs-keyword">if</span> (difficulty === <span class="hljs-string">&#x27;MEDIUM&#x27;</span>) {
+    <span class="hljs-keyword">const</span> colorCount = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">countColors</span>(playable);
+    <span class="hljs-keyword">const</span> bestColor = <span class="hljs-title function_">maxBy</span>(colorCount);
+    <span class="hljs-keyword">return</span> playable.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c.<span class="hljs-property">color</span> === bestColor) || playable[<span class="hljs-number">0</span>];
+  }
+
+  <span class="hljs-comment">// HARD: 攻击下家</span>
+  <span class="hljs-keyword">if</span> (hand.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">3</span>) {
+    <span class="hljs-keyword">const</span> actionCards = playable.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;NUMBER&#x27;</span>);
+    <span class="hljs-keyword">if</span> (actionCards.<span class="hljs-property">length</span>) <span class="hljs-keyword">return</span> actionCards[<span class="hljs-number">0</span>];
+  }
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre><hr>
+<h3 id="4.1-6">4.1 问题6：游戏性能如何优化？</h3>
+<p><strong>考察点：</strong> 性能优化、帧率保障</p>
+<p><strong>参考答案：</strong></p>
+<table>
+<thead>
+<tr>
+<th>优化项</th>
+<th>方案</th>
+<th>预期效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3D 渲染</td>
+<td>useMemo + React Spring</td>
+<td>60 FPS</td>
+</tr>
+<tr>
+<td>粒子系统</td>
+<td>BufferGeometry</td>
+<td>减少内存</td>
+</tr>
+<tr>
+<td>2D 动画</td>
+<td>Framer Motion</td>
+<td>60 FPS</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>二进制传输</td>
+<td>减少延迟</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>选择性订阅</td>
+<td>减少重渲染</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="5.1-7">5.1 问题7：项目架构是如何设计的？</h3>
+<p><strong>考察点：</strong> 系统设计、架构思维</p>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>前端架构
+┣━━ 渲染层
+┃   ┣━━ Scene3D (3D)
+┃   ┣━━ Scene2D (2D)
+┃   ┗━━ ClassicGame (经典)
+┃
+┣━━ 状态层 (Zustand)
+┃   ┗━━ useGameStore
+┃
+┗━━ 通信层 (Socket.io)
+    ┗━━ GameSocketContext
+
+后端架构 (NestJS)
+┣━━ GameGateway (WebSocket)
+┣━━ GameService (游戏逻辑)
+┗━━ AiService (AI 决策)
+</code></pre><hr>
+<h3 id="6.1-q">6.1 Q: 遇到的最大技术挑战是什么？</h3>
+<p><strong>回答框架</strong>：</p>
+<ol>
+<li>描述挑战场景</li>
+<li>尝试的解决方案</li>
+<li>最终方案</li>
+<li>学到的经验</li>
+</ol>
+<p><strong>示例</strong>：</p>
+<blockquote>
+<p>在实现 3D 粒子特效时，最初使用 React 状态管理粒子位置，但 200+ 粒子导致严重掉帧。后来改用 Three.js 的 BufferGeometry 和 useFrame 直接操作 GPU，帧率从 20FPS 提升到 60FPS。</p>
+</blockquote>
+<hr>
+<h3 id="7.1">7.1 核心技术亮点</h3>
+<table>
+<thead>
+<tr>
+<th>亮点</th>
+<th>技术深度</th>
+<th>业务价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>双渲染模式</td>
+<td>2D/3D 自由切换</td>
+<td>适配不同设备</td>
+</tr>
+<tr>
+<td>完整 UNO 规则</td>
+<td>质疑+4/喊UNO</td>
+<td>真实游戏体验</td>
+</tr>
+<tr>
+<td>AI 对手</td>
+<td>三种难度</td>
+<td>单人可玩</td>
+</tr>
+<tr>
+<td>响应式设计</td>
+<td>移动端适配</td>
+<td>全平台支持</td>
+</tr>
+<tr>
+<td>实时通信</td>
+<td><a href="http://Socket.io">Socket.io</a></td>
+<td>多人对战</td>
+</tr>
+</tbody>
+</table>
+<h3 id="">与竞品对比</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>UnoThree</th>
+<th>其他 Web UNO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3D 渲染</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>AI 对手</td>
+<td>3种难度</td>
+<td>1种/无</td>
+</tr>
+<tr>
+<td>响应式</td>
+<td>完善</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>开源</td>
+<td>是</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="8.1-30">8.1 30 秒电梯陈述</h3>
+<p>我在 UnoThree 负责多人实时对战链路与 2D/3D 双渲染体验，核心工作是把&quot;可玩&quot;升级为&quot;稳定可运营&quot;。我重点推进了游戏规则引擎、状态广播优化、弱网重连和跨端响应式，解决了多人并发下的回合同步与动画一致性问题，最终实现了更稳定的对局体验与更可控的线上维护成本。</p>
+<hr>
+<h3 id="8.2-3">8.2 3 分钟深挖版本</h3>
+<ol>
+<li>
+<p><strong>目标定义</strong></p>
+<ul>
+<li>体验目标：操作反馈快、动画自然、规则可解释</li>
+<li>稳定目标：断线可恢复、房间不&quot;僵尸化&quot;、状态不分叉</li>
+<li>运营目标：可观测、可回放、可快速定位争议对局</li>
+</ul>
+</li>
+<li>
+<p><strong>架构关键点</strong></p>
+<ul>
+<li>前端采用 2D/3D 双通道渲染：弱机型保底 2D，高性能设备可切 3D</li>
+<li>游戏状态以服务端为真源，客户端保留局部乐观动画，避免状态漂移</li>
+<li>WebSocket 事件按&quot;动作-校验-广播-落盘&quot;流程组织</li>
+</ul>
+</li>
+<li>
+<p><strong>难点与解决</strong></p>
+<ul>
+<li>难点 A：特殊牌（+4、反转、跳过）叠加后状态复杂
+<ul>
+<li>解决：规则引擎分层（合法性判定、效果执行、回合推进）</li>
+</ul>
+</li>
+<li>难点 B：多人并发动作导致竞争
+<ul>
+<li>解决：服务端回合锁 + 操作幂等键 + 超时处理</li>
+</ul>
+</li>
+<li>难点 C：动画与真实状态错位
+<ul>
+<li>解决：动画只做表现层，最终状态由服务端快照驱动</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="8.3-kpi">8.3 KPI 面试官高压问题</h3>
+<h4 id="">代码锚点版追问</h4>
+<ol>
+<li><code>startGlobalTimer()</code> 每秒扫描所有房间，房间数上来后复杂度怎么控？</li>
+<li><code>checkHeartbeats()</code> 把玩家标记离线后，为什么不立刻删房？</li>
+<li><code>handleChallenge()</code> 与 <code>handlePendingDrawPlay()</code> 的状态互斥是如何保证的？</li>
+<li><code>AiService.getBestMove()</code> 与超时 <code>autoPlay()</code> 之间冲突时谁优先？</li>
+</ol>
+<h4 id="3">业务价值（3 问）</h4>
+<ol>
+<li>UNO 已经是成熟玩法，你的技术优化如何转化为留存和时长？</li>
+<li>2D 和 3D 双模式是不是&quot;炫技&quot;，真实 ROI 在哪？</li>
+<li>你如何证明玩家流失主要是性能/同步问题而非玩法问题？</li>
+</ol>
+<h4 id="3">架构取舍（3 问）</h4>
+<ol start="4">
+<li>为什么状态真源放服务端，而不是前端主导 + 补偿？</li>
+<li>为什么不用纯 ECS/游戏引擎架构，而采用 React 组件化？</li>
+<li>规则引擎为什么不单独拆成独立服务？</li>
+</ol>
+<h4 id="3">性能（3 问）</h4>
+<ol start="7">
+<li>同屏 10 人、复杂动画下，帧率怎么保障？</li>
+<li>3D 模式下 GPU 占用过高如何降级？</li>
+<li>音效、动画、网络事件同时触发时，如何避免主线程阻塞？</li>
+</ol>
+<h4 id="3">稳定性（3 问）</h4>
+<ol start="10">
+<li>断线重连后，如何防止客户端看到过期回合？</li>
+<li>遇到&quot;双方都说自己先出牌&quot;你如何裁决？</li>
+<li>僵尸房间和幽灵玩家如何清理？</li>
+</ol>
+<hr>
+<h3 id="8.4">8.4 量化指标卡</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>指标</th>
+<th>建议目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>体验</td>
+<td>操作反馈延迟 P95</td>
+<td>≤ 150ms</td>
+</tr>
+<tr>
+<td>渲染</td>
+<td>对局帧率 P95</td>
+<td>2D ≥ 58 FPS；3D ≥ 45 FPS</td>
+</tr>
+<tr>
+<td>同步</td>
+<td>状态广播到达延迟 P95</td>
+<td>≤ 250ms</td>
+</tr>
+<tr>
+<td>稳定</td>
+<td>对局中断率</td>
+<td>≤ 0.8%</td>
+</tr>
+<tr>
+<td>一致性</td>
+<td>状态分叉率</td>
+<td>≤ 0.1%</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="8.5-90">8.5 90 天迭代路线</h3>
+<ol>
+<li><strong>第 1 阶段（0-30 天）</strong>：完善对局可观测（房间、动作、异常）与压测基线</li>
+<li><strong>第 2 阶段（31-60 天）</strong>：建立规则引擎自动化回归矩阵（功能牌组合）</li>
+<li><strong>第 3 阶段（61-90 天）</strong>：推进反作弊策略与回放审计系统产品化</li>
+</ol>
+<hr>
+<p><strong>文档结束（已增强面试版本）</strong></p>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="5-2-核心技术实现.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第5卷 FastDocument</span>
+          </a>
+              <a href="6-1-手写代码题库.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第6卷 手写代码题</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

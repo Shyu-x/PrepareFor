@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第3卷-工程实战 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#1" class="toc-link "><span>第1章 前端工程化</span></a></li><li class="toc-item"><a href="#1.1" class="toc-link "><span>1.1 模块化规范</span></a></li><li class="toc-item"><a href="#1.1.2-commonjs" class="toc-link "><span>1.1.2 CommonJS规范</span></a></li><li class="toc-item"><a href="#1.1.3-amd" class="toc-link "><span>1.1.3 AMD规范</span></a></li><li class="toc-item"><a href="#1.1.4-cmd" class="toc-link "><span>1.1.4 CMD规范</span></a></li><li class="toc-item"><a href="#1.1.5-es-module" class="toc-link "><span>1.1.5 ES Module规范</span></a></li><li class="toc-item"><a href="#1.1.6-umd" class="toc-link "><span>1.1.6 UMD规范</span></a></li><li class="toc-item"><a href="#1.2" class="toc-link "><span>1.2 代码组织</span></a></li><li class="toc-item"><a href="#1.2.1" class="toc-link "><span>1.2.1 项目目录结构</span></a></li><li class="toc-item"><a href="#1.2.2" class="toc-link "><span>1.2.2 模块与组件的设计原则</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第3卷 工程实战 / 第1章 前端工程化</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第3卷 工程实战</span>
+            </div>
+            <h1 class="article-title">第3卷-工程实战</h1>
+          </header>
+
+          <div class="content"><h2 id="1">第1章 前端工程化</h2>
+<h3 id="1.1">1.1 模块化规范</h3>
+<h4 id="1.1.1">1.1.1 模块化的发展历程</h4>
+<p>模块化是前端工程化的基础，它经历了从无到有、从简单到复杂的发展过程。理解模块化的发展历程有助于我们理解为什么需要模块化，以及不同模块化规范存在的意义。</p>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>模块化的核心思想是将一个大型的程序拆分成相互依赖的小文件，这些小文件（模块）可以独立开发、测试和维护，最后通过特定的导入导出机制组合在一起。模块化解决了以下核心问题：</p>
+<ul>
+<li><strong>命名空间污染</strong>：避免全局变量冲突</li>
+<li><strong>依赖管理</strong>：明确模块之间的依赖关系</li>
+<li><strong>代码复用</strong>：提高代码的可重用性</li>
+<li><strong>可维护性</strong>：便于代码的维护和更新</li>
+</ul>
+</blockquote>
+<p><strong>早期的全局变量模式</strong>
+在早期，JavaScript没有模块化机制，开发者通常使用全局变量来共享代码：</p>
+<pre class="hljs"><code><span class="hljs-comment">// module1.js</span>
+<span class="hljs-keyword">var</span> name = <span class="hljs-string">&#x27;Module1&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">sayHello</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Hello from &#x27;</span> + name);
+}
+
+<span class="hljs-comment">// 使用全局变量</span>
+<span class="hljs-variable language_">window</span>.<span class="hljs-property">Module1</span> = {
+  <span class="hljs-attr">name</span>: name,
+  <span class="hljs-attr">sayHello</span>: sayHello
+};
+</code></pre><pre class="hljs"><code><span class="hljs-comment">// main.js</span>
+<span class="hljs-title class_">Module1</span>.<span class="hljs-title function_">sayHello</span>(); <span class="hljs-comment">// &quot;Hello from Module1&quot;</span>
+</code></pre><blockquote>
+<p><strong>特别说明（常见误区、性能、兼容性、面试考点）</strong></p>
+<ul>
+<li>全局变量模式是早期最简单的模块化尝试，但存在严重的命名冲突问题</li>
+<li>当项目规模增大时，全局变量模式会导致&quot;变量命名战争&quot;，不同团队开发的代码可能相互覆盖</li>
+<li>面试常考点：为什么全局变量模式不适合大型项目？如何解决命名冲突？</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>帮助理解（类比、场景分析、优缺点对比）</strong></p>
+<p>想象一个公司没有部门划分，所有人都在同一个大办公室里工作，每个人的文件都放在公共桌上。这就会造成：有人拿错了别人的文件、有人不小心删除了别人的数据、很难追踪是谁修改了什么。模块化就像是为每个部门建立独立的办公室，每个部门有自己的文件柜，只有通过特定的方式（门禁系统）才能访问其他部门的资源。</p>
+</blockquote>
+<p>这种方式的缺点：</p>
+<ul>
+<li>命名冲突：不同模块可能使用相同的变量名</li>
+<li>依赖混乱：无法明确模块之间的依赖关系</li>
+<li>难以维护：模块之间的关系不清晰</li>
+</ul>
+<p><strong>IIFE（立即调用函数表达式）</strong>
+IIFE是一种早期的模块化解决方案，通过创建函数作用域来避免全局污染：</p>
+<pre class="hljs"><code><span class="hljs-comment">// module.js</span>
+<span class="hljs-keyword">var</span> <span class="hljs-title class_">Module</span> = (<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> _private = <span class="hljs-string">&#x27;I am private&#x27;</span>;
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">_privateMethod</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(_private);
+  }
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">publicMethod</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-title function_">_privateMethod</span>();
+    }
+  };
+})();
+
+<span class="hljs-title class_">Module</span>.<span class="hljs-title function_">publicMethod</span>(); <span class="hljs-comment">// &quot;I am private&quot;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Module</span>.<span class="hljs-property">_private</span>); <span class="hljs-comment">// undefined</span>
+</code></pre><blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>IIFE（Immediately Invoked Function Expression，立即调用函数表达式）是一种创建私有作用域的技术。它的核心原理是：</p>
+<ul>
+<li>使用函数作用域包裹代码，创建私有变量</li>
+<li>通过返回值（通常是一个对象）暴露有限的公共API</li>
+<li>函数在定义后立即执行，返回一个包含方法的对象</li>
+</ul>
+<p>IIFE 实现了基本的封装和信息隐藏，是现代模块化规范的雏形。</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-comment">// 模块依赖</span>
+<span class="hljs-keyword">var</span> <span class="hljs-title class_">ModuleA</span> = (<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Module A&#x27;</span>
+  };
+})();
+
+<span class="hljs-keyword">var</span> <span class="hljs-title class_">ModuleB</span> = (<span class="hljs-keyword">function</span>(<span class="hljs-params">ModuleA</span>) {
+  <span class="hljs-keyword">var</span> name = <span class="hljs-string">&#x27;Module B&#x27;</span>;
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">getFullName</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> name + <span class="hljs-string">&#x27; depends on &#x27;</span> + <span class="hljs-title class_">ModuleA</span>.<span class="hljs-property">name</span>;
+  }
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">getFullName</span>: getFullName
+  };
+})(<span class="hljs-title class_">ModuleA</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">ModuleB</span>.<span class="hljs-title function_">getFullName</span>()); <span class="hljs-comment">// &quot;Module B depends on Module A&quot;</span>
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>在实际项目中，IIFE 常用于：</p>
+<ul>
+<li>创建独立的第三方库作用域（如 jQuery）</li>
+<li>封装不需要暴露给外部的工具函数</li>
+<li>模拟私有方法和属性</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>帮助理解</strong></p>
+<p>IIFE 就像是一个&quot;保险箱&quot;。你把贵重物品（私有变量）放在保险箱里，只有通过特定的钥匙（返回的对象方法）才能访问。这样即使有人进入了你的房间（全局作用域），也无法直接拿走你的贵重物品。</p>
+</blockquote>
+<hr>
+<h3 id="1.1.2-commonjs">1.1.2 CommonJS规范</h3>
+<p>CommonJS是Node.js使用的模块化规范，它使用<code>require</code>来引入模块，<code>module.exports</code>来导出模块。</p>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>CommonJS 是 Node.js 的官方模块系统，其核心特点包括：</p>
+<ul>
+<li><strong>同步加载</strong>：适合服务器端环境，因为文件都在本地磁盘</li>
+<li><strong>运行时加载</strong>：模块在运行时才确定依赖关系</li>
+<li><strong>值拷贝</strong>：导出的是值的拷贝，导出的原始值变化不会影响导入方</li>
+<li><strong>缓存机制</strong>：模块只会加载一次，后续 require 直接从缓存获取</li>
+</ul>
+<p><strong>核心API</strong>：</p>
+<ul>
+<li><code>require(id)</code>：加载模块</li>
+<li><code>module.exports</code>：导出模块</li>
+<li><code>exports</code>：module.exports 的简写形式</li>
+<li><code>__filename</code>：当前文件的绝对路径</li>
+<li><code>__dirname</code>：当前目录的绝对路径</li>
+</ul>
+</blockquote>
+<p><strong>基本用法</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// math.js - 导出模块</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a + b;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">subtract</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a - b;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">multiply</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a * b;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">divide</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">if</span> (b === <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Cannot divide by zero&#x27;</span>);
+  }
+  <span class="hljs-keyword">return</span> a / b;
+}
+
+<span class="hljs-comment">// 导出方式1：导出多个</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  add,
+  subtract,
+  multiply,
+  divide
+};
+</code></pre><pre class="hljs"><code><span class="hljs-comment">// index.js - 引入模块</span>
+<span class="hljs-keyword">const</span> math = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./math&#x27;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(math.<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(math.<span class="hljs-title function_">subtract</span>(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>)); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(math.<span class="hljs-title function_">multiply</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)); <span class="hljs-comment">// 12</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(math.<span class="hljs-title function_">divide</span>(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>)); <span class="hljs-comment">// 5</span>
+</code></pre><blockquote>
+<p><strong>特别说明</strong></p>
+<ul>
+<li>CommonJS 是同步的，在浏览器环境中会导致页面阻塞</li>
+<li>webpack 等构建工具会将 CommonJS 转换为浏览器可用的格式</li>
+<li>注意区分 <code>module.exports</code> 和 <code>exports</code>，后者只是前者的引用</li>
+</ul>
+</blockquote>
+<p><strong>模块导出函数或类</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// logger.js</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Logger</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">prefix</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">prefix</span> = prefix;
+  }
+
+  <span class="hljs-title function_">log</span>(<span class="hljs-params">message</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`[<span class="hljs-subst">${<span class="hljs-variable language_">this</span>.prefix}</span>] <span class="hljs-subst">${message}</span>`</span>);
+  }
+
+  <span class="hljs-title function_">error</span>(<span class="hljs-params">message</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">`[<span class="hljs-subst">${<span class="hljs-variable language_">this</span>.prefix}</span>] ERROR: <span class="hljs-subst">${message}</span>`</span>);
+  }
+
+  <span class="hljs-title function_">warn</span>(<span class="hljs-params">message</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">`[<span class="hljs-subst">${<span class="hljs-variable language_">this</span>.prefix}</span>] WARN: <span class="hljs-subst">${message}</span>`</span>);
+  }
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-title class_">Logger</span>;
+</code></pre><blockquote>
+<p><strong>面试考点</strong></p>
+<ul>
+<li>CommonJS 的加载过程是怎样的？（从模块查找到缓存机制）</li>
+<li>module.exports 和 exports 的区别</li>
+<li>为什么 CommonJS 不适合浏览器环境？</li>
+</ul>
+</blockquote>
+<p><strong>模块导出单例</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// store.js</span>
+<span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">increment</span>(<span class="hljs-params"></span>) {
+  count++;
+  <span class="hljs-keyword">return</span> count;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">decrement</span>(<span class="hljs-params"></span>) {
+  count--;
+  <span class="hljs-keyword">return</span> count;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getCount</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> count;
+}
+
+<span class="hljs-comment">// 导出函数而非对象，每次require返回的都是同一个模块实例</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  increment,
+  decrement,
+  getCount
+};
+</code></pre><blockquote>
+<p><strong>帮助理解</strong></p>
+<p>CommonJS 的单例模式就像一个&quot;饮水机&quot;。当多个地方的人都需要喝水时，他们不是各自买一台饮水机，而是共享同一台。第一个 require 的人&quot;安装&quot;了饮水机（执行模块代码），后面的人直接使用这台饮水机（从缓存获取）。</p>
+</blockquote>
+<hr>
+<h3 id="1.1.3-amd">1.1.3 AMD规范</h3>
+<p>AMD（Asynchronous Module Definition）是异步模块定义规范，主要用于浏览器环境，解决了CommonJS在浏览器中同步加载的问题。</p>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>AMD 的核心设计理念是&quot;异步加载&quot;：</p>
+<ul>
+<li><strong>依赖前置</strong>：在定义模块时就声明所有依赖</li>
+<li><strong>异步加载</strong>：所有依赖并行加载，不阻塞页面渲染</li>
+<li><strong>回调机制</strong>：通过回调函数获取模块</li>
+</ul>
+<p><strong>核心API</strong>：</p>
+<ul>
+<li><code>define(id?, dependencies?, factory)</code>：定义模块</li>
+<li><code>require(dependencies, callback)</code>：加载模块</li>
+</ul>
+<p>AMD 的全称是 Asynchronous Module Definition（异步模块定义），这个&quot;异步&quot;指的就是依赖的加载方式是异步的。</p>
+</blockquote>
+<p><strong>基本用法</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 定义模块</span>
+<span class="hljs-title function_">define</span>(<span class="hljs-string">&#x27;myModule&#x27;</span>, [<span class="hljs-string">&#x27;dependency1&#x27;</span>, <span class="hljs-string">&#x27;dependency2&#x27;</span>], <span class="hljs-keyword">function</span>(<span class="hljs-params">dep1, dep2</span>) {
+  <span class="hljs-comment">// 模块逻辑</span>
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">doSomething</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> dep1.<span class="hljs-title function_">getValue</span>() + dep2.<span class="hljs-title function_">getValue</span>();
+  }
+
+  <span class="hljs-comment">// 导出</span>
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">doSomething</span>: doSomething
+  };
+});
+
+<span class="hljs-comment">// 引入模块</span>
+<span class="hljs-built_in">require</span>([<span class="hljs-string">&#x27;myModule&#x27;</span>, <span class="hljs-string">&#x27;simpleModule&#x27;</span>], <span class="hljs-keyword">function</span>(<span class="hljs-params">myModule, simpleModule</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(myModule.<span class="hljs-title function_">doSomething</span>());
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(simpleModule.<span class="hljs-property">name</span>);
+});
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>AMD 最著名的实现是 RequireJS，它解决了以下问题：</p>
+<ul>
+<li>浏览器端的模块加载</li>
+<li>多种文件类型的支持（JS、CSS等）</li>
+<li>模块之间的依赖管理</li>
+<li>动态加载和懒加载</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>特别说明</strong></p>
+<ul>
+<li>AMD 需要引入额外的库（如 RequireJS）才能使用</li>
+<li>依赖前置意味着即使某个依赖暂时用不到，也会提前加载</li>
+<li>语法相对冗长，需要维护大量的数组和回调</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>面试考点</strong></p>
+<ul>
+<li>AMD 和 CommonJS 的区别</li>
+<li>依赖前置 vs 依赖就近的优劣</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1.1.4-cmd">1.1.4 CMD规范</h3>
+<p>CMD（Common Module Definition）是SeaJS推广的模块定义规范，与AMD类似但有所不同。CMD推崇依赖就近，延迟执行。</p>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>CMD 与 AMD 的核心区别在于&quot;何时加载依赖&quot;：</p>
+<ul>
+<li><strong>依赖就近</strong>：在需要使用依赖时才 require</li>
+<li><strong>延迟执行</strong>：模块工厂函数在需要时才执行</li>
+<li><strong>就近书写</strong>：依赖写在函数内部，代码更直观</li>
+</ul>
+<p>CMD 的代表库是 SeaJS（阿里巴巴前端团队开发），虽然现在已经停止维护，但它对前端模块化的发展产生了重要影响。</p>
+</blockquote>
+<p><strong>基本用法</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// SeaJS示例</span>
+<span class="hljs-comment">// math.js</span>
+<span class="hljs-title function_">define</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"><span class="hljs-built_in">require</span>, <span class="hljs-built_in">exports</span>, <span class="hljs-variable language_">module</span></span>) {
+  <span class="hljs-keyword">var</span> add = <span class="hljs-keyword">function</span>(<span class="hljs-params">a, b</span>) {
+    <span class="hljs-keyword">return</span> a + b;
+  };
+
+  <span class="hljs-keyword">var</span> subtract = <span class="hljs-keyword">function</span>(<span class="hljs-params">a, b</span>) {
+    <span class="hljs-keyword">return</span> a - b;
+  };
+
+  <span class="hljs-built_in">exports</span>.<span class="hljs-property">add</span> = add;
+  <span class="hljs-built_in">exports</span>.<span class="hljs-property">subtract</span> = subtract;
+});
+</code></pre><p><strong>AMD与CMD的区别</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// AMD - 依赖前置</span>
+<span class="hljs-title function_">define</span>([<span class="hljs-string">&#x27;dep1&#x27;</span>, <span class="hljs-string">&#x27;dep2&#x27;</span>, <span class="hljs-string">&#x27;dep3&#x27;</span>], <span class="hljs-keyword">function</span>(<span class="hljs-params">dep1, dep2, dep3</span>) {
+  <span class="hljs-comment">// 所有依赖在定义时就已经加载</span>
+  dep1.<span class="hljs-title function_">doSomething</span>();
+  dep2.<span class="hljs-title function_">doSomething</span>();
+});
+
+<span class="hljs-comment">// CMD - 依赖就近</span>
+<span class="hljs-title function_">define</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"><span class="hljs-built_in">require</span>, <span class="hljs-built_in">exports</span>, <span class="hljs-variable language_">module</span></span>) {
+  <span class="hljs-keyword">var</span> dep1 = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dep1&#x27;</span>); <span class="hljs-comment">// 使用时再加载</span>
+  dep1.<span class="hljs-title function_">doSomething</span>();
+
+  <span class="hljs-keyword">if</span> (condition) {
+    <span class="hljs-keyword">var</span> dep2 = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;dep2&#x27;</span>); <span class="hljs-comment">// 条件加载</span>
+    dep2.<span class="hljs-title function_">doSomething</span>();
+  }
+});
+</code></pre><blockquote>
+<p><strong>帮助理解</strong></p>
+<ul>
+<li>AMD 就像提前买好所有食材放进冰箱，做饭时直接从冰箱拿</li>
+<li>CMD 就像去超市买菜，做饭时需要什么再去买什么</li>
+<li>两种方式各有优劣：AMD 预加载更快，CMD 按需加载更省资源</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1.1.5-es-module">1.1.5 ES Module规范</h3>
+<p>ES Module（ESM）是ES6引入的官方模块化规范，使用<code>import</code>和<code>export</code>关键字。</p>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>ES Module 是 ECMAScript 官方推出的模块系统，具有以下特点：</p>
+<ul>
+<li><strong>静态语法</strong>：import/export 必须在模块顶层，不能在条件语句中</li>
+<li><strong>编译时解析</strong>：在编译阶段就能确定依赖关系</li>
+<li><strong>实时绑定</strong>：导入的是值的引用，导出的原始值变化会反映到导入方</li>
+<li><strong>自动严格模式</strong>：ESM 自动使用严格模式</li>
+<li><strong>独立的作用域</strong>：每个 ESM 模块有自己的顶层作用域</li>
+</ul>
+<p><strong>核心语法</strong>：</p>
+<ul>
+<li><code>import { xxx } from 'module'</code>：命名导入</li>
+<li><code>import defaultExport from 'module'</code>：默认导入</li>
+<li><code>import * as namespace from 'module'</code>：命名空间导入</li>
+<li><code>export const/function/class</code>：命名导出</li>
+<li><code>export default</code>：默认导出</li>
+</ul>
+</blockquote>
+<p><strong>基本导出方式</strong></p>
+<p><strong>命名导出</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// named-export.js</span>
+<span class="hljs-comment">// 方式1：声明时导出</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> name = <span class="hljs-string">&#x27;Module&#x27;</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> version = <span class="hljs-string">&#x27;1.0.0&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a + b;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Calculator</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span> = <span class="hljs-number">0</span>;
+  }
+
+  <span class="hljs-title function_">add</span>(<span class="hljs-params">n</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span> += n;
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+
+  <span class="hljs-title function_">subtract</span>(<span class="hljs-params">n</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span> -= n;
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+
+  <span class="hljs-title function_">getResult</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>;
+  }
+}
+</code></pre><p><strong>默认导出</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// default-export.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Default export&#x27;</span>;
+}
+</code></pre><blockquote>
+<p><strong>特别说明</strong></p>
+<ul>
+<li>一个模块可以同时有默认导出和命名导出</li>
+<li>命名导出适合导出多个相关功能，默认导出适合导出单一功能</li>
+<li>面试常考点：ES Module 和 CommonJS 的区别</li>
+</ul>
+</blockquote>
+<p><strong>基本导入方式</strong></p>
+<p><strong>命名导入</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// import-named.js</span>
+<span class="hljs-keyword">import</span> { name, version, add, <span class="hljs-title class_">Calculator</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./named-export.js&#x27;</span>;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(name); <span class="hljs-comment">// &#x27;Module&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(version); <span class="hljs-comment">// &#x27;1.0.0&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)); <span class="hljs-comment">// 3</span>
+</code></pre><p><strong>默认导入</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// import-default.js</span>
+<span class="hljs-keyword">import</span> defaultExport <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./default-export.js&#x27;</span>;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">defaultExport</span>()); <span class="hljs-comment">// &#x27;Default export&#x27;</span>
+</code></pre><p><strong>命名空间导入</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// import-namespace.js</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> <span class="hljs-variable language_">module</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./named-export.js&#x27;</span>;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">name</span>); <span class="hljs-comment">// &#x27;Module&#x27;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)); <span class="hljs-comment">// 3</span>
+</code></pre><p><strong>动态导入</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// dynamic-import.js</span>
+<span class="hljs-comment">// 返回Promise</span>
+<span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./module.js&#x27;</span>)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">module</span> =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">default</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">module</span>.<span class="hljs-property">namedExport</span>);
+  });
+
+<span class="hljs-comment">// 使用async/await</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadModule</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./module.js&#x27;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">module</span>;
+}
+</code></pre><blockquote>
+<p><strong>帮助理解</strong></p>
+<p>ES Module 就像是一个&quot;智能文件柜&quot;。当你需要某个文件时，你可以：</p>
+<ul>
+<li>只拿你需要的那一页（命名导入）</li>
+<li>拿整本手册（命名空间导入）</li>
+<li>拿默认版本（默认导入）</li>
+<li>等等需要的时候再拿（动态导入）</li>
+</ul>
+<p>而且，这个柜子和文件是&quot;实时同步&quot;的——如果你修改了源文件，所有引用这个文件的地方都会看到更新。</p>
+</blockquote>
+<p><strong>ES Module的高级特性</strong></p>
+<p><strong>静态导入与导出</strong>
+ES Module使用静态语法，导入导出必须在模块顶层，这使得：</p>
+<ul>
+<li>静态分析成为可能</li>
+<li>Tree Shaking可以移除未使用的代码</li>
+<li>打包时可以确定依赖关系</li>
+</ul>
+<p><strong>ES Module在浏览器中的使用</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
+  <span class="hljs-keyword">import</span> { createApp } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./app.js&#x27;</span>;
+
+  <span class="hljs-title function_">createApp</span>();
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre><blockquote>
+<p><strong>面试考点</strong></p>
+<ul>
+<li>为什么 ES Module 是静态的？这带来了哪些好处？</li>
+<li>ES Module 和 CommonJS 的主要区别</li>
+<li>Tree Shaking 的原理</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1.1.6-umd">1.1.6 UMD规范</h3>
+<p>UMD（Universal Module Definition）是一种兼容多种模块化规范的模式，可以在CommonJS、AMD和全局变量环境中使用。</p>
+<blockquote>
+<p><strong>概念语法详细解释</strong></p>
+<p>UMD 的设计目标是&quot;一次编写，处处运行&quot;。它通过检测当前环境来选择合适的模块加载方式：</p>
+<ul>
+<li>检测 CommonJS 环境（module.exports 存在）</li>
+<li>检测 AMD 环境（define 存在）</li>
+<li>都不是则使用全局变量</li>
+</ul>
+<p>UMD 本质上是一个&quot;适配器&quot;模式，它让同一个文件可以在不同环境中正常工作。</p>
+</blockquote>
+<p><strong>UMD模式</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// umd-module.js</span>
+(<span class="hljs-keyword">function</span>(<span class="hljs-params">root, factory</span>) {
+  <span class="hljs-comment">// 检测环境</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">module</span> === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>) {
+    <span class="hljs-comment">// CommonJS</span>
+    <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-title function_">factory</span>();
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">&#x27;function&#x27;</span> &amp;&amp; define.<span class="hljs-property">amd</span>) {
+    <span class="hljs-comment">// AMD</span>
+    <span class="hljs-title function_">define</span>([], factory);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 全局变量</span>
+    root.<span class="hljs-property">MyModule</span> = <span class="hljs-title function_">factory</span>();
+  }
+}(<span class="hljs-keyword">typeof</span> self !== <span class="hljs-string">&#x27;undefined&#x27;</span> ? self : <span class="hljs-variable language_">this</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 模块实现</span>
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;My Module&#x27;</span>,
+    <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.0.0&#x27;</span>,
+    <span class="hljs-attr">init</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Module initialized&#x27;</span>);
+    }
+  };
+}));
+</code></pre><blockquote>
+<p><strong>具体应用实例</strong></p>
+<p>很多流行的库（如 jQuery、moment.js）使用 UMD 来兼容不同的模块系统，这样无论用户使用哪种方式引入，都能正常工作。</p>
+</blockquote>
+<blockquote>
+<p><strong>特别说明</strong></p>
+<ul>
+<li>UMD 代码通常比单一模块规范更冗长</li>
+<li>现代项目推荐直接使用 ESM 或 CommonJS，UMD 主要是为了向后兼容</li>
+<li>如果要支持 IE11 等老旧浏览器，UMD 仍然是有用的</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="1.2">1.2 代码组织</h2>
+<h3 id="1.2.1">1.2.1 项目目录结构</h3>
+<p>一个良好的项目目录结构对于代码组织和团队协作至关重要。以下是几种常见的项目结构：</p>
+<p><strong>基础项目结构</strong></p>
+<pre class="hljs"><code>my-project/
+┣━━ public/                 # 静态资源（不会被构建）
+┃   ┣━━ favicon.ico
+┃   ┗━━ robots.txt
+┣━━ src/
+┃   ┣━━ assets/             # 资源文件
+┃   ┃   ┣━━ images/
+┃   ┃   ┣━━ fonts/
+┃   ┃   ┗━━ styles/
+┃   ┣━━ components/         # 公共组件
+┃   ┃   ┣━━ Button/
+┃   ┃   ┃   ┣━━ Button.vue
+┃   ┃   ┃   ┣━━ Button.js
+┃   ┃   ┃   ┗━━ index.js
+┃   ┃   ┗━━ Modal/
+┃   ┣━━ pages/              # 页面组件
+┃   ┃   ┣━━ Home/
+┃   ┃   ┗━━ About/
+┃   ┣━━ router/             # 路由配置
+┃   ┃   ┗━━ index.js
+┃   ┣━━ store/              # 状态管理
+┃   ┃   ┗━━ index.js
+┃   ┣━━ api/                # API接口
+┃   ┃   ┣━━ index.js
+┃   ┃   ┗━━ user.js
+┃   ┣━━ utils/              # 工具函数
+┃   ┃   ┣━━ index.js
+┃   ┃   ┣━━ request.js
+┃   ┃   ┗━━ helper.js
+┃   ┣━━ views/              # 视图组件
+┃   ┣━━ directives/         # 自定义指令
+┃   ┣━━ filters/            # 过滤器
+┃   ┣━━ constants/          # 常量定义
+┃   ┣━━ mixins/             # 混入
+┃   ┣━━ App.vue
+┃   ┗━━ main.js
+┣━━ tests/                  # 测试文件
+┃   ┣━━ unit/
+┃   ┗━━ e2e/
+┣━━ .eslintrc.js
+┣━━ .prettierrc.js
+┣━━ babel.config.js
+┣━━ jest.config.js
+┣━━ package.json
+┗━━ README.md
+</code></pre><p><strong>大型项目结构（Monorepo）</strong></p>
+<pre class="hljs"><code>my-monorepo/
+┣━━ packages/
+┃   ┣━━ shared/              # 共享代码包
+┃   ┃   ┣━━ package.json
+┃   ┃   ┣━━ src/
+┃   ┃   ┃   ┣━━ index.ts
+┃   ┃   ┃   ┣━━ utils/
+┃   ┃   ┃   ┣━━ types/
+┃   ┃   ┃   ┗━━ constants/
+┃   ┃   ┗━━ tsconfig.json
+┃   ┣━━ web/                 # Web应用包
+┃   ┃   ┣━━ package.json
+┃   ┃   ┣━━ src/
+┃   ┃   ┗━━ public/
+┃   ┣━━ mobile/              # 移动端包
+┃   ┃   ┣━━ package.json
+┃   ┃   ┣━━ src/
+┃   ┃   ┗━━ public/
+┃   ┗━━ components/          # 组件库包
+┃       ┣━━ package.json
+┃       ┣━━ src/
+┃       ┃   ┣━━ Button/
+┃       ┃   ┣━━ Modal/
+┃       ┃   ┗━━ index.ts
+┃       ┗━━ stories/
+┣━━ packages.json            # 工作空间根配置
+┣━━ tsconfig.base.json       # 基础TypeScript配置
+┣━━ jest.config.js
+┣━━ lerna.json               # Lerna配置
+┗━━ package.json             # 根package.json
+</code></pre><h3 id="1.2.2">1.2.2 模块与组件的设计原则</h3>
+<p><strong>SOLID原则在前端中的应用</strong></p>
+<p><strong>单一职责原则（SRP）</strong>
+每个模块、组件只负责一项功能。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 正确：分离职责</span>
+<span class="hljs-comment">// validators/user.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">validateUser</span>(<span class="hljs-params">user</span>) {
+  <span class="hljs-keyword">if</span> (!user.<span class="hljs-property">name</span> || !user.<span class="hljs-property">email</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Invalid user data&#x27;</span>);
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-comment">// formatters/user.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">formatUser</span>(<span class="hljs-params">user</span>) {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">name</span>: user.<span class="hljs-property">name</span>.<span class="hljs-title function_">trim</span>(),
+    <span class="hljs-attr">email</span>: user.<span class="hljs-property">email</span>.<span class="hljs-title function_">toLowerCase</span>()
+  };
+}
+
+<span class="hljs-comment">// services/user.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">saveUser</span>(<span class="hljs-params">user</span>) {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/users&#x27;</span>, {
+    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(user)
+  });
+  <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">json</span>();
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">import</span> { validateUser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./validators/user&#x27;</span>;
+<span class="hljs-keyword">import</span> { formatUser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./formatters/user&#x27;</span>;
+<span class="hljs-keyword">import</span> { saveUser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./services/user&#x27;</span>;
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createUser</span>(<span class="hljs-params">userData</span>) {
+  <span class="hljs-title function_">validateUser</span>(userData);
+  <span class="hljs-keyword">const</span> formattedUser = <span class="hljs-title function_">formatUser</span>(userData);
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">saveUser</span>(formattedUser);
+}
+</code></pre><p><strong>开闭原则（OCP）</strong>
+对扩展开放，对修改封闭。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 正确：使用策略模式</span>
+<span class="hljs-comment">// 支付策略接口</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PaymentStrategy</span> {
+  <span class="hljs-title function_">pay</span>(<span class="hljs-params">amount</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Method not implemented&#x27;</span>);
+  }
+}
+
+<span class="hljs-comment">// 具体支付策略</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AlipayStrategy</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">PaymentStrategy</span> {
+  <span class="hljs-title function_">pay</span>(<span class="hljs-params">amount</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Alipay: <span class="hljs-subst">${amount}</span>`</span>);
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">WechatPayStrategy</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">PaymentStrategy</span> {
+  <span class="hljs-title function_">pay</span>(<span class="hljs-params">amount</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Wechat Pay: <span class="hljs-subst">${amount}</span>`</span>);
+  }
+}
+
+<span class="hljs-comment">// 支付处理器</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PaymentProcessor</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">strategy</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">strategy</span> = strategy;
+  }
+
+  <span class="hljs-title function_">setStrategy</span>(<span class="hljs-params">strategy</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">strategy</span> = strategy;
+  }
+
+  <span class="hljs-title function_">processPayment</span>(<span class="hljs-params">amount</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">strategy</span>.<span class="hljs-title function_">pay</span>(amount);
+  }
+}
+</code></pre><p><strong>依赖倒置原则（DIP）</strong>
+依赖抽象，不依赖具体实现。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 正确：依赖抽象</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserRepository</span> {
+  <span class="hljs-title function_">save</span>(<span class="hljs-params">user</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Method not implemented&#x27;</span>);
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MySQLUserRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">UserRepository</span> {
+  <span class="hljs-title function_">save</span>(<span class="hljs-params">user</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Saving to MySQL&#x27;</span>);
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserService</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">repository</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">repository</span> = repository;
+  }
+
+  <span class="hljs-title function_">createUser</span>(<span class="hljs-params">user</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">repository</span>.<span class="hljs-title function_">save</span>(user);
+  }
+}
+</code></pre><hr>
+<h2 id="1.3">1.3 依赖管理</h2>
+<h3 id="1.3.1">1.3.1 依赖管理基础</h3>
+<p><strong>package.json详解</strong></p>
+<pre class="hljs"><code><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;my-project&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;1.0.0&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;My awesome project&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;module&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;main&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;dist/index.js&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;module&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;dist/index.esm.js&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;types&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;dist/index.d.ts&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;exports&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;.&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;import&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./dist/index.esm.js&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;require&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./dist/index.cjs.js&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;types&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./dist/index.d.ts&quot;</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;dev&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;vite&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;vite build&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;preview&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;vite preview&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;lint&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eslint src --ext .vue,.js,.jsx,.ts,.tsx&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;test&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;jest&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;dependencies&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;vue&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^3.3.4&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;vue-router&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^4.2.4&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;pinia&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^2.1.6&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;axios&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^1.5.0&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;devDependencies&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;@vitejs/plugin-vue&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^4.3.4&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;vite&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^4.4.9&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;eslint&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^8.49.0&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><p><strong>依赖类型详解</strong></p>
+<p>dependencies（运行时依赖）：项目运行需要的依赖
+devDependencies（开发时依赖）：只在开发时需要的依赖
+peerDependencies（对等依赖）：期望使用者提供的依赖
+optionalDependencies（可选依赖）：可选的依赖</p>
+<h3 id="1.3.2">1.3.2 版本管理</h3>
+<p><strong>语义化版本（SemVer）</strong></p>
+<p>版本格式：<code>主版本.次版本.修订号</code></p>
+<pre class="hljs"><code><span class="hljs-comment"># ^ 允许次版本和修订号升级</span>
+npm install lodash@^4.17.21
+<span class="hljs-comment"># 会安装 4.x.x 中的最新版本</span>
+
+<span class="hljs-comment"># ~ 允许修订号升级</span>
+npm install lodash@~4.17.21
+<span class="hljs-comment"># 会安装 4.17.x 中的最新版本</span>
+
+<span class="hljs-comment"># 精确版本</span>
+npm install lodash@4.17.21
+</code></pre><h3 id="1.3.3">1.3.3 依赖分析与管理工具</h3>
+<pre class="hljs"><code><span class="hljs-comment"># npm</span>
+npm audit  <span class="hljs-comment"># 安全审计</span>
+npm outdated  <span class="hljs-comment"># 检查过期依赖</span>
+npm <span class="hljs-built_in">ls</span>  <span class="hljs-comment"># 查看依赖树</span>
+
+<span class="hljs-comment"># yarn</span>
+yarn audit
+yarn outdated
+yarn list
+
+<span class="hljs-comment"># pnpm</span>
+pnpm audit
+pnpm why  <span class="hljs-comment"># 查看依赖关系</span>
+</code></pre><hr>
+<p><em>本章节完</em></p>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="2-6-API路由与中间件.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第2卷 Next.js框架</span>
+          </a>
+              <a href="3-2-Vite快速构建.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第3卷 构建工具</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

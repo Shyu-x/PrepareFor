@@ -1,0 +1,2751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第1卷-基础核心 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#5" class="toc-link "><span>第5章 算法与数据结构</span></a></li><li class="toc-item"><a href="#4.1" class="toc-link "><span>4.1 数组</span></a></li><li class="toc-item"><a href="#4.2" class="toc-link "><span>4.2 链表</span></a></li><li class="toc-item"><a href="#5" class="toc-link "><span>第5章 栈与队列</span></a></li><li class="toc-item"><a href="#5.1-stack" class="toc-link "><span>5.1 栈（Stack）</span></a></li><li class="toc-item"><a href="#5.2-queue" class="toc-link "><span>5.2 队列（Queue）</span></a></li><li class="toc-item"><a href="#6" class="toc-link "><span>第6章 树与图</span></a></li><li class="toc-item"><a href="#6.1" class="toc-link "><span>6.1 二叉树</span></a></li><li class="toc-item"><a href="#6.2-bst" class="toc-link "><span>6.2 二叉搜索树（BST）</span></a></li><li class="toc-item"><a href="#6.3" class="toc-link "><span>6.3 堆</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第1卷 基础核心 / 第5章 算法与数据结构</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第1卷 基础核心</span>
+            </div>
+            <h1 class="article-title">第1卷-基础核心</h1>
+          </header>
+
+          <div class="content"><h2 id="5">第5章 算法与数据结构</h2>
+<h3 id="4.1">4.1 数组</h3>
+<p>数组是最基本的数据结构，元素在内存中连续存储，支持随机访问。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>随机访问：O(1)</li>
+<li>插入/删除：O(n)</li>
+<li>动态数组（ArrayList）：插入/删除均摊 O(1)</li>
+</ul>
+<p><strong>JavaScript 数组方法</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 常用方法</span>
+<span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+<span class="hljs-comment">// 添加元素</span>
+arr.<span class="hljs-title function_">push</span>(<span class="hljs-number">4</span>);        <span class="hljs-comment">// 末尾添加</span>
+arr.<span class="hljs-title function_">unshift</span>(<span class="hljs-number">0</span>);      <span class="hljs-comment">// 开头添加</span>
+
+<span class="hljs-comment">// 删除元素</span>
+arr.<span class="hljs-title function_">pop</span>();           <span class="hljs-comment">// 末尾删除</span>
+arr.<span class="hljs-title function_">shift</span>();         <span class="hljs-comment">// 开头删除</span>
+
+<span class="hljs-comment">// 查找</span>
+arr.<span class="hljs-title function_">indexOf</span>(<span class="hljs-number">2</span>);
+arr.<span class="hljs-title function_">includes</span>(<span class="hljs-number">2</span>);
+arr.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x &gt; <span class="hljs-number">1</span>);
+arr.<span class="hljs-title function_">findIndex</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x &gt; <span class="hljs-number">1</span>);
+
+<span class="hljs-comment">// 转换</span>
+arr.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x * <span class="hljs-number">2</span>);
+arr.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x &gt; <span class="hljs-number">1</span>);
+arr.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">acc, x</span>) =&gt;</span> acc + x, <span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// 其他</span>
+arr.<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>);
+arr.<span class="hljs-title function_">splice</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>);
+arr.<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a - b);
+arr.<span class="hljs-title function_">reverse</span>();
+</code></pre><hr>
+<h3 id="4.2">4.2 链表</h3>
+<p>链表是一种线性数据结构，每个节点包含数据和指向下一个节点的指针。</p>
+<p><strong>类型</strong>：</p>
+<ul>
+<li>单向链表</li>
+<li>双向链表</li>
+<li>循环链表</li>
+</ul>
+<p><strong>实现</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 单向链表节点</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ListNode</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">val</span> = val;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
+    }
+}
+
+<span class="hljs-comment">// 单向链表</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LinkedList</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = <span class="hljs-literal">null</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> = <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-comment">// 尾部添加</span>
+    <span class="hljs-title function_">append</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-keyword">const</span> node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ListNode</span>(val);
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = node;
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">let</span> curr = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+            <span class="hljs-keyword">while</span> (curr.<span class="hljs-property">next</span>) {
+                curr = curr.<span class="hljs-property">next</span>;
+            }
+            curr.<span class="hljs-property">next</span> = node;
+        }
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>++;
+    }
+
+    <span class="hljs-comment">// 头部添加</span>
+    <span class="hljs-title function_">prepend</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-keyword">const</span> node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ListNode</span>(val);
+        node.<span class="hljs-property">next</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = node;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>++;
+    }
+
+    <span class="hljs-comment">// 删除指定值</span>
+    <span class="hljs-title function_">remove</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">val</span> === val) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span>;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>--;
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">let</span> curr = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+        <span class="hljs-keyword">while</span> (curr.<span class="hljs-property">next</span>) {
+            <span class="hljs-keyword">if</span> (curr.<span class="hljs-property">next</span>.<span class="hljs-property">val</span> === val) {
+                curr.<span class="hljs-property">next</span> = curr.<span class="hljs-property">next</span>.<span class="hljs-property">next</span>;
+                <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>--;
+                <span class="hljs-keyword">return</span>;
+            }
+            curr = curr.<span class="hljs-property">next</span>;
+        }
+    }
+
+    <span class="hljs-comment">// 查找</span>
+    <span class="hljs-title function_">find</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-keyword">let</span> curr = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+        <span class="hljs-keyword">while</span> (curr) {
+            <span class="hljs-keyword">if</span> (curr.<span class="hljs-property">val</span> === val) <span class="hljs-keyword">return</span> curr;
+            curr = curr.<span class="hljs-property">next</span>;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    }
+}
+</code></pre><hr>
+<h2 id="5">第5章 栈与队列</h2>
+<h3 id="5.1-stack">5.1 栈（Stack）</h3>
+<p>栈是一种后进先出（LIFO）的数据结构。</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">Stack</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = [];
+    }
+
+    <span class="hljs-title function_">push</span>(<span class="hljs-params">element</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">push</span>(element);
+    }
+
+    <span class="hljs-title function_">pop</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">pop</span>();
+    }
+
+    <span class="hljs-title function_">peek</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>[<span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>];
+    }
+
+    <span class="hljs-title function_">isEmpty</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-title function_">size</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">length</span>;
+    }
+}
+</code></pre><p><strong>应用场景</strong>：</p>
+<ul>
+<li>函数调用栈</li>
+<li>表达式求值</li>
+<li>括号匹配</li>
+<li>深度优先搜索</li>
+</ul>
+<hr>
+<h3 id="5.2-queue">5.2 队列（Queue）</h3>
+<p>队列是一种先进先出（FIFO）的数据结构。</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">Queue</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = [];
+    }
+
+    <span class="hljs-title function_">enqueue</span>(<span class="hljs-params">element</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">push</span>(element);
+    }
+
+    <span class="hljs-title function_">dequeue</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">shift</span>();
+    }
+
+    <span class="hljs-title function_">front</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>[<span class="hljs-number">0</span>];
+    }
+
+    <span class="hljs-title function_">isEmpty</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-title function_">size</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">length</span>;
+    }
+}
+</code></pre><p><strong>变体</strong>：</p>
+<ul>
+<li>双端队列（Deque）</li>
+<li>优先队列（Priority Queue）</li>
+</ul>
+<p><strong>应用场景</strong>：</p>
+<ul>
+<li>任务调度</li>
+<li>广度优先搜索</li>
+<li>消息队列</li>
+</ul>
+<hr>
+<h2 id="6">第6章 树与图</h2>
+<h3 id="6.1">6.1 二叉树</h3>
+<p>二叉树是每个节点最多有两个子树的树结构。</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">TreeNode</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">val</span> = val;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">left</span> = <span class="hljs-literal">null</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">right</span> = <span class="hljs-literal">null</span>;
+    }
+}
+
+<span class="hljs-comment">// 二叉树遍历</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">preorder</span>(<span class="hljs-params">root</span>) {
+    <span class="hljs-keyword">if</span> (!root) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> [root.<span class="hljs-property">val</span>, ...<span class="hljs-title function_">preorder</span>(root.<span class="hljs-property">left</span>), ...<span class="hljs-title function_">preorder</span>(root.<span class="hljs-property">right</span>)];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">inorder</span>(<span class="hljs-params">root</span>) {
+    <span class="hljs-keyword">if</span> (!root) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> [...<span class="hljs-title function_">inorder</span>(root.<span class="hljs-property">left</span>), root.<span class="hljs-property">val</span>, ...<span class="hljs-title function_">inorder</span>(root.<span class="hljs-property">right</span>)];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">postorder</span>(<span class="hljs-params">root</span>) {
+    <span class="hljs-keyword">if</span> (!root) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> [...<span class="hljs-title function_">postorder</span>(root.<span class="hljs-property">left</span>), ...<span class="hljs-title function_">postorder</span>(root.<span class="hljs-property">right</span>), root.<span class="hljs-property">val</span>];
+}
+
+<span class="hljs-comment">// 层序遍历</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">levelOrder</span>(<span class="hljs-params">root</span>) {
+    <span class="hljs-keyword">if</span> (!root) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">const</span> result = [];
+    <span class="hljs-keyword">const</span> queue = [root];
+
+    <span class="hljs-keyword">while</span> (queue.<span class="hljs-property">length</span>) {
+        <span class="hljs-keyword">const</span> level = [];
+        <span class="hljs-keyword">const</span> levelSize = queue.<span class="hljs-property">length</span>;
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; levelSize; i++) {
+            <span class="hljs-keyword">const</span> node = queue.<span class="hljs-title function_">shift</span>();
+            level.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">val</span>);
+            <span class="hljs-keyword">if</span> (node.<span class="hljs-property">left</span>) queue.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">left</span>);
+            <span class="hljs-keyword">if</span> (node.<span class="hljs-property">right</span>) queue.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">right</span>);
+        }
+        result.<span class="hljs-title function_">push</span>(level);
+    }
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre><h3 id="6.2-bst">6.2 二叉搜索树（BST）</h3>
+<p>二叉搜索树是一种特殊的二叉树，左子树所有节点值小于根节点，右子树所有节点值大于根节点。</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">BST</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span> = <span class="hljs-literal">null</span>;
+    }
+
+    <span class="hljs-title function_">insert</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-keyword">const</span> node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(val);
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span>) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span> = node;
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">let</span> curr = <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span>;
+        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+            <span class="hljs-keyword">if</span> (val &lt; curr.<span class="hljs-property">val</span>) {
+                <span class="hljs-keyword">if</span> (!curr.<span class="hljs-property">left</span>) {
+                    curr.<span class="hljs-property">left</span> = node;
+                    <span class="hljs-keyword">break</span>;
+                }
+                curr = curr.<span class="hljs-property">left</span>;
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">if</span> (!curr.<span class="hljs-property">right</span>) {
+                    curr.<span class="hljs-property">right</span> = node;
+                    <span class="hljs-keyword">break</span>;
+                }
+                curr = curr.<span class="hljs-property">right</span>;
+            }
+        }
+    }
+
+    <span class="hljs-title function_">search</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-keyword">let</span> curr = <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span>;
+        <span class="hljs-keyword">while</span> (curr) {
+            <span class="hljs-keyword">if</span> (val === curr.<span class="hljs-property">val</span>) <span class="hljs-keyword">return</span> curr;
+            <span class="hljs-keyword">if</span> (val &lt; curr.<span class="hljs-property">val</span>) {
+                curr = curr.<span class="hljs-property">left</span>;
+            } <span class="hljs-keyword">else</span> {
+                curr = curr.<span class="hljs-property">right</span>;
+            }
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    }
+}
+</code></pre><h3 id="6.3">6.3 堆</h3>
+<p>堆是一棵完全二叉树，分为最大堆和最小堆。</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">MinHeap</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span> = [];
+    }
+
+    <span class="hljs-title function_">parent</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((i - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>);
+    }
+
+    <span class="hljs-title function_">left</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span>;
+    }
+
+    <span class="hljs-title function_">right</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * i + <span class="hljs-number">2</span>;
+    }
+
+    <span class="hljs-title function_">insert</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-title function_">push</span>(val);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">bubbleUp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>);
+    }
+
+    <span class="hljs-title function_">bubbleUp</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">const</span> p = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">parent</span>(i);
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[p] &gt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[i]) {
+                [<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[p], <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[i]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[p]];
+                i = p;
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">break</span>;
+            }
+        }
+    }
+
+    <span class="hljs-title function_">extractMin</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-property">length</span> === <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-title function_">pop</span>();
+
+        <span class="hljs-keyword">const</span> min = <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[<span class="hljs-number">0</span>];
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[<span class="hljs-number">0</span>] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-title function_">pop</span>();
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">bubbleDown</span>(<span class="hljs-number">0</span>);
+        <span class="hljs-keyword">return</span> min;
+    }
+
+    <span class="hljs-title function_">bubbleDown</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">while</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">left</span>(i) &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-property">length</span>) {
+            <span class="hljs-keyword">let</span> smallest = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">left</span>(i);
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">right</span>(i) &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>.<span class="hljs-property">length</span> &amp;&amp;
+                <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">right</span>(i)] &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[smallest]) {
+                smallest = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">right</span>(i);
+            }
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[i] &gt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[smallest]) {
+                [<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[smallest]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[smallest], <span class="hljs-variable language_">this</span>.<span class="hljs-property">heap</span>[i]];
+                i = smallest;
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">break</span>;
+            }
+        }
+    }
+}
+</code></pre><hr>
+<h3 id="6.4">6.4 哈希表</h3>
+<p>哈希表通过哈希函数将键映射到数组索引，实现 O(1) 查找。</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">HashTable</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">size = <span class="hljs-number">100</span></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> = size;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(size);
+    }
+
+    <span class="hljs-title function_">hash</span>(<span class="hljs-params">key</span>) {
+        <span class="hljs-keyword">let</span> hash = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; key.<span class="hljs-property">length</span>; i++) {
+            hash = (hash + key.<span class="hljs-title function_">charCodeAt</span>(i)) % <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>;
+        }
+        <span class="hljs-keyword">return</span> hash;
+    }
+
+    <span class="hljs-title function_">set</span>(<span class="hljs-params">key, value</span>) {
+        <span class="hljs-keyword">const</span> index = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">hash</span>(key);
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index]) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index] = [];
+        }
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index].<span class="hljs-property">length</span>; i++) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index][i][<span class="hljs-number">0</span>] === key) {
+                <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index][i][<span class="hljs-number">1</span>] = value;
+                <span class="hljs-keyword">return</span>;
+            }
+        }
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index].<span class="hljs-title function_">push</span>([key, value]);
+    }
+
+    <span class="hljs-title function_">get</span>(<span class="hljs-params">key</span>) {
+        <span class="hljs-keyword">const</span> index = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">hash</span>(key);
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index]) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [k, v] <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index]) {
+            <span class="hljs-keyword">if</span> (k === key) <span class="hljs-keyword">return</span> v;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+    }
+
+    <span class="hljs-title function_">delete</span>(<span class="hljs-params">key</span>) {
+        <span class="hljs-keyword">const</span> index = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">hash</span>(key);
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index]) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index].<span class="hljs-property">length</span>; i++) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index][i][<span class="hljs-number">0</span>] === key) {
+                <span class="hljs-variable language_">this</span>.<span class="hljs-property">table</span>[index].<span class="hljs-title function_">splice</span>(i, <span class="hljs-number">1</span>);
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+            }
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+}
+</code></pre><hr>
+<h3 id="6.5">6.5 图</h3>
+<p>图由顶点和边组成，分为有向图和无向图。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 邻接表表示</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Graph</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">adjacencyList</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+    }
+
+    <span class="hljs-title function_">addVertex</span>(<span class="hljs-params">vertex</span>) {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">adjacencyList</span>.<span class="hljs-title function_">has</span>(vertex)) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">adjacencyList</span>.<span class="hljs-title function_">set</span>(vertex, []);
+        }
+    }
+
+    <span class="hljs-title function_">addEdge</span>(<span class="hljs-params">v1, v2</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">adjacencyList</span>.<span class="hljs-title function_">get</span>(v1).<span class="hljs-title function_">push</span>(v2);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">adjacencyList</span>.<span class="hljs-title function_">get</span>(v2).<span class="hljs-title function_">push</span>(v1);
+    }
+
+    <span class="hljs-comment">// 深度优先搜索</span>
+    <span class="hljs-title function_">dfs</span>(<span class="hljs-params">start</span>) {
+        <span class="hljs-keyword">const</span> visited = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+        <span class="hljs-keyword">const</span> result = [];
+
+        <span class="hljs-keyword">const</span> <span class="hljs-title function_">dfsHelper</span> = (<span class="hljs-params">vertex</span>) =&gt; {
+            visited.<span class="hljs-title function_">add</span>(vertex);
+            result.<span class="hljs-title function_">push</span>(vertex);
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> neighbor <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">adjacencyList</span>.<span class="hljs-title function_">get</span>(vertex)) {
+                <span class="hljs-keyword">if</span> (!visited.<span class="hljs-title function_">has</span>(neighbor)) {
+                    <span class="hljs-title function_">dfsHelper</span>(neighbor);
+                }
+            }
+        };
+
+        <span class="hljs-title function_">dfsHelper</span>(start);
+        <span class="hljs-keyword">return</span> result;
+    }
+
+    <span class="hljs-comment">// 广度优先搜索</span>
+    <span class="hljs-title function_">bfs</span>(<span class="hljs-params">start</span>) {
+        <span class="hljs-keyword">const</span> visited = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+        <span class="hljs-keyword">const</span> queue = [start];
+        <span class="hljs-keyword">const</span> result = [];
+
+        visited.<span class="hljs-title function_">add</span>(start);
+        <span class="hljs-keyword">while</span> (queue.<span class="hljs-property">length</span>) {
+            <span class="hljs-keyword">const</span> vertex = queue.<span class="hljs-title function_">shift</span>();
+            result.<span class="hljs-title function_">push</span>(vertex);
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> neighbor <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">adjacencyList</span>.<span class="hljs-title function_">get</span>(vertex)) {
+                <span class="hljs-keyword">if</span> (!visited.<span class="hljs-title function_">has</span>(neighbor)) {
+                    visited.<span class="hljs-title function_">add</span>(neighbor);
+                    queue.<span class="hljs-title function_">push</span>(neighbor);
+                }
+            }
+        }
+
+        <span class="hljs-keyword">return</span> result;
+    }
+}
+</code></pre><hr>
+<h2 id="7">第7章 递归与回溯</h2>
+<h3 id="7.1">7.1 递归</h3>
+<p>递归是函数调用自身的编程技术。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 阶乘</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">factorial</span>(<span class="hljs-params">n</span>) {
+    <span class="hljs-keyword">if</span> (n &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> n * <span class="hljs-title function_">factorial</span>(n - <span class="hljs-number">1</span>);
+}
+
+<span class="hljs-comment">// 斐波那契数列</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fibonacci</span>(<span class="hljs-params">n</span>) {
+    <span class="hljs-keyword">if</span> (n &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> n;
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">fibonacci</span>(n - <span class="hljs-number">1</span>) + <span class="hljs-title function_">fibonacci</span>(n - <span class="hljs-number">2</span>);
+}
+
+<span class="hljs-comment">// 链表反转</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reverseList</span>(<span class="hljs-params">head</span>) {
+    <span class="hljs-keyword">if</span> (!head || !head.<span class="hljs-property">next</span>) <span class="hljs-keyword">return</span> head;
+    <span class="hljs-keyword">const</span> newHead = <span class="hljs-title function_">reverseList</span>(head.<span class="hljs-property">next</span>);
+    head.<span class="hljs-property">next</span>.<span class="hljs-property">next</span> = head;
+    head.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">return</span> newHead;
+}
+</code></pre><h3 id="7.2">7.2 回溯</h3>
+<p>回溯是一种通过试错来解决问题的算法。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 全排列</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">permutations</span>(<span class="hljs-params">nums</span>) {
+    <span class="hljs-keyword">const</span> result = [];
+    <span class="hljs-keyword">const</span> used = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">backtrack</span>(<span class="hljs-params">path</span>) {
+        <span class="hljs-keyword">if</span> (path.<span class="hljs-property">length</span> === nums.<span class="hljs-property">length</span>) {
+            result.<span class="hljs-title function_">push</span>([...path]);
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-property">length</span>; i++) {
+            <span class="hljs-keyword">if</span> (used.<span class="hljs-title function_">has</span>(i)) <span class="hljs-keyword">continue</span>;
+            path.<span class="hljs-title function_">push</span>(nums[i]);
+            used.<span class="hljs-title function_">add</span>(i);
+            <span class="hljs-title function_">backtrack</span>(path);
+            path.<span class="hljs-title function_">pop</span>();
+            used.<span class="hljs-title function_">delete</span>(i);
+        }
+    }
+
+    <span class="hljs-title function_">backtrack</span>([]);
+    <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-comment">// 子集</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">subsets</span>(<span class="hljs-params">nums</span>) {
+    <span class="hljs-keyword">const</span> result = [];
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">backtrack</span>(<span class="hljs-params">start, path</span>) {
+        result.<span class="hljs-title function_">push</span>([...path]);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = start; i &lt; nums.<span class="hljs-property">length</span>; i++) {
+            path.<span class="hljs-title function_">push</span>(nums[i]);
+            <span class="hljs-title function_">backtrack</span>(i + <span class="hljs-number">1</span>, path);
+            path.<span class="hljs-title function_">pop</span>();
+        }
+    }
+
+    <span class="hljs-title function_">backtrack</span>(<span class="hljs-number">0</span>, []);
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre><hr>
+<h2 id="8">第8章 动态规划</h2>
+<p>动态规划是一种通过将问题分解为子问题来解决复杂问题的方法。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 斐波那契数列（DP）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fibonacciDP</span>(<span class="hljs-params">n</span>) {
+    <span class="hljs-keyword">if</span> (n &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> n;
+    <span class="hljs-keyword">const</span> dp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n + <span class="hljs-number">1</span>);
+    dp[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+    dp[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) {
+        dp[i] = dp[i - <span class="hljs-number">1</span>] + dp[i - <span class="hljs-number">2</span>];
+    }
+    <span class="hljs-keyword">return</span> dp[n];
+}
+
+<span class="hljs-comment">// 背包问题</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">knapsack</span>(<span class="hljs-params">weights, values, capacity</span>) {
+    <span class="hljs-keyword">const</span> n = weights.<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> dp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n + <span class="hljs-number">1</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(capacity + <span class="hljs-number">1</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>));
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> w = <span class="hljs-number">0</span>; w &lt;= capacity; w++) {
+            <span class="hljs-keyword">if</span> (weights[i - <span class="hljs-number">1</span>] &lt;= w) {
+                dp[i][w] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(
+                    dp[i - <span class="hljs-number">1</span>][w],
+                    dp[i - <span class="hljs-number">1</span>][w - weights[i - <span class="hljs-number">1</span>]] + values[i - <span class="hljs-number">1</span>]
+                );
+            } <span class="hljs-keyword">else</span> {
+                dp[i][w] = dp[i - <span class="hljs-number">1</span>][w];
+            }
+        }
+    }
+    <span class="hljs-keyword">return</span> dp[n][capacity];
+}
+
+<span class="hljs-comment">// 最长公共子序列</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">longestCommonSubsequence</span>(<span class="hljs-params">s1, s2</span>) {
+    <span class="hljs-keyword">const</span> m = s1.<span class="hljs-property">length</span>, n = s2.<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> dp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(m + <span class="hljs-number">1</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n + <span class="hljs-number">1</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>));
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt;= m; i++) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">1</span>; j &lt;= n; j++) {
+            <span class="hljs-keyword">if</span> (s1[i - <span class="hljs-number">1</span>] === s2[j - <span class="hljs-number">1</span>]) {
+                dp[i][j] = dp[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>] + <span class="hljs-number">1</span>;
+            } <span class="hljs-keyword">else</span> {
+                dp[i][j] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(dp[i - <span class="hljs-number">1</span>][j], dp[i][j - <span class="hljs-number">1</span>]);
+            }
+        }
+    }
+    <span class="hljs-keyword">return</span> dp[m][n];
+}
+</code></pre><hr>
+<h2 id="9">第9章 高级数据结构</h2>
+<h3 id="9.1">9.1 完全二叉树</h3>
+<p>完全二叉树是一种效率很高的数据结构，堆就是一种完全二叉树。完全二叉树由满二叉树引出。</p>
+<p><strong>定义</strong>：若设二叉树的深度为h，除第h层外，其他各层（1~h-1）的结点数都达到最大个数，第h层所有的结点都连续集中在最左边，这就是完全二叉树。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>叶子结点只能出现在最下层和次下层</li>
+<li>最下层的叶子结点集中在树的左部</li>
+<li>倒数第二层若存在叶子结点，一定在右部连续位置</li>
+<li>如果结点度为1，则该结点只有左孩子</li>
+<li>同样结点数目的二叉树，完全二叉树深度最小</li>
+<li>满二叉树一定是完全二叉树，但完全二叉树不一定是满二叉树</li>
+</ul>
+<p><strong>数组存储</strong>：完全二叉树通常用数组而不是链表存储</p>
+<pre class="hljs"><code><span class="hljs-comment">// 完全二叉树的数组表示</span>
+<span class="hljs-comment">// 对于下标i的节点（i从0开始）：</span>
+<span class="hljs-comment">// - 父节点下标：Math.floor((i - 1) / 2)</span>
+<span class="hljs-comment">// - 左孩子下标：2 * i + 1</span>
+<span class="hljs-comment">// - 右孩子下标：2 * i + 2</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CompleteBinaryTree</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span> = [];
+    }
+
+    <span class="hljs-comment">// 获取父节点索引</span>
+    <span class="hljs-title function_">parent</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((i - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>);
+    }
+
+    <span class="hljs-comment">// 获取左孩子索引</span>
+    <span class="hljs-title function_">leftChild</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span>;
+    }
+
+    <span class="hljs-comment">// 获取右孩子索引</span>
+    <span class="hljs-title function_">rightChild</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * i + <span class="hljs-number">2</span>;
+    }
+
+    <span class="hljs-comment">// 判断是否为完全二叉树（层序遍历判断）</span>
+    <span class="hljs-title function_">isCompleteBinaryTree</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+
+        <span class="hljs-keyword">let</span> foundNull = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>.<span class="hljs-property">length</span>; i++) {
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[i] === <span class="hljs-literal">null</span>) {
+                foundNull = <span class="hljs-literal">true</span>;
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (foundNull) {
+                <span class="hljs-comment">// 如果发现null之后还有非null节点，则不是完全二叉树</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+            }
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+}
+</code></pre><p><strong>完全二叉树的节点数计算</strong>：</p>
+<ul>
+<li>第i层最多有 2^(i-1) 个节点（i从1开始）</li>
+<li>深度为k的完全二叉树最多有 2^k - 1 个节点</li>
+</ul>
+<hr>
+<h3 id="9.2-avl">9.2 AVL树（平衡二叉搜索树）</h3>
+<p>AVL树是最先发明的自平衡二叉查找树，由苏联数学家Adelson-Velsky和Landis于1962年提出。</p>
+<p><strong>定义</strong>：</p>
+<ul>
+<li>本身是一棵二叉搜索树</li>
+<li>带有平衡条件：每个结点的左右子树的高度之差（平衡因子）绝对值最多为1</li>
+<li>平衡因子 = 左子树高度 - 右子树高度</li>
+</ul>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>查找、插入、删除在平均和最坏情况下的时间复杂度都是 O(log n)</li>
+<li>任何节点的两个子树的高度最大差别为1</li>
+</ul>
+<p><strong>旋转操作</strong>：</p>
+<ul>
+<li>左旋（LL型）：右子树过高</li>
+<li>右旋（RR型）：左子树过高</li>
+<li>左右旋（LR型）：先左旋后右旋</li>
+<li>右左旋（RL型）：先右旋后左旋</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">AVLNode</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">val</span> = val;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">left</span> = <span class="hljs-literal">null</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">right</span> = <span class="hljs-literal">null</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">height</span> = <span class="hljs-number">1</span>;
+    }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AVLTree</span> {
+    <span class="hljs-title function_">getHeight</span>(<span class="hljs-params">node</span>) {
+        <span class="hljs-keyword">return</span> node ? node.<span class="hljs-property">height</span> : <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-title function_">getBalanceFactor</span>(<span class="hljs-params">node</span>) {
+        <span class="hljs-keyword">return</span> node ? <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getHeight</span>(node.<span class="hljs-property">left</span>) - <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getHeight</span>(node.<span class="hljs-property">right</span>) : <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-title function_">updateHeight</span>(<span class="hljs-params">node</span>) {
+        node.<span class="hljs-property">height</span> = <span class="hljs-number">1</span> + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getHeight</span>(node.<span class="hljs-property">left</span>), <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getHeight</span>(node.<span class="hljs-property">right</span>));
+    }
+
+    <span class="hljs-comment">// 右旋</span>
+    <span class="hljs-title function_">rightRotate</span>(<span class="hljs-params">y</span>) {
+        <span class="hljs-keyword">const</span> x = y.<span class="hljs-property">left</span>;
+        <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">T2</span> = x.<span class="hljs-property">right</span>;
+
+        x.<span class="hljs-property">right</span> = y;
+        y.<span class="hljs-property">left</span> = <span class="hljs-variable constant_">T2</span>;
+
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">updateHeight</span>(y);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">updateHeight</span>(x);
+
+        <span class="hljs-keyword">return</span> x;
+    }
+
+    <span class="hljs-comment">// 左旋</span>
+    <span class="hljs-title function_">leftRotate</span>(<span class="hljs-params">x</span>) {
+        <span class="hljs-keyword">const</span> y = x.<span class="hljs-property">right</span>;
+        <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">T2</span> = y.<span class="hljs-property">left</span>;
+
+        y.<span class="hljs-property">left</span> = x;
+        x.<span class="hljs-property">right</span> = <span class="hljs-variable constant_">T2</span>;
+
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">updateHeight</span>(x);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">updateHeight</span>(y);
+
+        <span class="hljs-keyword">return</span> y;
+    }
+
+    <span class="hljs-title function_">insert</span>(<span class="hljs-params">node, val</span>) {
+        <span class="hljs-keyword">if</span> (!node) <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AVLNode</span>(val);
+
+        <span class="hljs-keyword">if</span> (val &lt; node.<span class="hljs-property">val</span>) {
+            node.<span class="hljs-property">left</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">insert</span>(node.<span class="hljs-property">left</span>, val);
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (val &gt; node.<span class="hljs-property">val</span>) {
+            node.<span class="hljs-property">right</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">insert</span>(node.<span class="hljs-property">right</span>, val);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">return</span> node;
+        }
+
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">updateHeight</span>(node);
+
+        <span class="hljs-keyword">const</span> balance = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getBalanceFactor</span>(node);
+
+        <span class="hljs-comment">// LL型 - 右旋</span>
+        <span class="hljs-keyword">if</span> (balance &gt; <span class="hljs-number">1</span> &amp;&amp; val &lt; node.<span class="hljs-property">left</span>.<span class="hljs-property">val</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">rightRotate</span>(node);
+        }
+
+        <span class="hljs-comment">// RR型 - 左旋</span>
+        <span class="hljs-keyword">if</span> (balance &lt; -<span class="hljs-number">1</span> &amp;&amp; val &gt; node.<span class="hljs-property">right</span>.<span class="hljs-property">val</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">leftRotate</span>(node);
+        }
+
+        <span class="hljs-comment">// LR型 - 左右旋</span>
+        <span class="hljs-keyword">if</span> (balance &gt; <span class="hljs-number">1</span> &amp;&amp; val &gt; node.<span class="hljs-property">left</span>.<span class="hljs-property">val</span>) {
+            node.<span class="hljs-property">left</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">leftRotate</span>(node.<span class="hljs-property">left</span>);
+            <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">rightRotate</span>(node);
+        }
+
+        <span class="hljs-comment">// RL型 - 右左旋</span>
+        <span class="hljs-keyword">if</span> (balance &lt; -<span class="hljs-number">1</span> &amp;&amp; val &lt; node.<span class="hljs-property">right</span>.<span class="hljs-property">val</span>) {
+            node.<span class="hljs-property">right</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">rightRotate</span>(node.<span class="hljs-property">right</span>);
+            <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">leftRotate</span>(node);
+        }
+
+        <span class="hljs-keyword">return</span> node;
+    }
+}
+</code></pre><hr>
+<h3 id="9.3">9.3 红黑树</h3>
+<p>红黑树是一种自平衡的二叉查找树，1972年由Rudolf Bayer发明。</p>
+<p><strong>五大性质</strong>：</p>
+<ol>
+<li>每个节点要么是黑色，要么是红色</li>
+<li>根节点是黑色</li>
+<li>每个叶子节点（NIL）是黑色</li>
+<li>每个红色结点的两个子结点一定都是黑色</li>
+<li>任意一结点到每个叶子结点的路径都包含数量相同的黑结点</li>
+</ol>
+<p><strong>与AVL树的比较</strong>：</p>
+<ul>
+<li>AVL树更严格平衡，查找效率更高</li>
+<li>红黑树插入删除效率更高（旋转次数少）</li>
+<li>AVL树适合查找频繁的场景，红黑树适合插入删除频繁的场景</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">RBNode</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">val</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">val</span> = val;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;RED&#x27;</span>;  <span class="hljs-comment">// 新插入的节点默认为红色</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">left</span> = <span class="hljs-literal">null</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">right</span> = <span class="hljs-literal">null</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span> = <span class="hljs-literal">null</span>;
+    }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">RedBlackTree</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">NIL</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RBNode</span>(<span class="hljs-literal">null</span>);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">NIL</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">NIL</span>;
+    }
+
+    <span class="hljs-title function_">leftRotate</span>(<span class="hljs-params">x</span>) {
+        <span class="hljs-keyword">const</span> y = x.<span class="hljs-property">right</span>;
+        x.<span class="hljs-property">right</span> = y.<span class="hljs-property">left</span>;
+        <span class="hljs-keyword">if</span> (y.<span class="hljs-property">left</span> !== <span class="hljs-variable language_">this</span>.<span class="hljs-property">NIL</span>) {
+            y.<span class="hljs-property">left</span>.<span class="hljs-property">parent</span> = x;
+        }
+        y.<span class="hljs-property">parent</span> = x.<span class="hljs-property">parent</span>;
+        <span class="hljs-keyword">if</span> (x.<span class="hljs-property">parent</span> === <span class="hljs-literal">null</span>) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span> = y;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x === x.<span class="hljs-property">parent</span>.<span class="hljs-property">left</span>) {
+            x.<span class="hljs-property">parent</span>.<span class="hljs-property">left</span> = y;
+        } <span class="hljs-keyword">else</span> {
+            x.<span class="hljs-property">parent</span>.<span class="hljs-property">right</span> = y;
+        }
+        y.<span class="hljs-property">left</span> = x;
+        x.<span class="hljs-property">parent</span> = y;
+    }
+
+    <span class="hljs-comment">// 插入后的修复操作</span>
+    <span class="hljs-title function_">insertFixup</span>(<span class="hljs-params">node</span>) {
+        <span class="hljs-keyword">while</span> (node.<span class="hljs-property">parent</span> &amp;&amp; node.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> === <span class="hljs-string">&#x27;RED&#x27;</span>) {
+            <span class="hljs-keyword">if</span> (node.<span class="hljs-property">parent</span> === node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>?.<span class="hljs-property">left</span>) {
+                <span class="hljs-keyword">const</span> uncle = node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>.<span class="hljs-property">right</span>;
+                <span class="hljs-keyword">if</span> (uncle &amp;&amp; uncle.<span class="hljs-property">color</span> === <span class="hljs-string">&#x27;RED&#x27;</span>) {
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+                    uncle.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;RED&#x27;</span>;
+                    node = node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>;
+                } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">if</span> (node === node.<span class="hljs-property">parent</span>.<span class="hljs-property">right</span>) {
+                        node = node.<span class="hljs-property">parent</span>;
+                        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">leftRotate</span>(node);
+                    }
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;RED&#x27;</span>;
+                    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">rightRotate</span>(node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>);
+                }
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-comment">// 对称情况</span>
+                <span class="hljs-keyword">const</span> uncle = node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>?.<span class="hljs-property">left</span>;
+                <span class="hljs-keyword">if</span> (uncle &amp;&amp; uncle.<span class="hljs-property">color</span> === <span class="hljs-string">&#x27;RED&#x27;</span>) {
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+                    uncle.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;RED&#x27;</span>;
+                    node = node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>;
+                } <span class="hljs-keyword">else</span> {
+                    <span class="hljs-keyword">if</span> (node === node.<span class="hljs-property">parent</span>.<span class="hljs-property">left</span>) {
+                        node = node.<span class="hljs-property">parent</span>;
+                        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">rightRotate</span>(node);
+                    }
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+                    node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;RED&#x27;</span>;
+                    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">leftRotate</span>(node.<span class="hljs-property">parent</span>.<span class="hljs-property">parent</span>);
+                }
+            }
+        }
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span>.<span class="hljs-property">color</span> = <span class="hljs-string">&#x27;BLACK&#x27;</span>;
+    }
+}
+</code></pre><hr>
+<h3 id="9.4-bb">9.4 B树与B+树</h3>
+<p>B树和B+树广泛应用于数据库和文件系统的索引结构。</p>
+<p><strong>B树特点</strong>：</p>
+<ul>
+<li>是一种平衡的多路查找树</li>
+<li>每个节点可以有多个子节点</li>
+<li>所有关键字分布在整棵树中</li>
+<li>非叶子节点也包含数据</li>
+</ul>
+<p><strong>B+树特点</strong>：</p>
+<ul>
+<li>是B树的变体</li>
+<li>所有数据都存储在叶子节点</li>
+<li>叶子节点之间通过指针连接，形成有序链表</li>
+<li>非叶子节点只存储索引（关键字）</li>
+<li>更适合范围查询和顺序访问</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// B树节点</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">BTreeNode</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">t</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">t</span> = t;  <span class="hljs-comment">// 最小度数</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">keys</span> = [];  <span class="hljs-comment">// 关键字数组</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">children</span> = [];  <span class="hljs-comment">// 子节点数组</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">leaf</span> = <span class="hljs-literal">true</span>;  <span class="hljs-comment">// 是否为叶子节点</span>
+    }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">BTree</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">t</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BTreeNode</span>(t);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">t</span> = t;
+    }
+
+    <span class="hljs-comment">// 搜索</span>
+    <span class="hljs-title function_">search</span>(<span class="hljs-params">k, node = <span class="hljs-variable language_">this</span>.root</span>) {
+        <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">while</span> (i &lt; node.<span class="hljs-property">keys</span>.<span class="hljs-property">length</span> &amp;&amp; k &gt; node.<span class="hljs-property">keys</span>[i]) {
+            i++;
+        }
+        <span class="hljs-keyword">if</span> (i &lt; node.<span class="hljs-property">keys</span>.<span class="hljs-property">length</span> &amp;&amp; k === node.<span class="hljs-property">keys</span>[i]) {
+            <span class="hljs-keyword">return</span> { node, <span class="hljs-attr">index</span>: i };
+        }
+        <span class="hljs-keyword">if</span> (node.<span class="hljs-property">leaf</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">search</span>(k, node.<span class="hljs-property">children</span>[i]);
+    }
+
+    <span class="hljs-comment">// 分裂子节点</span>
+    <span class="hljs-title function_">splitChild</span>(<span class="hljs-params">parent, index</span>) {
+        <span class="hljs-keyword">const</span> t = <span class="hljs-variable language_">this</span>.<span class="hljs-property">t</span>;
+        <span class="hljs-keyword">const</span> child = parent.<span class="hljs-property">children</span>[index];
+        <span class="hljs-keyword">const</span> newNode = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BTreeNode</span>(t);
+
+        <span class="hljs-comment">// 将child的后t-1个关键字移动到newNode</span>
+        newNode.<span class="hljs-property">keys</span> = child.<span class="hljs-property">keys</span>.<span class="hljs-title function_">splice</span>(t);
+        <span class="hljs-comment">// 将child的后t个子节点移动到newNode</span>
+        <span class="hljs-keyword">if</span> (!child.<span class="hljs-property">leaf</span>) {
+            newNode.<span class="hljs-property">children</span> = child.<span class="hljs-property">children</span>.<span class="hljs-title function_">splice</span>(t);
+            newNode.<span class="hljs-property">leaf</span> = <span class="hljs-literal">false</span>;
+        }
+
+        <span class="hljs-comment">// 将child的第t个关键字提升到父节点</span>
+        parent.<span class="hljs-property">keys</span>.<span class="hljs-title function_">splice</span>(index, <span class="hljs-number">0</span>, child.<span class="hljs-property">keys</span>[t - <span class="hljs-number">1</span>]);
+        child.<span class="hljs-property">keys</span>.<span class="hljs-title function_">splice</span>(t - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+
+        <span class="hljs-comment">// 将newNode插入父节点的children</span>
+        parent.<span class="hljs-property">children</span>.<span class="hljs-title function_">splice</span>(index + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, newNode);
+    }
+
+    <span class="hljs-comment">// 插入</span>
+    <span class="hljs-title function_">insert</span>(<span class="hljs-params">k</span>) {
+        <span class="hljs-keyword">const</span> root = <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span>;
+        <span class="hljs-keyword">if</span> (root.<span class="hljs-property">keys</span>.<span class="hljs-property">length</span> === <span class="hljs-number">2</span> * <span class="hljs-variable language_">this</span>.<span class="hljs-property">t</span> - <span class="hljs-number">1</span>) {
+            <span class="hljs-keyword">const</span> newRoot = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BTreeNode</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">t</span>);
+            newRoot.<span class="hljs-property">children</span>.<span class="hljs-title function_">push</span>(root);
+            newRoot.<span class="hljs-property">leaf</span> = <span class="hljs-literal">false</span>;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">splitChild</span>(newRoot, <span class="hljs-number">0</span>);
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span> = newRoot;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">insertNonFull</span>(newRoot, k);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">insertNonFull</span>(root, k);
+        }
+    }
+
+    <span class="hljs-title function_">insertNonFull</span>(<span class="hljs-params">node, k</span>) {
+        <span class="hljs-keyword">let</span> i = node.<span class="hljs-property">keys</span>.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">if</span> (node.<span class="hljs-property">leaf</span>) {
+            <span class="hljs-keyword">while</span> (i &gt;= <span class="hljs-number">0</span> &amp;&amp; k &lt; node.<span class="hljs-property">keys</span>[i]) {
+                i--;
+            }
+            node.<span class="hljs-property">keys</span>.<span class="hljs-title function_">splice</span>(i + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, k);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">while</span> (i &gt;= <span class="hljs-number">0</span> &amp;&amp; k &lt; node.<span class="hljs-property">keys</span>[i]) {
+                i--;
+            }
+            i++;
+            <span class="hljs-keyword">if</span> (node.<span class="hljs-property">children</span>[i].<span class="hljs-property">keys</span>.<span class="hljs-property">length</span> === <span class="hljs-number">2</span> * <span class="hljs-variable language_">this</span>.<span class="hljs-property">t</span> - <span class="hljs-number">1</span>) {
+                <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">splitChild</span>(node, i);
+                <span class="hljs-keyword">if</span> (k &gt; node.<span class="hljs-property">keys</span>[i]) {
+                    i++;
+                }
+            }
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">insertNonFull</span>(node.<span class="hljs-property">children</span>[i], k);
+        }
+    }
+}
+</code></pre><p><strong>B树与B+树对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>B树</th>
+<th>B+树</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据存储</td>
+<td>所有节点</td>
+<td>仅叶子节点</td>
+</tr>
+<tr>
+<td>查找稳定性</td>
+<td>不稳定</td>
+<td>稳定</td>
+</tr>
+<tr>
+<td>范围查询</td>
+<td>效率低</td>
+<td>效率高（链表）</td>
+</tr>
+<tr>
+<td>空间利用率</td>
+<td>较低</td>
+<td>较高</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>随机访问</td>
+<td>顺序访问、范围查询</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="9.5">9.5 线段树</h3>
+<p>线段树是一种高效处理区间查询和动态修改问题的数据结构。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>每次查询和更新时间复杂度：O(log n)</li>
+<li>构建时间复杂度：O(n)</li>
+<li>空间复杂度：O(n)</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">SegmentTree</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">arr</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">n</span> = arr.<span class="hljs-property">length</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(<span class="hljs-number">4</span> * <span class="hljs-variable language_">this</span>.<span class="hljs-property">n</span>);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">build</span>(arr, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">n</span> - <span class="hljs-number">1</span>);
+    }
+
+    <span class="hljs-title function_">build</span>(<span class="hljs-params">arr, node, start, end</span>) {
+        <span class="hljs-keyword">if</span> (start === end) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[node] = arr[start];
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">const</span> mid = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((start + end) / <span class="hljs-number">2</span>);
+            <span class="hljs-keyword">const</span> leftNode = <span class="hljs-number">2</span> * node + <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">const</span> rightNode = <span class="hljs-number">2</span> * node + <span class="hljs-number">2</span>;
+
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">build</span>(arr, leftNode, start, mid);
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">build</span>(arr, rightNode, mid + <span class="hljs-number">1</span>, end);
+
+            <span class="hljs-comment">// 区间求和</span>
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[node] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[leftNode] + <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[rightNode];
+        }
+    }
+
+    <span class="hljs-comment">// 区间查询</span>
+    <span class="hljs-title function_">query</span>(<span class="hljs-params">node, start, end, qL, qR</span>) {
+        <span class="hljs-keyword">if</span> (qR &lt; start || qL &gt; end) {
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;  <span class="hljs-comment">// 不在查询范围内</span>
+        }
+        <span class="hljs-keyword">if</span> (qL &lt;= start &amp;&amp; end &lt;= qR) {
+            <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[node];  <span class="hljs-comment">// 完全在查询范围内</span>
+        }
+
+        <span class="hljs-keyword">const</span> mid = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((start + end) / <span class="hljs-number">2</span>);
+        <span class="hljs-keyword">const</span> leftResult = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">query</span>(<span class="hljs-number">2</span> * node + <span class="hljs-number">1</span>, start, mid, qL, qR);
+        <span class="hljs-keyword">const</span> rightResult = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">query</span>(<span class="hljs-number">2</span> * node + <span class="hljs-number">2</span>, mid + <span class="hljs-number">1</span>, end, qL, qR);
+
+        <span class="hljs-keyword">return</span> leftResult + rightResult;
+    }
+
+    <span class="hljs-comment">// 单点更新</span>
+    <span class="hljs-title function_">update</span>(<span class="hljs-params">node, start, end, idx, value</span>) {
+        <span class="hljs-keyword">if</span> (start === end) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[node] = value;
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-keyword">const</span> mid = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((start + end) / <span class="hljs-number">2</span>);
+        <span class="hljs-keyword">if</span> (idx &lt;= mid) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">update</span>(<span class="hljs-number">2</span> * node + <span class="hljs-number">1</span>, start, mid, idx, value);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">update</span>(<span class="hljs-number">2</span> * node + <span class="hljs-number">2</span>, mid + <span class="hljs-number">1</span>, end, idx, value);
+        }
+
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[node] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[<span class="hljs-number">2</span> * node + <span class="hljs-number">1</span>] + <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[<span class="hljs-number">2</span> * node + <span class="hljs-number">2</span>];
+    }
+}
+</code></pre><hr>
+<h3 id="9.6-fenwick-tree">9.6 树状数组（Fenwick Tree）</h3>
+<p>树状数组（Fenwick Tree）是一种高效处理前缀和查询及单点更新的数据结构。</p>
+<p><strong>核心操作</strong>：</p>
+<ul>
+<li>更新：O(log n)</li>
+<li>前缀和查询：O(log n)</li>
+<li>区间和查询：O(log n)</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">FenwickTree</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">size</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> = size;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(size + <span class="hljs-number">1</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>);
+    }
+
+    <span class="hljs-comment">// lowbit函数：获取最低位1</span>
+    <span class="hljs-title function_">lowbit</span>(<span class="hljs-params">x</span>) {
+        <span class="hljs-keyword">return</span> x &amp; (-x);
+    }
+
+    <span class="hljs-comment">// 更新：给位置i增加delta</span>
+    <span class="hljs-title function_">update</span>(<span class="hljs-params">i, delta</span>) {
+        <span class="hljs-keyword">while</span> (i &lt;= <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[i] += delta;
+            i += <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">lowbit</span>(i);
+        }
+    }
+
+    <span class="hljs-comment">// 查询：返回1到i的前缀和</span>
+    <span class="hljs-title function_">query</span>(<span class="hljs-params">i</span>) {
+        <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">0</span>) {
+            sum += <span class="hljs-variable language_">this</span>.<span class="hljs-property">tree</span>[i];
+            i -= <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">lowbit</span>(i);
+        }
+        <span class="hljs-keyword">return</span> sum;
+    }
+
+    <span class="hljs-comment">// 区间和查询</span>
+    <span class="hljs-title function_">rangeQuery</span>(<span class="hljs-params">left, right</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">query</span>(right) - <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">query</span>(left - <span class="hljs-number">1</span>);
+    }
+}
+</code></pre><hr>
+<h3 id="9.7-trie">9.7 字典树（Trie）</h3>
+<p>字典树，又称前缀树或Trie树，是一种用于高效存储和检索字符串的数据结构。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>根节点不包含字符</li>
+<li>从根节点到某个节点的路径上的字符连接起来为该节点对应的字符串</li>
+<li>每个节点的所有子节点包含的字符都不相同</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">TrieNode</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">children</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();  <span class="hljs-comment">// 字符到节点的映射</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">isEnd</span> = <span class="hljs-literal">false</span>;  <span class="hljs-comment">// 是否为单词结尾</span>
+    }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Trie</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TrieNode</span>();
+    }
+
+    <span class="hljs-comment">// 插入单词</span>
+    <span class="hljs-title function_">insert</span>(<span class="hljs-params">word</span>) {
+        <span class="hljs-keyword">let</span> node = <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> char <span class="hljs-keyword">of</span> word) {
+            <span class="hljs-keyword">if</span> (!node.<span class="hljs-property">children</span>.<span class="hljs-title function_">has</span>(char)) {
+                node.<span class="hljs-property">children</span>.<span class="hljs-title function_">set</span>(char, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TrieNode</span>());
+            }
+            node = node.<span class="hljs-property">children</span>.<span class="hljs-title function_">get</span>(char);
+        }
+        node.<span class="hljs-property">isEnd</span> = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-comment">// 搜索单词</span>
+    <span class="hljs-title function_">search</span>(<span class="hljs-params">word</span>) {
+        <span class="hljs-keyword">const</span> node = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">searchPrefix</span>(word);
+        <span class="hljs-keyword">return</span> node !== <span class="hljs-literal">null</span> &amp;&amp; node.<span class="hljs-property">isEnd</span>;
+    }
+
+    <span class="hljs-comment">// 搜索前缀</span>
+    <span class="hljs-title function_">startsWith</span>(<span class="hljs-params">prefix</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">searchPrefix</span>(prefix) !== <span class="hljs-literal">null</span>;
+    }
+
+    <span class="hljs-title function_">searchPrefix</span>(<span class="hljs-params">prefix</span>) {
+        <span class="hljs-keyword">let</span> node = <span class="hljs-variable language_">this</span>.<span class="hljs-property">root</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> char <span class="hljs-keyword">of</span> prefix) {
+            <span class="hljs-keyword">if</span> (!node.<span class="hljs-property">children</span>.<span class="hljs-title function_">has</span>(char)) {
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+            }
+            node = node.<span class="hljs-property">children</span>.<span class="hljs-title function_">get</span>(char);
+        }
+        <span class="hljs-keyword">return</span> node;
+    }
+
+    <span class="hljs-comment">// 获取所有以prefix为前缀的单词</span>
+    <span class="hljs-title function_">getWordsWithPrefix</span>(<span class="hljs-params">prefix</span>) {
+        <span class="hljs-keyword">const</span> result = [];
+        <span class="hljs-keyword">const</span> node = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">searchPrefix</span>(prefix);
+        <span class="hljs-keyword">if</span> (!node) <span class="hljs-keyword">return</span> result;
+
+        <span class="hljs-keyword">const</span> <span class="hljs-title function_">dfs</span> = (<span class="hljs-params">currNode, currentWord</span>) =&gt; {
+            <span class="hljs-keyword">if</span> (currNode.<span class="hljs-property">isEnd</span>) {
+                result.<span class="hljs-title function_">push</span>(currentWord);
+            }
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [char, childNode] <span class="hljs-keyword">of</span> currNode.<span class="hljs-property">children</span>) {
+                <span class="hljs-title function_">dfs</span>(childNode, currentWord + char);
+            }
+        };
+
+        <span class="hljs-title function_">dfs</span>(node, prefix);
+        <span class="hljs-keyword">return</span> result;
+    }
+}
+</code></pre><p><strong>应用场景</strong>：</p>
+<ul>
+<li>字符串检索</li>
+<li>前缀匹配</li>
+<li>自动补全</li>
+<li>IP路由（最长前缀匹配）</li>
+</ul>
+<hr>
+<h3 id="9.8">9.8 单调栈</h3>
+<p>单调栈是一种特殊的栈，保持栈内元素单调递增或递减。</p>
+<p><strong>应用场景</strong>：</p>
+<ul>
+<li>下一个更大/更小元素</li>
+<li>股票价格跨度</li>
+<li>每日温度</li>
+<li>去除重复字母</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// 单调递减栈 - 寻找下一个更大元素</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">nextGreaterElement</span>(<span class="hljs-params">nums</span>) {
+    <span class="hljs-keyword">const</span> n = nums.<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n).<span class="hljs-title function_">fill</span>(-<span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> stack = [];  <span class="hljs-comment">// 存储索引</span>
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) {
+        <span class="hljs-comment">// 当前元素大于栈顶元素，找到下一个更大元素</span>
+        <span class="hljs-keyword">while</span> (stack.<span class="hljs-property">length</span> &amp;&amp; nums[i] &gt; nums[stack[stack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]]) {
+            <span class="hljs-keyword">const</span> idx = stack.<span class="hljs-title function_">pop</span>();
+            result[idx] = nums[i];
+        }
+        stack.<span class="hljs-title function_">push</span>(i);
+    }
+
+    <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-comment">// 单调递增栈 - 寻找下一个更小元素</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">nextSmallerElement</span>(<span class="hljs-params">nums</span>) {
+    <span class="hljs-keyword">const</span> n = nums.<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n).<span class="hljs-title function_">fill</span>(-<span class="hljs-number">1</span>);
+    <span class="hljs-keyword">const</span> stack = [];
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) {
+        <span class="hljs-keyword">while</span> (stack.<span class="hljs-property">length</span> &amp;&amp; nums[i] &lt; nums[stack[stack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]]) {
+            <span class="hljs-keyword">const</span> idx = stack.<span class="hljs-title function_">pop</span>();
+            result[idx] = nums[i];
+        }
+        stack.<span class="hljs-title function_">push</span>(i);
+    }
+
+    <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-comment">// 柱状图中最大的矩形</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">largestRectangleArea</span>(<span class="hljs-params">heights</span>) {
+    <span class="hljs-keyword">const</span> n = heights.<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> stack = [];
+    <span class="hljs-keyword">let</span> maxArea = <span class="hljs-number">0</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt;= n; i++) {
+        <span class="hljs-keyword">const</span> h = i === n ? <span class="hljs-number">0</span> : heights[i];
+        <span class="hljs-keyword">while</span> (stack.<span class="hljs-property">length</span> &amp;&amp; h &lt; heights[stack[stack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]]) {
+            <span class="hljs-keyword">const</span> height = heights[stack.<span class="hljs-title function_">pop</span>()];
+            <span class="hljs-keyword">const</span> width = stack.<span class="hljs-property">length</span> ? i - stack[stack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] - <span class="hljs-number">1</span> : i;
+            maxArea = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(maxArea, height * width);
+        }
+        stack.<span class="hljs-title function_">push</span>(i);
+    }
+
+    <span class="hljs-keyword">return</span> maxArea;
+}
+</code></pre><hr>
+<h3 id="9.9">9.9 单调队列</h3>
+<p>单调队列是一种特殊的队列，常用于滑动窗口最大值问题。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 滑动窗口最大值</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">maxSlidingWindow</span>(<span class="hljs-params">nums, k</span>) {
+    <span class="hljs-keyword">const</span> result = [];
+    <span class="hljs-keyword">const</span> deque = [];  <span class="hljs-comment">// 存储索引</span>
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-property">length</span>; i++) {
+        <span class="hljs-comment">// 移除超出窗口的索引</span>
+        <span class="hljs-keyword">while</span> (deque.<span class="hljs-property">length</span> &amp;&amp; deque[<span class="hljs-number">0</span>] &lt;= i - k) {
+            deque.<span class="hljs-title function_">shift</span>();
+        }
+
+        <span class="hljs-comment">// 移除比当前元素小的元素（保持递减）</span>
+        <span class="hljs-keyword">while</span> (deque.<span class="hljs-property">length</span> &amp;&amp; nums[deque[deque.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]] &lt;= nums[i]) {
+            deque.<span class="hljs-title function_">pop</span>();
+        }
+
+        deque.<span class="hljs-title function_">push</span>(i);
+
+        <span class="hljs-comment">// 记录窗口最大值</span>
+        <span class="hljs-keyword">if</span> (i &gt;= k - <span class="hljs-number">1</span>) {
+            result.<span class="hljs-title function_">push</span>(nums[deque[<span class="hljs-number">0</span>]]);
+        }
+    }
+
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre><hr>
+<h3 id="9.10-union-find">9.10 并查集（Union-Find）</h3>
+<p>并查集是一种高效处理集合合并和查询的数据结构。</p>
+<p><strong>核心操作</strong>：</p>
+<ul>
+<li>查询（find）：查找元素所属集合</li>
+<li>合并（union）：合并两个集合</li>
+<li>路径压缩：优化查询效率</li>
+<li>按秩合并：优化合并效率</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">UnionFind</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">n</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">rank</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n);  <span class="hljs-comment">// 按秩合并</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[i] = i;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">rank</span>[i] = <span class="hljs-number">0</span>;
+        }
+    }
+
+    <span class="hljs-comment">// 查找（带路径压缩）</span>
+    <span class="hljs-title function_">find</span>(<span class="hljs-params">x</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x] !== x) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x] = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x]);  <span class="hljs-comment">// 路径压缩</span>
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x];
+    }
+
+    <span class="hljs-comment">// 按秩合并</span>
+    <span class="hljs-title function_">union</span>(<span class="hljs-params">x, y</span>) {
+        <span class="hljs-keyword">const</span> rootX = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(x);
+        <span class="hljs-keyword">const</span> rootY = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(y);
+
+        <span class="hljs-keyword">if</span> (rootX === rootY) <span class="hljs-keyword">return</span>;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">rank</span>[rootX] &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">rank</span>[rootY]) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[rootX] = rootY;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">rank</span>[rootX] &gt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">rank</span>[rootY]) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[rootY] = rootX;
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[rootY] = rootX;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">rank</span>[rootX]++;
+        }
+    }
+
+    <span class="hljs-comment">// 判断是否连通</span>
+    <span class="hljs-title function_">connected</span>(<span class="hljs-params">x, y</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(x) === <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(y);
+    }
+}
+</code></pre><p><strong>应用场景</strong>：</p>
+<ul>
+<li>朋友圈</li>
+<li>岛屿数量</li>
+<li>连通分量</li>
+<li>Kruskal最小生成树算法</li>
+</ul>
+<hr>
+<h3 id="9.11-bloom-filter">9.11 布隆过滤器（Bloom Filter）</h3>
+<p>布隆过滤器是一种空间效率极高的概率型数据结构，用于判断一个元素是否在集合中。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>空间效率高</li>
+<li>查询时间 O(k)，k为哈希函数个数</li>
+<li>可能存在误判（可能把不存在的元素判断为存在）</li>
+<li>不存在误判（判断存在可能不存在，但判断不存在一定不存在）</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">BloomFilter</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">size = <span class="hljs-number">100000</span>, hashCount = <span class="hljs-number">3</span></span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> = size;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">hashCount</span> = hashCount;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">bitArray</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(size).<span class="hljs-title function_">fill</span>(<span class="hljs-literal">false</span>);
+    }
+
+    <span class="hljs-comment">// 简单的哈希函数</span>
+    <span class="hljs-title function_">hash</span>(<span class="hljs-params">value, seed</span>) {
+        <span class="hljs-keyword">let</span> hash = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">const</span> str = <span class="hljs-title class_">String</span>(value);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; str.<span class="hljs-property">length</span>; i++) {
+            hash = (hash * <span class="hljs-number">31</span> + str.<span class="hljs-title function_">charCodeAt</span>(i) + seed) % <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>;
+        }
+        <span class="hljs-keyword">return</span> hash;
+    }
+
+    <span class="hljs-comment">// 添加元素</span>
+    <span class="hljs-title function_">add</span>(<span class="hljs-params">value</span>) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">hashCount</span>; i++) {
+            <span class="hljs-keyword">const</span> index = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">hash</span>(value, i);
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">bitArray</span>[index] = <span class="hljs-literal">true</span>;
+        }
+    }
+
+    <span class="hljs-comment">// 判断元素是否存在</span>
+    <span class="hljs-title function_">contains</span>(<span class="hljs-params">value</span>) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">hashCount</span>; i++) {
+            <span class="hljs-keyword">const</span> index = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">hash</span>(value, i);
+            <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">bitArray</span>[index]) {
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+            }
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+}
+</code></pre><p><strong>应用场景</strong>：</p>
+<ul>
+<li>缓存穿透问题</li>
+<li>垃圾邮件过滤</li>
+<li>URL去重</li>
+<li>大数据去重</li>
+</ul>
+<hr>
+<h3 id="9.12-lru">9.12 LRU缓存（最近最少使用）</h3>
+<p>LRU是一种常用的缓存淘汰策略。</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCache</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">capacity</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">capacity</span> = capacity;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+    }
+
+    <span class="hljs-title function_">get</span>(<span class="hljs-params">key</span>) {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">has</span>(key)) {
+            <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+        }
+        <span class="hljs-comment">// 移到末尾（最近使用）</span>
+        <span class="hljs-keyword">const</span> value = <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">get</span>(key);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">delete</span>(key);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">set</span>(key, value);
+        <span class="hljs-keyword">return</span> value;
+    }
+
+    <span class="hljs-title function_">put</span>(<span class="hljs-params">key, value</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">has</span>(key)) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">delete</span>(key);
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-property">size</span> &gt;= <span class="hljs-variable language_">this</span>.<span class="hljs-property">capacity</span>) {
+            <span class="hljs-comment">// 删除最旧的（第一个）</span>
+            <span class="hljs-keyword">const</span> firstKey = <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">keys</span>().<span class="hljs-title function_">next</span>().<span class="hljs-property">value</span>;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">delete</span>(firstKey);
+        }
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">set</span>(key, value);
+    }
+}
+
+<span class="hljs-comment">// 使用双向链表+哈希表实现（更高效）</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCache2</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">capacity</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">capacity</span> = capacity;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+
+        <span class="hljs-comment">// 伪头部和伪尾部</span>
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = { <span class="hljs-attr">key</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">value</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">prev</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span> };
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = { <span class="hljs-attr">key</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">value</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">prev</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>, <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span> };
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>;
+    }
+
+    <span class="hljs-comment">// 移动到末尾</span>
+    <span class="hljs-title function_">moveToTail</span>(<span class="hljs-params">key</span>) {
+        <span class="hljs-keyword">const</span> node = <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">get</span>(key);
+        <span class="hljs-comment">// 移除节点</span>
+        node.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = node.<span class="hljs-property">next</span>;
+        node.<span class="hljs-property">next</span>.<span class="hljs-property">prev</span> = node.<span class="hljs-property">prev</span>;
+        <span class="hljs-comment">// 插入尾部</span>
+        node.<span class="hljs-property">prev</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>;
+        node.<span class="hljs-property">next</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = node;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span> = node;
+    }
+
+    <span class="hljs-title function_">get</span>(<span class="hljs-params">key</span>) {
+        <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">has</span>(key)) {
+            <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+        }
+        <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">moveToTail</span>(key);
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">get</span>(key).<span class="hljs-property">value</span>;
+    }
+
+    <span class="hljs-title function_">put</span>(<span class="hljs-params">key, value</span>) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">has</span>(key)) {
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">get</span>(key).<span class="hljs-property">value</span> = value;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">moveToTail</span>(key);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-property">size</span> &gt;= <span class="hljs-variable language_">this</span>.<span class="hljs-property">capacity</span>) {
+                <span class="hljs-keyword">const</span> first = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span>;
+                <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">delete</span>(first.<span class="hljs-property">key</span>);
+                <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span> = first.<span class="hljs-property">next</span>;
+                first.<span class="hljs-property">next</span>.<span class="hljs-property">prev</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+            }
+            <span class="hljs-keyword">const</span> node = { key, value, <span class="hljs-attr">prev</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>, <span class="hljs-attr">next</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> };
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">cache</span>.<span class="hljs-title function_">set</span>(key, node);
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = node;
+            <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span> = node;
+        }
+    }
+}
+</code></pre><hr>
+<h2 id="10">第10章 图算法高级</h2>
+<h3 id="10.1-dijkstra">10.1 Dijkstra最短路径算法</h3>
+<pre class="hljs"><code><span class="hljs-comment">// 迪杰斯特拉算法 - 单源最短路径</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">dijkstra</span>(<span class="hljs-params">graph, start</span>) {
+    <span class="hljs-keyword">const</span> dist = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(graph.<span class="hljs-property">length</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-title class_">Infinity</span>);
+    <span class="hljs-keyword">const</span> visited = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(graph.<span class="hljs-property">length</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-literal">false</span>);
+    <span class="hljs-keyword">const</span> parent = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(graph.<span class="hljs-property">length</span>).<span class="hljs-title function_">fill</span>(-<span class="hljs-number">1</span>);
+
+    dist[start] = <span class="hljs-number">0</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; graph.<span class="hljs-property">length</span>; i++) {
+        <span class="hljs-comment">// 找到未访问的最小距离节点</span>
+        <span class="hljs-keyword">let</span> minDist = <span class="hljs-title class_">Infinity</span>;
+        <span class="hljs-keyword">let</span> minNode = -<span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>; j &lt; graph.<span class="hljs-property">length</span>; j++) {
+            <span class="hljs-keyword">if</span> (!visited[j] &amp;&amp; dist[j] &lt; minDist) {
+                minDist = dist[j];
+                minNode = j;
+            }
+        }
+
+        <span class="hljs-keyword">if</span> (minNode === -<span class="hljs-number">1</span>) <span class="hljs-keyword">break</span>;
+        visited[minNode] = <span class="hljs-literal">true</span>;
+
+        <span class="hljs-comment">// 更新邻居节点的距离</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>; j &lt; graph.<span class="hljs-property">length</span>; j++) {
+            <span class="hljs-keyword">if</span> (graph[minNode][j] &gt; <span class="hljs-number">0</span> &amp;&amp; !visited[j]) {
+                <span class="hljs-keyword">const</span> newDist = dist[minNode] + graph[minNode][j];
+                <span class="hljs-keyword">if</span> (newDist &lt; dist[j]) {
+                    dist[j] = newDist;
+                    parent[j] = minNode;
+                }
+            }
+        }
+    }
+
+    <span class="hljs-keyword">return</span> { dist, parent };
+}
+
+<span class="hljs-comment">// 重建最短路径</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getPath</span>(<span class="hljs-params">parent, start, end</span>) {
+    <span class="hljs-keyword">const</span> path = [];
+    <span class="hljs-keyword">let</span> curr = end;
+    <span class="hljs-keyword">while</span> (curr !== -<span class="hljs-number">1</span>) {
+        path.<span class="hljs-title function_">unshift</span>(curr);
+        curr = parent[curr];
+    }
+    <span class="hljs-keyword">return</span> path[<span class="hljs-number">0</span>] === start ? path : [];
+}
+</code></pre><h3 id="10.2">10.2 拓扑排序</h3>
+<p>拓扑排序用于处理有向无环图（DAG）的排序。</p>
+<pre class="hljs"><code><span class="hljs-comment">// Kahn算法 - 基于入度</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">topologicalSortKahn</span>(<span class="hljs-params">numCourses, prerequisites</span>) {
+    <span class="hljs-keyword">const</span> graph = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(numCourses).<span class="hljs-title function_">fill</span>(<span class="hljs-literal">null</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function">() =&gt;</span> []);
+    <span class="hljs-keyword">const</span> inDegree = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(numCourses).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [course, prereq] <span class="hljs-keyword">of</span> prerequisites) {
+        graph[prereq].<span class="hljs-title function_">push</span>(course);
+        inDegree[course]++;
+    }
+
+    <span class="hljs-keyword">const</span> queue = [];
+    <span class="hljs-keyword">const</span> result = [];
+
+    <span class="hljs-comment">// 入度为0的节点入队</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; numCourses; i++) {
+        <span class="hljs-keyword">if</span> (inDegree[i] === <span class="hljs-number">0</span>) {
+            queue.<span class="hljs-title function_">push</span>(i);
+        }
+    }
+
+    <span class="hljs-keyword">while</span> (queue.<span class="hljs-property">length</span>) {
+        <span class="hljs-keyword">const</span> node = queue.<span class="hljs-title function_">shift</span>();
+        result.<span class="hljs-title function_">push</span>(node);
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> next <span class="hljs-keyword">of</span> graph[node]) {
+            inDegree[next]--;
+            <span class="hljs-keyword">if</span> (inDegree[next] === <span class="hljs-number">0</span>) {
+                queue.<span class="hljs-title function_">push</span>(next);
+            }
+        }
+    }
+
+    <span class="hljs-keyword">return</span> result.<span class="hljs-property">length</span> === numCourses ? result : [];
+}
+
+<span class="hljs-comment">// DFS拓扑排序</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">topologicalSortDFS</span>(<span class="hljs-params">numCourses, prerequisites</span>) {
+    <span class="hljs-keyword">const</span> graph = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(numCourses).<span class="hljs-title function_">fill</span>(<span class="hljs-literal">null</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function">() =&gt;</span> []);
+    <span class="hljs-keyword">const</span> visited = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(numCourses).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>);  <span class="hljs-comment">// 0:未访问 1:访问中 2:已完成</span>
+    <span class="hljs-keyword">const</span> result = [];
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [course, prereq] <span class="hljs-keyword">of</span> prerequisites) {
+        graph[prereq].<span class="hljs-title function_">push</span>(course);
+    }
+
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">dfs</span> = (<span class="hljs-params">node</span>) =&gt; {
+        <span class="hljs-keyword">if</span> (visited[node] === <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;  <span class="hljs-comment">// 有环</span>
+        <span class="hljs-keyword">if</span> (visited[node] === <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+
+        visited[node] = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> next <span class="hljs-keyword">of</span> graph[node]) {
+            <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">dfs</span>(next)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+        visited[node] = <span class="hljs-number">2</span>;
+        result.<span class="hljs-title function_">push</span>(node);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    };
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; numCourses; i++) {
+        <span class="hljs-keyword">if</span> (visited[i] === <span class="hljs-number">0</span> &amp;&amp; !<span class="hljs-title function_">dfs</span>(i)) {
+            <span class="hljs-keyword">return</span> [];
+        }
+    }
+
+    <span class="hljs-keyword">return</span> result.<span class="hljs-title function_">reverse</span>();
+}
+</code></pre></div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="1-4-HTTP协议.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第1卷 计算机网络</span>
+          </a>
+              <a href="1-6-Linux命令与运维.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第1卷 Linux运维基础</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

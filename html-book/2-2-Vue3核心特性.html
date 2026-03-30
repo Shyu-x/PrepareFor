@@ -1,0 +1,3494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2卷-框架生态 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#2-vue" class="toc-link "><span>第2章 Vue框架</span></a></li><li class="toc-item"><a href="#2.1-compositionapi" class="toc-link "><span>2.1 CompositionAPI</span></a></li><li class="toc-item"><a href="#2.3-provideinject" class="toc-link "><span>2.3 依赖注入 provide/inject</span></a></li><li class="toc-item"><a href="#2.3.1-provideinject" class="toc-link "><span>2.3.1 provide/inject 深入理解</span></a></li><li class="toc-item"><a href="#" class="toc-link "><span>三、组件通信</span></a></li><li class="toc-item"><a href="#3.1" class="toc-link "><span>3.1 组件通信方式</span></a></li><li class="toc-item"><a href="#3.1.1-props" class="toc-link "><span>3.1.1 props 详解</span></a></li><li class="toc-item"><a href="#3.1.2-emit" class="toc-link "><span>3.1.2 emit 详解</span></a></li><li class="toc-item"><a href="#3.1.3-attrs" class="toc-link "><span>3.1.3 $attrs 详解</span></a></li><li class="toc-item"><a href="#3.2-vuex" class="toc-link "><span>3.2 Vuex 状态管理</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第2卷 框架生态 / 第2章 Vue框架</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第2卷 框架生态</span>
+            </div>
+            <h1 class="article-title">第2卷-框架生态</h1>
+          </header>
+
+          <div class="content"><hr>
+<h2 id="2-vue">第2章 Vue框架</h2>
+<hr>
+<h3 id="2.1-compositionapi">2.1 CompositionAPI</h3>
+<h4 id="2.1.1-setup">2.1.1 setup函数</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { ref, onMounted, onUnmounted } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params">props, context</span>) {
+    <span class="hljs-comment">// props: 组件接收的 props（响应式）</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(props.<span class="hljs-property">name</span>);
+
+    <span class="hljs-comment">// context: 非响应式的上下文对象</span>
+    <span class="hljs-comment">// {</span>
+    <span class="hljs-comment">//   attrs: 组件属性</span>
+    <span class="hljs-comment">//   slots: 插槽</span>
+    <span class="hljs-comment">//   emit: 触发事件</span>
+    <span class="hljs-comment">//   expose: 暴露组件实例</span>
+    <span class="hljs-comment">// }</span>
+
+    <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+
+    <span class="hljs-comment">// 生命周期钩子</span>
+    <span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;mounted&#x27;</span>);
+    });
+
+    <span class="hljs-title function_">onUnmounted</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;unmounted&#x27;</span>);
+    });
+
+    <span class="hljs-comment">// 返回值会暴露给模板</span>
+    <span class="hljs-keyword">return</span> {
+      count
+    };
+  }
+};
+</code></pre><h4 id="2.1.1-setup">2.1.1 setup函数详解</h4>
+<p><strong>setup 函数的执行时机</strong>：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                    setup 执行时机                                 ┃
+┃                                                                  ┃ 
+┃  new Vue()                                                       ┃ 
+┃       ┃                                                          ┃ 
+┃       ▼                                                          ┃ 
+┃  beforeCreate ━━▶ setup() ◀━━ 在这里执行                        ┃  
+┃       ┃                                                          ┃ 
+┃       ▼                                                          ┃ 
+┃  created                                                         ┃ 
+┃                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><p><strong>setup 函数的参数</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-attr">age</span>: {
+      <span class="hljs-attr">type</span>: <span class="hljs-title class_">Number</span>,
+      <span class="hljs-attr">default</span>: <span class="hljs-number">18</span>
+    }
+  },
+
+  <span class="hljs-comment">// setup 接收两个参数</span>
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params">props, context</span>) {
+    <span class="hljs-comment">// 1. props - 响应式的 props 对象</span>
+    <span class="hljs-comment">//    - 包含父组件传入的所有 props</span>
+    <span class="hljs-comment">//    - 是响应式的，会随父组件变化而变化</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(props.<span class="hljs-property">name</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(props.<span class="hljs-property">age</span>);
+
+    <span class="hljs-comment">// 2. context - 非响应式的上下文对象</span>
+    <span class="hljs-comment">//    - attrs: 组件属性（包含非 prop 的属性）</span>
+    <span class="hljs-comment">//    - slots: 插槽对象</span>
+    <span class="hljs-comment">//    - emit: 触发事件的函数</span>
+    <span class="hljs-comment">//    - expose: 暴露给父组件的属性</span>
+
+    <span class="hljs-comment">// attrs - 包含非 prop 的属性</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(context.<span class="hljs-property">attrs</span>);
+    <span class="hljs-comment">// 等价于 Vue 2 的 this.$attrs</span>
+
+    <span class="hljs-comment">// slots - 插槽</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(context.<span class="hljs-property">slots</span>.<span class="hljs-property">default</span>);
+    <span class="hljs-comment">// 等价于 Vue 2 的 this.$slots</span>
+
+    <span class="hljs-comment">// emit - 触发事件</span>
+    context.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+    <span class="hljs-comment">// 等价于 Vue 2 的 this.$emit(&#x27;update&#x27;, ...)</span>
+
+    <span class="hljs-comment">// expose - 暴露属性给父组件</span>
+    context.<span class="hljs-title function_">expose</span>({
+      <span class="hljs-title function_">someMethod</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;method&#x27;</span>);
+      }
+    });
+
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-comment">// 返回的属性和方法可以在模板中使用</span>
+    };
+  }
+};
+</code></pre><p><strong>setup 中使用 this</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params">props, context</span>) {
+    <span class="hljs-comment">// setup 中没有 this</span>
+    <span class="hljs-comment">// 如果需要访问组件实例，使用 getCurrentInstance</span>
+
+    <span class="hljs-keyword">import</span> { getCurrentInstance } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+    <span class="hljs-keyword">const</span> { proxy } = <span class="hljs-title function_">getCurrentInstance</span>();
+
+    <span class="hljs-comment">// proxy 等价于 Vue 2 中的 this</span>
+    <span class="hljs-comment">// proxy.$emit()</span>
+    <span class="hljs-comment">// proxy.$refs</span>
+
+    <span class="hljs-keyword">return</span> {};
+  }
+};
+</code></pre><h4 id="2.1.2-setup">2.1.2 setup中返回数据的方式</h4>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { ref, reactive, computed } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 1. 返回普通对象 - 可以在模板中使用</span>
+    <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">increment</span> = (<span class="hljs-params"></span>) =&gt; count.<span class="hljs-property">value</span>++;
+
+    <span class="hljs-keyword">return</span> {
+      count,
+      increment
+    };
+
+    <span class="hljs-comment">// 2. 返回函数</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 返回渲染函数</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">h</span>(<span class="hljs-string">&#x27;div&#x27;</span>, count.<span class="hljs-property">value</span>);
+    };
+
+    <span class="hljs-comment">// 3. 不返回任何东西 - 用于 setup 只执行逻辑</span>
+    <span class="hljs-comment">// 如注册全局事件、初始化第三方库等</span>
+    <span class="hljs-keyword">import</span> { onMounted } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+    <span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;mounted&#x27;</span>);
+    });
+
+    <span class="hljs-comment">// 不需要 return</span>
+  }
+};
+</code></pre><hr>
+<h4 id="2.2">2.2 生命周期钩子</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃                    Vue 3 生命周期                               ┃ 
+┃                                                                  ┃
+┃  创建阶段                                                       ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃ 
+┃  ┃  setup()                                                    ┃┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛┃ 
+┃                              ┃                                  ┃ 
+┃                              ▼                                  ┃ 
+┃  挂载阶段                                                       ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃ 
+┃  ┃  onBeforeMount ━━▶ onMounted                               ┃┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛┃ 
+┃                              ┃                                  ┃ 
+┃                              ▼                                  ┃ 
+┃  更新阶段                                                       ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃ 
+┃  ┃  onBeforeUpdate ━━▶ onUpdated                              ┃┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛┃ 
+┃                              ┃                                  ┃ 
+┃                              ▼                                  ┃ 
+┃  卸载阶段                                                       ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃ 
+┃  ┃  onBeforeUnmount ━━▶ onUnmounted                           ┃┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛┃ 
+┃                                                                  ┃
+┃  Vue 2 vs Vue 3                                                ┃  
+┃  beforeCreate  ━━▶ setup()                                      ┃ 
+┃  created       ━━▶ setup()                                      ┃ 
+┃  beforeMount   ━━▶ onBeforeMount                                ┃ 
+┃  mounted       ━━▶ onMounted                                    ┃ 
+┃  beforeUpdate  ━━▶ onBeforeUpdate                               ┃ 
+┃  updated       ━━▶ onUpdated                                     ┃
+┃  beforeDestroy ━━▶ onBeforeUnmount                              ┃ 
+┃  destroyed    ━━▶ onUnmounted                                  ┃  
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+
+</code></pre><h4 id="2.2.1">2.2.1 生命周期钩子详解</h4>
+<p><strong>所有生命周期钩子</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> {
+  onMounted,
+  onUpdated,
+  onUnmounted,
+  onBeforeMount,
+  onBeforeUpdate,
+  onBeforeUnmount,
+  onErrorCaptured,
+  onRenderTracked,
+  onRenderTriggered,
+  onActivated,
+  onDeactivated
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-comment">// 1. 组件挂载之前</span>
+  <span class="hljs-title function_">onBeforeMount</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;beforeMount&#x27;</span>);
+    <span class="hljs-comment">// 此时 DOM 还未创建</span>
+    <span class="hljs-comment">// 可以访问 props、data，但无法访问 DOM</span>
+  }),
+
+  <span class="hljs-comment">// 2. 组件挂载完成</span>
+  <span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;mounted&#x27;</span>);
+    <span class="hljs-comment">// DOM 已创建</span>
+    <span class="hljs-comment">// 可以访问 this.$el、this.$refs</span>
+    <span class="hljs-comment">// 适合：初始化第三方库、添加事件监听、发送请求</span>
+  }),
+
+  <span class="hljs-comment">// 3. 组件更新之前</span>
+  <span class="hljs-title function_">onBeforeUpdate</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;beforeUpdate&#x27;</span>);
+    <span class="hljs-comment">// 数据已更新，但 DOM 还未更新</span>
+    <span class="hljs-comment">// 适合：在 DOM 更新前保存状态</span>
+  }),
+
+  <span class="hljs-comment">// 4. 组件更新完成</span>
+  <span class="hljs-title function_">onUpdated</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;updated&#x27;</span>);
+    <span class="hljs-comment">// DOM 已更新</span>
+    <span class="hljs-comment">// 适合：操作更新后的 DOM</span>
+  }),
+
+  <span class="hljs-comment">// 5. 组件卸载之前</span>
+  <span class="hljs-title function_">onBeforeUnmount</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;beforeUnmount&#x27;</span>);
+    <span class="hljs-comment">// 组件仍然可用</span>
+    <span class="hljs-comment">// 适合：清理定时器、移除事件监听</span>
+  }),
+
+  <span class="hljs-comment">// 6. 组件卸载完成</span>
+  <span class="hljs-title function_">onUnmounted</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;unmounted&#x27;</span>);
+    <span class="hljs-comment">// 组件已被销毁</span>
+    <span class="hljs-comment">// 适合：清理所有副作用</span>
+  }),
+
+  <span class="hljs-comment">// 7. 错误捕获</span>
+  <span class="hljs-title function_">onErrorCaptured</span>(<span class="hljs-function">(<span class="hljs-params">err, instance, info</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;errorCaptured:&#x27;</span>, err);
+    <span class="hljs-comment">// 返回 false 可以阻止错误传播</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }),
+
+  <span class="hljs-comment">// 8. 渲染跟踪（调试用）</span>
+  <span class="hljs-title function_">onRenderTracked</span>(<span class="hljs-function">(<span class="hljs-params">{ key, target, type, effect }</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;render tracked:&#x27;</span>, key);
+  }),
+
+  <span class="hljs-comment">// 9. 渲染触发（调试用）</span>
+  <span class="hljs-title function_">onRenderTriggered</span>(<span class="hljs-function">(<span class="hljs-params">{ key, target, type, effect }</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;render triggered:&#x27;</span>, key);
+  })
+};
+</code></pre><p><strong>keep-alive 相关的生命周期</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { onActivated, onDeactivated } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-comment">// 当组件被缓存时，会触发 onUnmounted 和 onDeactivated</span>
+<span class="hljs-comment">// 当组件从缓存中恢复时，会触发 onActivated</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-comment">// 组件首次挂载</span>
+  <span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;mounted&#x27;</span>);
+  }),
+
+  <span class="hljs-comment">// 组件被激活（从缓存中恢复）</span>
+  <span class="hljs-title function_">onActivated</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;activated&#x27;</span>);
+    <span class="hljs-comment">// 适合：刷新数据、重置状态</span>
+  }),
+
+  <span class="hljs-comment">// 组件被缓存</span>
+  <span class="hljs-title function_">onDeactivated</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;deactivated&#x27;</span>);
+    <span class="hljs-comment">// 适合：暂停定时器、保存状态</span>
+  }),
+
+  <span class="hljs-comment">// 组件被销毁</span>
+  <span class="hljs-title function_">onUnmounted</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;unmounted&#x27;</span>);
+  })
+};
+</code></pre><p><strong>使用示例：结合定时器</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { ref, onMounted, onUnmounted } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">let</span> timer = <span class="hljs-literal">null</span>;
+
+    <span class="hljs-title function_">onMounted</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 启动定时器</span>
+      timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+        count.<span class="hljs-property">value</span>++;
+      }, <span class="hljs-number">1000</span>);
+    });
+
+    <span class="hljs-title function_">onUnmounted</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 清理定时器，防止内存泄漏</span>
+      <span class="hljs-keyword">if</span> (timer) {
+        <span class="hljs-built_in">clearInterval</span>(timer);
+        timer = <span class="hljs-literal">null</span>;
+      }
+    });
+
+    <span class="hljs-keyword">return</span> { count };
+  }
+};
+</code></pre><hr>
+<h3 id="2.3-provideinject">2.3 依赖注入 provide/inject</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 父组件</span>
+<span class="hljs-keyword">import</span> { provide, ref } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;dark&#x27;</span>);
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">updateTheme</span> = (<span class="hljs-params">newTheme</span>) =&gt; {
+      theme.<span class="hljs-property">value</span> = newTheme;
+    };
+
+    <span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;theme&#x27;</span>, theme);
+    <span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;updateTheme&#x27;</span>, updateTheme);
+  }
+};
+
+<span class="hljs-comment">// 子组件</span>
+<span class="hljs-keyword">import</span> { inject } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;theme&#x27;</span>);
+    <span class="hljs-keyword">const</span> updateTheme = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;updateTheme&#x27;</span>);
+
+    <span class="hljs-keyword">return</span> { theme, updateTheme };
+  }
+};
+</code></pre><h3 id="2.3.1-provideinject">2.3.1 provide/inject 深入理解</h3>
+<p><strong>provide/inject 原理</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// provide 实现原理</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">provide</span>(<span class="hljs-params">key, value</span>) {
+  <span class="hljs-comment">// 获取当前组件实例</span>
+  <span class="hljs-keyword">const</span> currentInstance = <span class="hljs-title function_">getCurrentInstance</span>();
+
+  <span class="hljs-keyword">if</span> (currentInstance) {
+    <span class="hljs-comment">// 将值存储到组件实例的 provides 上</span>
+    currentInstance.<span class="hljs-property">provides</span>[key] = value;
+  }
+}
+
+<span class="hljs-comment">// inject 实现原理</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">inject</span>(<span class="hljs-params">key, defaultValue</span>) {
+  <span class="hljs-comment">// 获取当前组件实例</span>
+  <span class="hljs-keyword">const</span> currentInstance = <span class="hljs-title function_">getCurrentInstance</span>();
+
+  <span class="hljs-keyword">if</span> (currentInstance) {
+    <span class="hljs-comment">// 从父组件的 provides 中获取值</span>
+    <span class="hljs-keyword">const</span> parentProvides = currentInstance.<span class="hljs-property">parent</span>.<span class="hljs-property">provides</span>;
+    <span class="hljs-keyword">if</span> (key <span class="hljs-keyword">in</span> parentProvides) {
+      <span class="hljs-keyword">return</span> parentProvides[key];
+    }
+  }
+
+  <span class="hljs-comment">// 返回默认值</span>
+  <span class="hljs-keyword">return</span> defaultValue;
+}
+</code></pre><p><strong>provide/inject 高级用法</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 传递响应式数据</span>
+<span class="hljs-keyword">import</span> { provide, reactive, ref, computed } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-comment">// 父组件</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 传递 ref</span>
+    <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+    <span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;count&#x27;</span>, count);
+
+    <span class="hljs-comment">// 传递 reactive</span>
+    <span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+      <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+    });
+    <span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;state&#x27;</span>, state);
+
+    <span class="hljs-comment">// 传递 computed</span>
+    <span class="hljs-keyword">const</span> doubleCount = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> count.<span class="hljs-property">value</span> * <span class="hljs-number">2</span>);
+    <span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;doubleCount&#x27;</span>, doubleCount);
+
+    <span class="hljs-keyword">return</span> {};
+  }
+};
+
+<span class="hljs-comment">// 子组件</span>
+<span class="hljs-keyword">import</span> { inject, computed } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;count&#x27;</span>);
+    <span class="hljs-keyword">const</span> state = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;state&#x27;</span>);
+    <span class="hljs-keyword">const</span> doubleCount = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;doubleCount&#x27;</span>);
+
+    <span class="hljs-comment">// 可以直接修改，响应式会传递</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">increment</span> = (<span class="hljs-params"></span>) =&gt; count.<span class="hljs-property">value</span>++;
+
+    <span class="hljs-keyword">return</span> { count, state, doubleCount, increment };
+  }
+};
+</code></pre><p><strong>2. 使用 symbol 作为 key</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 使用 Symbol 避免命名冲突</span>
+<span class="hljs-keyword">const</span> themeKey = <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">&#x27;theme&#x27;</span>);
+<span class="hljs-keyword">const</span> userKey = <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">&#x27;user&#x27;</span>);
+
+<span class="hljs-comment">// 父组件</span>
+<span class="hljs-keyword">import</span> { provide, reactive } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">reactive</span>({
+      <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;dark&#x27;</span>,
+      <span class="hljs-attr">fontSize</span>: <span class="hljs-number">14</span>
+    });
+
+    <span class="hljs-title function_">provide</span>(themeKey, theme);
+
+    <span class="hljs-keyword">return</span> {};
+  }
+};
+
+<span class="hljs-comment">// 子组件</span>
+<span class="hljs-keyword">import</span> { inject } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">inject</span>(themeKey);
+    <span class="hljs-keyword">return</span> { theme };
+  }
+};
+</code></pre><p><strong>3. 设置默认值</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 子组件</span>
+<span class="hljs-keyword">import</span> { inject } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 使用 ref 作为默认值</span>
+    <span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;theme&#x27;</span>, <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;light&#x27;</span>));
+
+    <span class="hljs-comment">// 使用工厂函数设置默认值</span>
+    <span class="hljs-keyword">const</span> user = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-function">() =&gt;</span> ({
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Guest&#x27;</span>,
+      <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+    }));
+
+    <span class="hljs-keyword">return</span> { theme, user };
+  }
+};
+</code></pre><p><strong>4. 改写 props 为 provide</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 父组件</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-attr">age</span>: <span class="hljs-title class_">Number</span>
+  },
+
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params">props</span>) {
+    <span class="hljs-keyword">import</span> { provide, toRefs } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+    <span class="hljs-comment">// 使用 toRefs 保持响应性</span>
+    <span class="hljs-keyword">const</span> { name, age } = <span class="hljs-title function_">toRefs</span>(props);
+
+    <span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;name&#x27;</span>, name);
+    <span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;age&#x27;</span>, age);
+
+    <span class="hljs-keyword">return</span> {};
+  }
+};
+</code></pre><hr>
+<h2 id="">三、组件通信</h2>
+<h3 id="3.1">3.1 组件通信方式</h3>
+<p><strong>参考答案：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方式</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Props / Emit</strong></td>
+<td style="text-align:left">父子组件通信</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Provide / Inject</strong></td>
+<td style="text-align:left">祖先与后代通信</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>EventBus</strong></td>
+<td style="text-align:left">任意组件通信（ mitt）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Vuex / Pinia</strong></td>
+<td style="text-align:left">全局状态管理</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$attrs</strong></td>
+<td style="text-align:left">透传 props</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$refs</strong></td>
+<td style="text-align:left">获取组件实例</td>
+</tr>
+</tbody>
+</table>
+<pre class="hljs"><code><span class="hljs-comment">// Props</span>
+<span class="hljs-title function_">defineProps</span>({
+  <span class="hljs-attr">title</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">count</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">Number</span>,
+    <span class="hljs-attr">default</span>: <span class="hljs-number">0</span>
+  }
+});
+
+<span class="hljs-comment">// Emit</span>
+<span class="hljs-keyword">const</span> emit = <span class="hljs-title function_">defineEmits</span>([<span class="hljs-string">&#x27;update&#x27;</span>, <span class="hljs-string">&#x27;delete&#x27;</span>]);
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update&#x27;</span>, payload);
+
+<span class="hljs-comment">// $attrs</span>
+<span class="hljs-comment">// 父组件</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Child</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Tom&quot;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">&quot;18&quot;</span> /&gt;</span></span>
+
+<span class="hljs-comment">// Child 组件</span>
+<span class="hljs-comment">// 未声明的 props 会通过 $attrs 传递</span>
+<span class="hljs-comment">// 可通过 v-bind=&quot;$attrs&quot; 透传</span>
+</code></pre><h3 id="3.1.1-props">3.1.1 props 详解</h3>
+<p><strong>props 定义方式</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 数组方式（不推荐）</span>
+<span class="hljs-title function_">defineProps</span>([<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;age&#x27;</span>, <span class="hljs-string">&#x27;email&#x27;</span>]);
+
+<span class="hljs-comment">// 2. 对象方式（完整配置）</span>
+<span class="hljs-title function_">defineProps</span>({
+  <span class="hljs-comment">// 基础类型</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-title class_">String</span>,
+
+  <span class="hljs-comment">// 多个基础类型</span>
+  <span class="hljs-attr">age</span>: <span class="hljs-title class_">Number</span>,
+
+  <span class="hljs-comment">// 带默认值</span>
+  <span class="hljs-attr">count</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">Number</span>,
+    <span class="hljs-attr">default</span>: <span class="hljs-number">0</span>
+  },
+
+  <span class="hljs-comment">// 带验证函数</span>
+  <span class="hljs-attr">email</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-title function_">validator</span>(<span class="hljs-params">value</span>) {
+      <span class="hljs-comment">// 自定义验证逻辑</span>
+      <span class="hljs-keyword">return</span> value.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;@&#x27;</span>);
+    }
+  },
+
+  <span class="hljs-comment">// 带 required</span>
+  <span class="hljs-attr">id</span>: {
+    <span class="hljs-attr">type</span>: [<span class="hljs-title class_">Number</span>, <span class="hljs-title class_">String</span>],
+    <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>
+  },
+
+  <span class="hljs-comment">// 对象类型的默认值（需要使用工厂函数）</span>
+  <span class="hljs-attr">user</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">Object</span>,
+    <span class="hljs-title function_">default</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">return</span> { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">18</span> };
+    }
+  },
+
+  <span class="hljs-comment">// 数组类型的默认值</span>
+  <span class="hljs-attr">roles</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">Array</span>,
+    <span class="hljs-title function_">default</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">return</span> [];
+    }
+  }
+});
+
+<span class="hljs-comment">// 3. 使用类型定义（TypeScript）</span>
+interface <span class="hljs-title class_">User</span> {
+  <span class="hljs-attr">name</span>: string;
+  <span class="hljs-attr">age</span>: number;
+}
+
+defineProps&lt;{
+  <span class="hljs-attr">name</span>: string;
+  age?: number;
+  <span class="hljs-attr">user</span>: <span class="hljs-title class_">User</span>;
+}&gt;();
+
+<span class="hljs-comment">// 4. 使用 withDefaults（TypeScript）</span>
+interface <span class="hljs-title class_">Props</span> {
+  <span class="hljs-attr">name</span>: string;
+  age?: number;
+}
+
+<span class="hljs-keyword">const</span> props = <span class="hljs-title function_">withDefaults</span>(defineProps&lt;<span class="hljs-title class_">Props</span>&gt;(), {
+  <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+});
+</code></pre><p><strong>props 验证</strong>：</p>
+<pre class="hljs"><code><span class="hljs-title function_">defineProps</span>({
+  <span class="hljs-comment">// 类型检查</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-title class_">String</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-title class_">Number</span>,
+  <span class="hljs-attr">isActive</span>: <span class="hljs-title class_">Boolean</span>,
+  <span class="hljs-attr">callback</span>: <span class="hljs-title class_">Function</span>,
+  <span class="hljs-attr">items</span>: <span class="hljs-title class_">Array</span>,
+  <span class="hljs-attr">user</span>: <span class="hljs-title class_">Object</span>,
+
+  <span class="hljs-comment">// 多个允许的类型</span>
+  <span class="hljs-attr">value</span>: [<span class="hljs-title class_">String</span>, <span class="hljs-title class_">Number</span>],
+
+  <span class="hljs-comment">// 必填</span>
+  <span class="hljs-attr">id</span>: {
+    <span class="hljs-attr">type</span>: [<span class="hljs-title class_">String</span>, <span class="hljs-title class_">Number</span>],
+    <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span>
+  },
+
+  <span class="hljs-comment">// 默认值</span>
+  <span class="hljs-attr">count</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">Number</span>,
+    <span class="hljs-attr">default</span>: <span class="hljs-number">0</span>
+  },
+
+  <span class="hljs-comment">// 自定义验证</span>
+  <span class="hljs-attr">email</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>,
+    <span class="hljs-title function_">validator</span>(<span class="hljs-params">value</span>) {
+      <span class="hljs-comment">// 必须是有效的邮箱格式</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/</span>.<span class="hljs-title function_">test</span>(value);
+    }
+  },
+
+  <span class="hljs-comment">// 多个验证条件</span>
+  <span class="hljs-attr">age</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-title class_">Number</span>,
+    <span class="hljs-title function_">validator</span>(<span class="hljs-params">value</span>) {
+      <span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0</span> || value &gt; <span class="hljs-number">150</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&#x27;年龄必须在 0-150 之间&#x27;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+      }
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+  }
+});
+</code></pre><h3 id="3.1.2-emit">3.1.2 emit 详解</h3>
+<p><strong>emit 定义方式</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 数组方式</span>
+<span class="hljs-keyword">const</span> emit = <span class="hljs-title function_">defineEmits</span>([<span class="hljs-string">&#x27;update&#x27;</span>, <span class="hljs-string">&#x27;delete&#x27;</span>, <span class="hljs-string">&#x27;click&#x27;</span>]);
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;delete&#x27;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;click&#x27;</span>);
+
+<span class="hljs-comment">// 2. 对象方式（带类型检查）</span>
+<span class="hljs-keyword">const</span> emit = <span class="hljs-title function_">defineEmits</span>({
+  <span class="hljs-attr">update</span>: <span class="hljs-function">(<span class="hljs-params">payload</span>) =&gt;</span> {
+    <span class="hljs-comment">// 验证 payload</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> payload.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;string&#x27;</span>;
+  },
+  <span class="hljs-attr">delete</span>: <span class="hljs-function">(<span class="hljs-params">id</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> id === <span class="hljs-string">&#x27;number&#x27;</span>;
+  },
+  <span class="hljs-attr">click</span>: <span class="hljs-literal">null</span> <span class="hljs-comment">// 不验证</span>
+});
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;delete&#x27;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;click&#x27;</span>);
+
+<span class="hljs-comment">// 3. TypeScript 类型定义</span>
+<span class="hljs-keyword">const</span> emit = defineEmits&lt;{
+  (<span class="hljs-attr">e</span>: <span class="hljs-string">&#x27;update&#x27;</span>, <span class="hljs-attr">payload</span>: { <span class="hljs-attr">name</span>: string }): <span class="hljs-keyword">void</span>;
+  (<span class="hljs-attr">e</span>: <span class="hljs-string">&#x27;delete&#x27;</span>, <span class="hljs-attr">id</span>: number): <span class="hljs-keyword">void</span>;
+  (<span class="hljs-attr">e</span>: <span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-attr">event</span>: <span class="hljs-title class_">MouseEvent</span>): <span class="hljs-keyword">void</span>;
+}&gt;();
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;delete&#x27;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">MouseEvent</span>(<span class="hljs-string">&#x27;click&#x27;</span>));
+</code></pre><p><strong>emit 与 v-model</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 父组件</span>
+&lt;<span class="hljs-title class_">ChildComponent</span> v-model=<span class="hljs-string">&quot;value&quot;</span> /&gt;
+
+<span class="hljs-comment">// 等价于</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ChildComponent</span> <span class="hljs-attr">:modelValue</span>=<span class="hljs-string">&quot;value&quot;</span> @<span class="hljs-attr">update:modelValue</span>=<span class="hljs-string">&quot;value = $event&quot;</span> /&gt;</span></span>
+
+<span class="hljs-comment">// 子组件</span>
+<span class="hljs-keyword">const</span> props = <span class="hljs-title function_">defineProps</span>([<span class="hljs-string">&#x27;modelValue&#x27;</span>]);
+<span class="hljs-keyword">const</span> emit = <span class="hljs-title function_">defineEmits</span>([<span class="hljs-string">&#x27;update:modelValue&#x27;</span>]);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">onInput</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update:modelValue&#x27;</span>, value);
+}
+
+<span class="hljs-comment">// 多个 v-model</span>
+<span class="hljs-comment">// 父组件</span>
+&lt;<span class="hljs-title class_">ChildComponent</span> v-<span class="hljs-attr">model</span>:name=<span class="hljs-string">&quot;name&quot;</span> v-<span class="hljs-attr">model</span>:age=<span class="hljs-string">&quot;age&quot;</span> /&gt;
+
+<span class="hljs-comment">// 子组件</span>
+<span class="hljs-keyword">const</span> props = <span class="hljs-title function_">defineProps</span>([<span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;age&#x27;</span>]);
+<span class="hljs-keyword">const</span> emit = <span class="hljs-title function_">defineEmits</span>([<span class="hljs-string">&#x27;update:name&#x27;</span>, <span class="hljs-string">&#x27;update:age&#x27;</span>]);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">updateName</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update:name&#x27;</span>, value);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">updateAge</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update:age&#x27;</span>, value);
+}
+</code></pre><h3 id="3.1.3-attrs">3.1.3 $attrs 详解</h3>
+<p><strong>$attrs 的使用</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 父组件</span>
+&lt;<span class="hljs-title class_">ChildComponent</span>
+  <span class="hljs-keyword">class</span>=<span class="hljs-string">&quot;custom-class&quot;</span>
+  style=<span class="hljs-string">&quot;color: red&quot;</span>
+  data-id=<span class="hljs-string">&quot;123&quot;</span>
+  name=<span class="hljs-string">&quot;Tom&quot;</span>
+  age=<span class="hljs-string">&quot;18&quot;</span>
+/&gt;
+
+<span class="hljs-comment">// Child 组件</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-comment">// 只接收 name，age 会通过 $attrs 传递</span>
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-title class_">String</span>
+  },
+
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params">props, context</span>) {
+    <span class="hljs-comment">// $attrs 包含所有非 props 的属性</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(context.<span class="hljs-property">attrs</span>);
+    <span class="hljs-comment">// { class: &#x27;custom-class&#x27;, style: &#x27;color: red&#x27;, data-id: &#x27;123&#x27;, age: &#x27;18&#x27; }</span>
+
+    <span class="hljs-comment">// 透传 attrs</span>
+    <span class="hljs-comment">// &lt;GrandChild v-bind=&quot;$attrs&quot; /&gt;</span>
+
+    <span class="hljs-keyword">return</span> {};
+  }
+};
+</code></pre><p><strong>inheritAttrs</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 控制是否将 attrs 应用到根元素</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">props</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-title class_">String</span>
+  },
+
+  <span class="hljs-comment">// 默认 true，会将 attrs 应用到根元素</span>
+  <span class="hljs-attr">inheritAttrs</span>: <span class="hljs-literal">false</span>,
+
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params">props, context</span>) {
+    <span class="hljs-comment">// 可以手动控制 attrs 的应用</span>
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-comment">// 只将某些 attrs 应用到特定元素</span>
+      <span class="hljs-attr">customAttrs</span>: {
+        <span class="hljs-attr">class</span>: context.<span class="hljs-property">attrs</span>.<span class="hljs-property">class</span>,
+        <span class="hljs-string">&#x27;data-id&#x27;</span>: context.<span class="hljs-property">attrs</span>[<span class="hljs-string">&#x27;data-id&#x27;</span>]
+      }
+    };
+  }
+};
+</code></pre><pre class="hljs"><code><span class="hljs-comment">&lt;!-- 模板中使用 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;wrapper&quot;</span> <span class="hljs-attr">v-bind</span>=<span class="hljs-string">&quot;customAttrs&quot;</span>&gt;</span>
+  {{ name }}
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre><hr>
+<h3 id="3.2-vuex">3.2 Vuex 状态管理</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 安装 Vuex</span>
+<span class="hljs-comment">// npm install vuex@4</span>
+
+<span class="hljs-comment">// 2. 创建 store</span>
+<span class="hljs-keyword">import</span> { createStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vuex&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">createStore</span>({
+  <span class="hljs-comment">// 状态</span>
+  <span class="hljs-attr">state</span>: {
+    <span class="hljs-attr">count</span>: <span class="hljs-number">0</span>,
+    <span class="hljs-attr">user</span>: <span class="hljs-literal">null</span>
+  },
+
+  <span class="hljs-comment">// 类似于 computed</span>
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">doubleCount</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">count</span> * <span class="hljs-number">2</span>,
+    <span class="hljs-attr">isLoggedIn</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> !!state.<span class="hljs-property">user</span>,
+    <span class="hljs-comment">// 接受 getter 作为第二个参数</span>
+    <span class="hljs-attr">greeting</span>: <span class="hljs-function">(<span class="hljs-params">state, getters</span>) =&gt;</span> {
+      <span class="hljs-keyword">return</span> getters.<span class="hljs-property">isLoggedIn</span> ? <span class="hljs-string">`Hello, <span class="hljs-subst">${state.user.name}</span>`</span> : <span class="hljs-string">&#x27;Please login&#x27;</span>;
+    }
+  },
+
+  <span class="hljs-comment">// 修改状态（必须是同步）</span>
+  <span class="hljs-attr">mutations</span>: {
+    <span class="hljs-title function_">increment</span>(<span class="hljs-params">state</span>) {
+      state.<span class="hljs-property">count</span>++;
+    },
+    <span class="hljs-title function_">setUser</span>(<span class="hljs-params">state, user</span>) {
+      state.<span class="hljs-property">user</span> = user;
+    },
+    <span class="hljs-title function_">setCount</span>(<span class="hljs-params">state, count</span>) {
+      state.<span class="hljs-property">count</span> = count;
+    }
+  },
+
+  <span class="hljs-comment">// 提交 mutations（可以是异步）</span>
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">{ commit }, credentials</span>) {
+      <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">login</span>(credentials);
+        <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;setUser&#x27;</span>, user);
+        <span class="hljs-keyword">return</span> user;
+      } <span class="hljs-keyword">catch</span> (error) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error);
+        <span class="hljs-keyword">throw</span> error;
+      }
+    },
+    <span class="hljs-title function_">incrementAsync</span>(<span class="hljs-params">{ commit }</span>) {
+      <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;increment&#x27;</span>);
+      }, <span class="hljs-number">1000</span>);
+    }
+  },
+
+  <span class="hljs-comment">// 模块</span>
+  <span class="hljs-attr">modules</span>: {
+    <span class="hljs-attr">user</span>: {
+      <span class="hljs-attr">namespaced</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">state</span>: <span class="hljs-function">() =&gt;</span> ({
+        <span class="hljs-attr">profile</span>: <span class="hljs-literal">null</span>
+      }),
+      <span class="hljs-attr">getters</span>: {
+        <span class="hljs-attr">profile</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">profile</span>
+      },
+      <span class="hljs-attr">mutations</span>: {
+        <span class="hljs-title function_">setProfile</span>(<span class="hljs-params">state, profile</span>) {
+          state.<span class="hljs-property">profile</span> = profile;
+        }
+      },
+      <span class="hljs-attr">actions</span>: {
+        <span class="hljs-keyword">async</span> <span class="hljs-title function_">fetchProfile</span>(<span class="hljs-params">{ commit }</span>) {
+          <span class="hljs-keyword">const</span> profile = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">getProfile</span>();
+          <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;setProfile&#x27;</span>, profile);
+        }
+      }
+    }
+  }
+});
+</code></pre><h3 id="3.2.1-vuex">3.2.1 Vuex 在组件中的使用</h3>
+<p><strong>在组件中使用 Vuex</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { mapState, mapGetters, mapMutations, mapActions } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vuex&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">computed</span>: {
+    <span class="hljs-comment">// 映射单个 state</span>
+    ...<span class="hljs-title function_">mapState</span>([<span class="hljs-string">&#x27;count&#x27;</span>, <span class="hljs-string">&#x27;user&#x27;</span>]),
+    <span class="hljs-comment">// 映射带命名空间的 state</span>
+    ...<span class="hljs-title function_">mapState</span>(<span class="hljs-string">&#x27;user&#x27;</span>, [<span class="hljs-string">&#x27;profile&#x27;</span>]),
+    <span class="hljs-comment">// 映射带别名的 state</span>
+    ...<span class="hljs-title function_">mapState</span>({
+      <span class="hljs-attr">myCount</span>: <span class="hljs-string">&#x27;count&#x27;</span>,
+      <span class="hljs-attr">currentUser</span>: <span class="hljs-string">&#x27;user&#x27;</span>
+    }),
+
+    <span class="hljs-comment">// 映射 getters</span>
+    ...<span class="hljs-title function_">mapGetters</span>([<span class="hljs-string">&#x27;doubleCount&#x27;</span>, <span class="hljs-string">&#x27;isLoggedIn&#x27;</span>]),
+    ...<span class="hljs-title function_">mapGetters</span>(<span class="hljs-string">&#x27;user&#x27;</span>, [<span class="hljs-string">&#x27;profile&#x27;</span>])
+  },
+
+  <span class="hljs-attr">methods</span>: {
+    <span class="hljs-comment">// 映射 mutations</span>
+    ...<span class="hljs-title function_">mapMutations</span>([<span class="hljs-string">&#x27;increment&#x27;</span>, <span class="hljs-string">&#x27;setUser&#x27;</span>]),
+    ...<span class="hljs-title function_">mapMutations</span>({
+      <span class="hljs-attr">add</span>: <span class="hljs-string">&#x27;increment&#x27;</span>
+    }),
+
+    <span class="hljs-comment">// 映射 actions</span>
+    ...<span class="hljs-title function_">mapActions</span>([<span class="hljs-string">&#x27;login&#x27;</span>, <span class="hljs-string">&#x27;incrementAsync&#x27;</span>]),
+    ...<span class="hljs-title function_">mapActions</span>({
+      <span class="hljs-attr">loginAction</span>: <span class="hljs-string">&#x27;login&#x27;</span>
+    })
+  }
+};
+</code></pre><p><strong>使用 Composition API 访问 Vuex</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { computed } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+<span class="hljs-keyword">import</span> { useStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vuex&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> store = <span class="hljs-title function_">useStore</span>();
+
+    <span class="hljs-comment">// 访问 state</span>
+    <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> store.<span class="hljs-property">state</span>.<span class="hljs-property">count</span>);
+    <span class="hljs-keyword">const</span> user = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> store.<span class="hljs-property">state</span>.<span class="hljs-property">user</span>);
+
+    <span class="hljs-comment">// 访问 getters</span>
+    <span class="hljs-keyword">const</span> doubleCount = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> store.<span class="hljs-property">getters</span>.<span class="hljs-property">doubleCount</span>);
+    <span class="hljs-keyword">const</span> isLoggedIn = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> store.<span class="hljs-property">getters</span>.<span class="hljs-property">isLoggedIn</span>);
+
+    <span class="hljs-comment">// 提交 mutations</span>
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">increment</span>(<span class="hljs-params"></span>) {
+      store.<span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;increment&#x27;</span>);
+    }
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">setUser</span>(<span class="hljs-params">user</span>) {
+      store.<span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;setUser&#x27;</span>, user);
+    }
+
+    <span class="hljs-comment">// 分发 actions</span>
+    <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">credentials</span>) {
+      <span class="hljs-keyword">await</span> store.<span class="hljs-title function_">dispatch</span>(<span class="hljs-string">&#x27;login&#x27;</span>, credentials);
+    }
+
+    <span class="hljs-keyword">return</span> {
+      count,
+      user,
+      doubleCount,
+      isLoggedIn,
+      increment,
+      setUser,
+      login
+    };
+  }
+};
+</code></pre><p><strong>Vuex 模块化</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// stores/modules/user.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">namespaced</span>: <span class="hljs-literal">true</span>,
+
+  <span class="hljs-attr">state</span>: <span class="hljs-function">() =&gt;</span> ({
+    <span class="hljs-attr">profile</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">token</span>: <span class="hljs-literal">null</span>
+  }),
+
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">isLoggedIn</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> !!state.<span class="hljs-property">token</span>,
+    <span class="hljs-attr">username</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">profile</span>?.<span class="hljs-property">name</span>
+  },
+
+  <span class="hljs-attr">mutations</span>: {
+    <span class="hljs-title function_">setProfile</span>(<span class="hljs-params">state, profile</span>) {
+      state.<span class="hljs-property">profile</span> = profile;
+    },
+    <span class="hljs-title function_">setToken</span>(<span class="hljs-params">state, token</span>) {
+      state.<span class="hljs-property">token</span> = token;
+    },
+    <span class="hljs-title function_">logout</span>(<span class="hljs-params">state</span>) {
+      state.<span class="hljs-property">profile</span> = <span class="hljs-literal">null</span>;
+      state.<span class="hljs-property">token</span> = <span class="hljs-literal">null</span>;
+    }
+  },
+
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">{ commit }, credentials</span>) {
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">login</span>(credentials);
+      <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;setToken&#x27;</span>, response.<span class="hljs-property">token</span>);
+      <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;setProfile&#x27;</span>, response.<span class="hljs-property">user</span>);
+      <span class="hljs-keyword">return</span> response;
+    },
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">logout</span>(<span class="hljs-params">{ commit }</span>) {
+      <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">logout</span>();
+      <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;logout&#x27;</span>);
+    }
+  }
+};
+
+<span class="hljs-comment">// stores/modules/cart.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">namespaced</span>: <span class="hljs-literal">true</span>,
+
+  <span class="hljs-attr">state</span>: <span class="hljs-function">() =&gt;</span> ({
+    <span class="hljs-attr">items</span>: [],
+    <span class="hljs-attr">checkoutStatus</span>: <span class="hljs-literal">null</span>
+  }),
+
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">totalPrice</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> {
+      <span class="hljs-keyword">return</span> state.<span class="hljs-property">items</span>.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">total, item</span>) =&gt;</span> {
+        <span class="hljs-keyword">return</span> total + item.<span class="hljs-property">price</span> * item.<span class="hljs-property">quantity</span>;
+      }, <span class="hljs-number">0</span>);
+    },
+    <span class="hljs-attr">itemCount</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">items</span>.<span class="hljs-property">length</span>
+  },
+
+  <span class="hljs-attr">mutations</span>: {
+    <span class="hljs-title function_">addItem</span>(<span class="hljs-params">state, item</span>) {
+      <span class="hljs-keyword">const</span> existing = state.<span class="hljs-property">items</span>.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> i.<span class="hljs-property">id</span> === item.<span class="hljs-property">id</span>);
+      <span class="hljs-keyword">if</span> (existing) {
+        existing.<span class="hljs-property">quantity</span>++;
+      } <span class="hljs-keyword">else</span> {
+        state.<span class="hljs-property">items</span>.<span class="hljs-title function_">push</span>({ ...item, <span class="hljs-attr">quantity</span>: <span class="hljs-number">1</span> });
+      }
+    },
+    <span class="hljs-title function_">removeItem</span>(<span class="hljs-params">state, itemId</span>) {
+      <span class="hljs-keyword">const</span> index = state.<span class="hljs-property">items</span>.<span class="hljs-title function_">findIndex</span>(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> i.<span class="hljs-property">id</span> === itemId);
+      <span class="hljs-keyword">if</span> (index &gt; -<span class="hljs-number">1</span>) {
+        state.<span class="hljs-property">items</span>.<span class="hljs-title function_">splice</span>(index, <span class="hljs-number">1</span>);
+      }
+    },
+    <span class="hljs-title function_">clearCart</span>(<span class="hljs-params">state</span>) {
+      state.<span class="hljs-property">items</span> = [];
+    }
+  },
+
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-title function_">checkout</span>(<span class="hljs-params">{ commit, state }</span>) {
+      <span class="hljs-keyword">return</span> api.<span class="hljs-title function_">checkout</span>(state.<span class="hljs-property">items</span>)
+        .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+          <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;clearCart&#x27;</span>);
+          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        })
+        .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+          <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;setCheckoutStatus&#x27;</span>, error.<span class="hljs-property">message</span>);
+          <span class="hljs-keyword">throw</span> error;
+        });
+    }
+  }
+};
+
+<span class="hljs-comment">// store/index.js</span>
+<span class="hljs-keyword">import</span> { createStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vuex&#x27;</span>;
+<span class="hljs-keyword">import</span> user <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./modules/user&#x27;</span>;
+<span class="hljs-keyword">import</span> cart <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./modules/cart&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">createStore</span>({
+  <span class="hljs-attr">modules</span>: {
+    user,
+    cart
+  },
+
+  <span class="hljs-comment">// 根级别的 state</span>
+  <span class="hljs-attr">state</span>: <span class="hljs-function">() =&gt;</span> ({
+    <span class="hljs-attr">loading</span>: <span class="hljs-literal">false</span>
+  }),
+
+  <span class="hljs-comment">// 根级别的 getters</span>
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">loading</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">loading</span>
+  }
+});
+</code></pre><hr>
+<h3 id="3.3-pinia">3.3 Pinia 状态管理</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 创建 store</span>
+<span class="hljs-keyword">import</span> { defineStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;pinia&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useCounterStore = <span class="hljs-title function_">defineStore</span>(<span class="hljs-string">&#x27;counter&#x27;</span>, {
+  <span class="hljs-comment">// 状态</span>
+  <span class="hljs-attr">state</span>: <span class="hljs-function">() =&gt;</span> ({
+    <span class="hljs-attr">count</span>: <span class="hljs-number">0</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>
+  }),
+
+  <span class="hljs-comment">// 计算属性</span>
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">doubleCount</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">count</span> * <span class="hljs-number">2</span>,
+    <span class="hljs-comment">// 访问其他 getter</span>
+    <span class="hljs-title function_">doublePlusOne</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">doubleCount</span> + <span class="hljs-number">1</span>;
+    }
+  },
+
+  <span class="hljs-comment">// 方法</span>
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-title function_">increment</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">count</span>++;
+    },
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/data&#x27;</span>);
+      <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> res.<span class="hljs-title function_">json</span>();
+      <span class="hljs-keyword">return</span> data;
+    }
+  }
+});
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">import</span> { useCounterStore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/stores/counter&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> store = <span class="hljs-title function_">useCounterStore</span>();
+
+    <span class="hljs-comment">// 访问状态</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(store.<span class="hljs-property">count</span>);
+
+    <span class="hljs-comment">// 修改状态</span>
+    store.<span class="hljs-title function_">increment</span>();
+
+    <span class="hljs-comment">// 解构（保持响应式）</span>
+    <span class="hljs-keyword">const</span> { count } = <span class="hljs-title function_">storeToRefs</span>(store);
+
+    <span class="hljs-keyword">return</span> { store, count };
+  }
+};
+</code></pre><h3 id="3.3.1-pinia">3.3.1 Pinia 深入理解</h3>
+<p><strong>Pinia 的优势</strong>：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                    Pinia vs Vuex                                ┃   
+┃                                                                  ┃  
+┃  Pinia 优势：                                                   ┃   
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃    
+┃  ┃  1. 更简洁的 API                                          ┃   ┃  
+┃  ┃     - 不需要 mutations                                     ┃   ┃ 
+┃  ┃     - 自动类型推断                                         ┃   ┃ 
+┃  ┃                                                             ┃   ┃
+┃  ┃  2. 支持 Composition API                                   ┃   ┃ 
+┃  ┃     - 可以使用 ref/reactive                                ┃   ┃ 
+┃  ┃     - 更好的 TypeScript 支持                               ┃   ┃ 
+┃  ┃                                                             ┃   ┃
+┃  ┃  3. 模块化更简单                                            ┃   ┃
+┃  ┃     - 每个 store 都是独立的                                 ┃   ┃
+┃  ┃     - 不需要嵌套模块                                        ┃   ┃
+┃  ┃                                                             ┃   ┃
+┃  ┃  4. 无需手动刷新                                            ┃   ┃
+┃  ┃     - 热更新时保持状态                                      ┃   ┃
+┃  ┃                                                             ┃   ┃
+┃  ┃  5. 更好的调试                                              ┃   ┃
+┃  ┃     - 支持 Vue Devtools                                    ┃   ┃ 
+┃  ┃                                                             ┃   ┃
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ┃    
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><p><strong>Pinia Store 的多种定义方式</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 选项式 API（类似 Vuex）</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useUserStore = <span class="hljs-title function_">defineStore</span>(<span class="hljs-string">&#x27;user&#x27;</span>, {
+  <span class="hljs-attr">state</span>: <span class="hljs-function">() =&gt;</span> ({
+    <span class="hljs-attr">user</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">isLoggedIn</span>: <span class="hljs-literal">false</span>
+  }),
+
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">username</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">user</span>?.<span class="hljs-property">name</span> || <span class="hljs-string">&#x27;Guest&#x27;</span>,
+    <span class="hljs-attr">isVIP</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">user</span>?.<span class="hljs-property">vip</span> || <span class="hljs-literal">false</span>
+  },
+
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">credentials</span>) {
+      <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">login</span>(credentials);
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">user</span> = user;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">isLoggedIn</span> = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">return</span> user;
+      } <span class="hljs-keyword">catch</span> (error) {
+        <span class="hljs-keyword">throw</span> error;
+      }
+    },
+
+    <span class="hljs-title function_">logout</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">user</span> = <span class="hljs-literal">null</span>;
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">isLoggedIn</span> = <span class="hljs-literal">false</span>;
+    }
+  }
+});
+
+<span class="hljs-comment">// 2. Setup 函数式（类似 Composition API）</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useUserStore = <span class="hljs-title function_">defineStore</span>(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 状态</span>
+  <span class="hljs-keyword">const</span> user = <span class="hljs-title function_">ref</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> isLoggedIn = <span class="hljs-title function_">ref</span>(<span class="hljs-literal">false</span>);
+
+  <span class="hljs-comment">// 计算属性</span>
+  <span class="hljs-keyword">const</span> username = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> user.<span class="hljs-property">value</span>?.<span class="hljs-property">name</span> || <span class="hljs-string">&#x27;Guest&#x27;</span>);
+  <span class="hljs-keyword">const</span> isVIP = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> user.<span class="hljs-property">value</span>?.<span class="hljs-property">vip</span> || <span class="hljs-literal">false</span>);
+
+  <span class="hljs-comment">// 方法</span>
+  <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">credentials</span>) {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">const</span> userData = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">login</span>(credentials);
+      user.<span class="hljs-property">value</span> = userData;
+      isLoggedIn.<span class="hljs-property">value</span> = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">return</span> userData;
+    } <span class="hljs-keyword">catch</span> (error) {
+      <span class="hljs-keyword">throw</span> error;
+    }
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">logout</span>(<span class="hljs-params"></span>) {
+    user.<span class="hljs-property">value</span> = <span class="hljs-literal">null</span>;
+    isLoggedIn.<span class="hljs-property">value</span> = <span class="hljs-literal">false</span>;
+  }
+
+  <span class="hljs-keyword">return</span> {
+    user,
+    isLoggedIn,
+    username,
+    isVIP,
+    login,
+    logout
+  };
+});
+</code></pre><p><strong>Pinia 持久化</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 使用 pinia-plugin-persistedstate 插件</span>
+<span class="hljs-keyword">import</span> { createPinia } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;pinia&#x27;</span>;
+<span class="hljs-keyword">import</span> piniaPluginPersistedstate <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;pinia-plugin-persistedstate&#x27;</span>;
+
+<span class="hljs-keyword">const</span> pinia = <span class="hljs-title function_">createPinia</span>();
+pinia.<span class="hljs-title function_">use</span>(piniaPluginPersistedstate);
+
+<span class="hljs-comment">// 在 store 中启用持久化</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useUserStore = <span class="hljs-title function_">defineStore</span>(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> token = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> user = <span class="hljs-title function_">ref</span>(<span class="hljs-literal">null</span>);
+
+  <span class="hljs-keyword">return</span> { token, user };
+}, {
+  <span class="hljs-attr">persist</span>: <span class="hljs-literal">true</span> <span class="hljs-comment">// 启用持久化</span>
+});
+
+<span class="hljs-comment">// 自定义持久化配置</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useSettingsStore = <span class="hljs-title function_">defineStore</span>(<span class="hljs-string">&#x27;settings&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;dark&#x27;</span>);
+  <span class="hljs-keyword">const</span> language = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;zh-CN&#x27;</span>);
+
+  <span class="hljs-keyword">return</span> { theme, language };
+}, {
+  <span class="hljs-attr">persist</span>: {
+    <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;my-app-settings&#x27;</span>,
+    <span class="hljs-attr">storage</span>: <span class="hljs-variable language_">localStorage</span>,
+    <span class="hljs-attr">paths</span>: [<span class="hljs-string">&#x27;theme&#x27;</span>] <span class="hljs-comment">// 只持久化 theme</span>
+  }
+});
+</code></pre><p><strong>Pinia 与 TypeScript</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 类型定义</span>
+interface <span class="hljs-title class_">User</span> {
+  <span class="hljs-attr">id</span>: number;
+  <span class="hljs-attr">name</span>: string;
+  <span class="hljs-attr">email</span>: string;
+}
+
+interface <span class="hljs-title class_">UserState</span> {
+  <span class="hljs-attr">user</span>: <span class="hljs-title class_">User</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">isLoggedIn</span>: boolean;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> useUserStore = <span class="hljs-title function_">defineStore</span>(<span class="hljs-string">&#x27;user&#x27;</span>, {
+  <span class="hljs-attr">state</span>: (): <span class="hljs-function"><span class="hljs-params">UserState</span> =&gt;</span> ({
+    <span class="hljs-attr">user</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">isLoggedIn</span>: <span class="hljs-literal">false</span>
+  }),
+
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">username</span>: (state): <span class="hljs-function"><span class="hljs-params">string</span> =&gt;</span> state.<span class="hljs-property">user</span>?.<span class="hljs-property">name</span> || <span class="hljs-string">&#x27;Guest&#x27;</span>
+  },
+
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">login</span>(<span class="hljs-attr">credentials</span>: { <span class="hljs-attr">email</span>: string; <span class="hljs-attr">password</span>: string }): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">User</span>&gt; {
+      <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> api.<span class="hljs-title function_">login</span>(credentials);
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">user</span> = user;
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">isLoggedIn</span> = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">return</span> user;
+    }
+  }
+});
+
+<span class="hljs-comment">// 使用时自动推断类型</span>
+<span class="hljs-keyword">const</span> store = <span class="hljs-title function_">useUserStore</span>();
+store.<span class="hljs-property">user</span>?.<span class="hljs-property">name</span>; <span class="hljs-comment">// string | undefined</span>
+store.<span class="hljs-property">login</span>; <span class="hljs-comment">// (credentials: { email: string; password: string }) =&gt; Promise&lt;User&gt;</span>
+</code></pre><hr>
+<h2 id="vue-3">四、Vue 3 新特性</h2>
+<h3 id="4.1-teleport">4.1 Teleport 瞬移</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// Teleport - 将组件渲染到指定 DOM 位置</span>
+&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;show = true&quot;</span>&gt;</span>Open Modal<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Teleport</span> <span class="hljs-attr">to</span>=<span class="hljs-string">&quot;body&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">&quot;show&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Modal Content<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;show = false&quot;</span>&gt;</span>Close<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Teleport</span>&gt;</span></span>
+&lt;/template&gt;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
+<span class="hljs-selector-class">.modal</span> {
+  <span class="hljs-attribute">position</span>: fixed;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>);
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span>
+</code></pre><h3 id="4.1.1-teleport">4.1.1 Teleport 深入理解</h3>
+<p><strong>Teleport 的多种用法</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 传送到 body</span>
+&lt;<span class="hljs-title class_">Teleport</span> to=<span class="hljs-string">&quot;body&quot;</span>&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal&quot;</span>&gt;</span>Modal Content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+&lt;/<span class="hljs-title class_">Teleport</span>&gt;
+
+<span class="hljs-comment">// 2. 传送到指定选择器</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Teleport</span> <span class="hljs-attr">to</span>=<span class="hljs-string">&quot;#modal-container&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal&quot;</span>&gt;</span>Modal Content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Teleport</span>&gt;</span></span>
+
+<span class="hljs-comment">// 3. 传送到 DOM 元素</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Teleport</span> <span class="hljs-attr">:to</span>=<span class="hljs-string">&quot;modalContainer&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal&quot;</span>&gt;</span>Modal Content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Teleport</span>&gt;</span></span>
+
+<span class="hljs-comment">// 4. 传送到多个目标（禁用）</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Teleport</span> <span class="hljs-attr">to</span>=<span class="hljs-string">&quot;body&quot;</span> <span class="hljs-attr">:disabled</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal&quot;</span>&gt;</span>Modal Content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Teleport</span>&gt;</span></span>
+</code></pre><p><strong>Teleport 实战示例</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// Modal 组件</span>
+&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Teleport</span> <span class="hljs-attr">to</span>=<span class="hljs-string">&quot;body&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-if</span>=<span class="hljs-string">&quot;modelValue&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal-overlay&quot;</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;close&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal-content&quot;</span> @<span class="hljs-attr">click.stop</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">header</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>Default Title<span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;close-btn&quot;</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;close&quot;</span>&gt;</span>×<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">main</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">footer</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;close&quot;</span>&gt;</span>Close<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Teleport</span>&gt;</span></span>
+&lt;/template&gt;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">setup</span>&gt;</span><span class="language-javascript">
+<span class="hljs-title function_">defineProps</span>({
+  <span class="hljs-attr">modelValue</span>: <span class="hljs-title class_">Boolean</span>
+});
+
+<span class="hljs-keyword">const</span> emit = <span class="hljs-title function_">defineEmits</span>([<span class="hljs-string">&#x27;update:modelValue&#x27;</span>]);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">close</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;update:modelValue&#x27;</span>, <span class="hljs-literal">false</span>);
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">scoped</span>&gt;</span><span class="language-css">
+<span class="hljs-selector-class">.modal-overlay</span> {
+  <span class="hljs-attribute">position</span>: fixed;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>);
+  <span class="hljs-attribute">display</span>: flex;
+  <span class="hljs-attribute">justify-content</span>: center;
+  <span class="hljs-attribute">align-items</span>: center;
+}
+
+<span class="hljs-selector-class">.modal-content</span> {
+  <span class="hljs-attribute">background</span>: white;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">20px</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">8px</span>;
+  <span class="hljs-attribute">min-width</span>: <span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">max-width</span>: <span class="hljs-number">90%</span>;
+}
+
+<span class="hljs-selector-class">.close-btn</span> {
+  <span class="hljs-attribute">float</span>: right;
+  <span class="hljs-attribute">border</span>: none;
+  <span class="hljs-attribute">background</span>: none;
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span>;
+  <span class="hljs-attribute">cursor</span>: pointer;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span>
+</code></pre><pre class="hljs"><code><span class="hljs-comment">// 使用 Modal</span>
+&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;showModal = true&quot;</span>&gt;</span>Open Modal<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Modal</span> <span class="hljs-attr">v-model</span>=<span class="hljs-string">&quot;showModal&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">title</span>&gt;</span>Confirm<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Are you sure to delete this item?<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">footer</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;confirm&quot;</span>&gt;</span>Confirm<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> @<span class="hljs-attr">click</span>=<span class="hljs-string">&quot;showModal = false&quot;</span>&gt;</span>Cancel<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Modal</span>&gt;</span></span>
+&lt;/template&gt;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">setup</span>&gt;</span><span class="language-javascript">
+<span class="hljs-keyword">import</span> { ref } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Modal</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Modal.vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> showModal = <span class="hljs-title function_">ref</span>(<span class="hljs-literal">false</span>);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">confirm</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 删除逻辑</span>
+  showModal.<span class="hljs-property">value</span> = <span class="hljs-literal">false</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+</code></pre><p><strong>Teleport 与 CSS 样式</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 注意事项：Teleport 不会改变 CSS 作用域</span>
+<span class="hljs-comment">// 样式仍然受组件作用域影响</span>
+
+<span class="hljs-comment">// 解决方案1：使用 :global</span>
+&lt;style&gt;
+:<span class="hljs-title function_">global</span>(<span class="hljs-params">.modal-overlay</span>) {
+  <span class="hljs-comment">/* 全局样式 */</span>
+}
+&lt;/style&gt;
+
+<span class="hljs-comment">// 解决方案2：在 Teleport 外部定义样式</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css">
+<span class="hljs-selector-class">.modal-overlay</span> {
+  <span class="hljs-attribute">position</span>: fixed;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>);
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span>
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Teleport</span> <span class="hljs-attr">to</span>=<span class="hljs-string">&quot;body&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;modal-overlay&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Teleport</span>&gt;</span></span>
+</code></pre><hr>
+<h3 id="4.2-suspense">4.2 Suspense 异步组件</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 异步组件</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncComponent</span> = <span class="hljs-title function_">defineAsyncComponent</span>(<span class="hljs-function">() =&gt;</span>
+  <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./AsyncComponent.vue&#x27;</span>)
+);
+
+<span class="hljs-comment">// 带 loading 和 error</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncComponent</span> = <span class="hljs-title function_">defineAsyncComponent</span>({
+  <span class="hljs-attr">loader</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./AsyncComponent.vue&#x27;</span>),
+  <span class="hljs-attr">loadingComponent</span>: <span class="hljs-title class_">LoadingComponent</span>,
+  <span class="hljs-attr">errorComponent</span>: <span class="hljs-title class_">ErrorComponent</span>,
+  <span class="hljs-attr">delay</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-attr">timeout</span>: <span class="hljs-number">3000</span>
+});
+
+<span class="hljs-comment">// 使用 Suspense</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">default</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">AsyncComponent</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">fallback</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Loading</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
+</code></pre><h3 id="4.2.1-suspense">4.2.1 Suspense 深入理解</h3>
+<p><strong>Suspense 的工作原理</strong>：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃                    Suspense 工作流程                             ┃
+┃                                                                  ┃
+┃  1. 初始渲染                                                     ┃
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃ 
+┃  ┃  Suspense 显示 #fallback                                  ┃  ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    
+┃                              ┃                                  ┃ 
+┃                              ▼                                  ┃ 
+┃  2. 异步依赖加载                                                ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃ 
+┃  ┃  - 异步组件                                               ┃  ┃ 
+┃  ┃  - async setup()                                         ┃  ┃  
+┃  ┃  - 异步组件的顶层 await                                  ┃  ┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    
+┃                              ┃                                  ┃ 
+┃                              ▼                                  ┃ 
+┃  3. 渲染完成                                                    ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃ 
+┃  ┃  Suspense 显示 #default                                  ┃  ┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃    
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+
+</code></pre><p><strong>defineAsyncComponent 完整配置</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { defineAsyncComponent } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Loading</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Loading.vue&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Error</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Error.vue&#x27;</span>;
+
+<span class="hljs-comment">// 完整配置</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncComponent</span> = <span class="hljs-title function_">defineAsyncComponent</span>({
+  <span class="hljs-comment">// 异步组件加载函数</span>
+  <span class="hljs-attr">loader</span>: <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-comment">// 模拟网络延迟</span>
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>));
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./AsyncComponent.vue&#x27;</span>);
+  },
+
+  <span class="hljs-comment">// 加载时显示的组件</span>
+  <span class="hljs-attr">loadingComponent</span>: <span class="hljs-title class_">Loading</span>,
+
+  <span class="hljs-comment">// 加载失败时显示的组件</span>
+  <span class="hljs-attr">errorComponent</span>: <span class="hljs-title class_">Error</span>,
+
+  <span class="hljs-comment">// 展示 loadingComponent 前的延迟（默认 200ms）</span>
+  <span class="hljs-attr">delay</span>: <span class="hljs-number">200</span>,
+
+  <span class="hljs-comment">// 超时时间（默认 Infinity）</span>
+  <span class="hljs-attr">timeout</span>: <span class="hljs-number">3000</span>,
+
+  <span class="hljs-comment">// 是否承诺组件可挂起（默认 true）</span>
+  <span class="hljs-attr">suspensible</span>: <span class="hljs-literal">true</span>,
+
+  <span class="hljs-comment">// 加载错误后是否重试</span>
+  <span class="hljs-title function_">onError</span>(<span class="hljs-params">error, retry, fail, attempts</span>) {
+    <span class="hljs-comment">// 错误处理逻辑</span>
+    <span class="hljs-keyword">if</span> (attempts &lt; <span class="hljs-number">3</span>) {
+      <span class="hljs-title function_">retry</span>();
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-title function_">fail</span>();
+    }
+  }
+});
+</code></pre><p><strong>Suspense 嵌套使用</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 父组件</span>
+&lt;<span class="hljs-title class_">Suspense</span>&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">default</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ParentComponent</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">fallback</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">LoadingSkeleton</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
+&lt;/<span class="hljs-title class_">Suspense</span>&gt;
+
+<span class="hljs-comment">// ParentComponent.vue</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Parent<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">default</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">ChildComponent</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">fallback</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">ChildLoading</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
+</code></pre><p><strong>async setup 与 Suspense</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 使用 async setup</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 在 setup 中使用 await</span>
+    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchUser</span>();
+    <span class="hljs-keyword">const</span> posts = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchPosts</span>();
+
+    <span class="hljs-keyword">return</span> { user, posts };
+  }
+};
+
+<span class="hljs-comment">// 或者在组件中使用 async 组件</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">UserProfile</span> = <span class="hljs-title function_">defineAsyncComponent</span>(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchUser</span>();
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">return</span> { user };
+    }
+  };
+});
+</code></pre><hr>
+<h3 id="4.3-fragments">4.3 Fragments</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// Vue 3 支持多根节点组件</span>
+&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;header&quot;</span>&gt;</span>Header<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>Content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>Footer<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+&lt;/template&gt;
+
+<span class="hljs-comment">// Vue 2 需要单一根节点</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;header&quot;</span>&gt;</span>Header<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>Content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>Footer<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
+</code></pre><h3 id="4.3.1-fragments">4.3.1 Fragments 深入理解</h3>
+<p><strong>Fragments 的优势</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 减少不必要的 DOM 层级</span>
+<span class="hljs-comment">// Vue 2</span>
+<span class="hljs-comment">// &lt;div&gt;</span>
+<span class="hljs-comment">//   &lt;header&gt;&lt;/header&gt;</span>
+<span class="hljs-comment">//   &lt;main&gt;&lt;/main&gt;</span>
+<span class="hljs-comment">//   &lt;footer&gt;&lt;/footer&gt;</span>
+<span class="hljs-comment">// &lt;/div&gt;</span>
+
+<span class="hljs-comment">// Vue 3</span>
+<span class="hljs-comment">// &lt;header&gt;&lt;/header&gt;</span>
+<span class="hljs-comment">// &lt;main&gt;&lt;/main&gt;</span>
+<span class="hljs-comment">// &lt;footer&gt;&lt;/footer&gt;</span>
+
+<span class="hljs-comment">// 2. 更好的 CSS 样式控制</span>
+&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Item 1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Item 2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Item 3<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>
+&lt;/template&gt;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">scoped</span>&gt;</span><span class="language-css">
+<span class="hljs-selector-tag">li</span> {
+  <span class="hljs-attribute">color</span>: red;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span>
+</code></pre><p><strong>带 key 的 Fragments</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 需要使用 key 来标记每个元素</span>
+&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">v-for</span>=<span class="hljs-string">&quot;item in items&quot;</span> <span class="hljs-attr">:key</span>=<span class="hljs-string">&quot;item.id&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{{ item.title }}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{{ item.description }}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></span>
+&lt;/template&gt;
+</code></pre><p><strong>Fragments 与 v-for</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 动态渲染多个元素</span>
+&lt;template&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">v-for</span>=<span class="hljs-string">&quot;header in headers&quot;</span> <span class="hljs-attr">:key</span>=<span class="hljs-string">&quot;header.id&quot;</span>&gt;</span>
+    {{ header.text }}
+  <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>
+&lt;/template&gt;
+
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">setup</span>&gt;</span><span class="language-javascript">
+<span class="hljs-keyword">const</span> headers = [
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Header 1&#x27;</span> },
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Header 2&#x27;</span> },
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Header 3&#x27;</span> }
+];
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+</code></pre><hr>
+<h2 id="">五、性能优化</h2>
+<h3 id="5.1-vue">5.1 Vue 性能优化策略</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. v-show vs v-if</span>
+<span class="hljs-comment">// v-if: 条件为 false 不渲染（切换成本高）</span>
+<span class="hljs-comment">// v-show: 始终渲染，通过 display 切换（初始化成本高）</span>
+
+<span class="hljs-comment">// 2. v-for 使用 key</span>
+<span class="hljs-comment">// 保持节点可复用</span>
+&lt;div v-<span class="hljs-keyword">for</span>=<span class="hljs-string">&quot;item in items&quot;</span> :key=<span class="hljs-string">&quot;item.id&quot;</span>&gt;
+
+<span class="hljs-comment">// 3. 列表虚拟滚动</span>
+<span class="hljs-comment">// vue-virtual-scroller</span>
+
+<span class="hljs-comment">// 4. 组件懒加载</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncComponent</span> = <span class="hljs-title function_">defineAsyncComponent</span>(<span class="hljs-function">() =&gt;</span>
+  <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./AsyncComponent.vue&#x27;</span>)
+);
+
+<span class="hljs-comment">// 5. 减少响应式对象</span>
+<span class="hljs-comment">// 不需要响应式的数据不要放在 data/reactive 中</span>
+
+<span class="hljs-comment">// 6. computed 缓存</span>
+<span class="hljs-comment">// 依赖不变时使用缓存</span>
+
+<span class="hljs-comment">// 7. keep-alive 缓存组件</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">keep-alive</span> <span class="hljs-attr">:include</span>=<span class="hljs-string">&quot;[&#x27;ComponentA&#x27;]&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ComponentA</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">keep-alive</span>&gt;</span></span>
+</code></pre><h3 id="5.1.1">5.1.1 渲染优化</h3>
+<p><strong>v-show vs v-if 选择</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">推荐</th>
+<th style="text-align:left">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">切换频率低</td>
+<td style="text-align:left">v-if</td>
+<td style="text-align:left">不渲染，初始成本低</td>
+</tr>
+<tr>
+<td style="text-align:left">切换频率高</td>
+<td style="text-align:left">v-show</td>
+<td style="text-align:left">始终渲染，切换成本低</td>
+</tr>
+<tr>
+<td style="text-align:left">权限控制</td>
+<td style="text-align:left">v-if</td>
+<td style="text-align:left">条件不满足不渲染</td>
+</tr>
+<tr>
+<td style="text-align:left">动态显示/隐藏</td>
+<td style="text-align:left">v-show</td>
+<td style="text-align:left">需要保持状态</td>
+</tr>
+</tbody>
+</table>
+<pre class="hljs"><code><span class="hljs-comment">// v-if 适合权限控制</span>
+&lt;div v-<span class="hljs-keyword">if</span>=<span class="hljs-string">&quot;user.isAdmin&quot;</span>&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">AdminPanel</span> /&gt;</span></span>
+&lt;/div&gt;
+
+<span class="hljs-comment">// v-show 适合频繁切换</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">v-show</span>=<span class="hljs-string">&quot;isModalVisible&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">Modal</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</code></pre><p><strong>减少不必要的渲染</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 合理使用 computed</span>
+<span class="hljs-keyword">const</span> firstName = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;John&#x27;</span>);
+<span class="hljs-keyword">const</span> lastName = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;Doe&#x27;</span>);
+
+<span class="hljs-comment">// 好：使用 computed</span>
+<span class="hljs-keyword">const</span> fullName = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${firstName.value}</span> <span class="hljs-subst">${lastName.value}</span>`</span>;
+});
+
+<span class="hljs-comment">// 不好：每次渲染都重新计算</span>
+<span class="hljs-keyword">const</span> fullName = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+<span class="hljs-title function_">watch</span>([firstName, lastName], <span class="hljs-function">() =&gt;</span> {
+  fullName.<span class="hljs-property">value</span> = <span class="hljs-string">`<span class="hljs-subst">${firstName.value}</span> <span class="hljs-subst">${lastName.value}</span>`</span>;
+});
+
+<span class="hljs-comment">// 2. 使用 shallowRef / markRaw</span>
+<span class="hljs-keyword">import</span> { shallowRef, markRaw } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-comment">// shallowRef 只触发顶层响应式</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">shallowRef</span>({
+  <span class="hljs-attr">deep</span>: { <span class="hljs-attr">nested</span>: <span class="hljs-string">&#x27;value&#x27;</span> }
+});
+state.<span class="hljs-property">value</span>.<span class="hljs-property">deep</span>.<span class="hljs-property">nested</span> = <span class="hljs-string">&#x27;newValue&#x27;</span>; <span class="hljs-comment">// 不会触发更新</span>
+
+<span class="hljs-comment">// markRaw 标记非响应式</span>
+<span class="hljs-keyword">const</span> obj = <span class="hljs-title function_">markRaw</span>({ <span class="hljs-attr">deep</span>: { <span class="hljs-attr">nested</span>: <span class="hljs-string">&#x27;value&#x27;</span> } });
+<span class="hljs-comment">// 修改 obj 不会触发更新</span>
+</code></pre><p><strong>v-for 优化</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 使用唯一的 key</span>
+<span class="hljs-comment">// 好</span>
+&lt;div v-<span class="hljs-keyword">for</span>=<span class="hljs-string">&quot;item in items&quot;</span> :key=<span class="hljs-string">&quot;item.id&quot;</span>&gt;
+
+<span class="hljs-comment">// 不好 - 使用索引作为 key</span>
+&lt;div v-for=&quot;(item, index) in items&quot; :key=&quot;index&quot;&gt;
+
+// 2. 避免在 v-for 中使用 v-if
+// 不好
+&lt;div v-for=&quot;item in items&quot; v-if=&quot;item.visible&quot; :key=&quot;item.id&quot;&gt;
+
+// 好 - 使用 computed 过滤
+const visibleItems = computed(() =&gt; {
+  return items.filter(item =&gt; item.visible);
+});
+&lt;div v-for=&quot;item in visibleItems&quot; :key=&quot;item.id&quot;&gt;
+
+// 3. 使用虚拟列表
+// vue-virtual-scroller, vue-virtual-scroll-list
+</code></pre><h3 id="5.1.2">5.1.2 异步组件</h3>
+<p><strong>异步组件的优势</strong>：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                    异步组件优势                                   ┃
+┃                                                                  ┃ 
+┃  1. 代码分割                                                     ┃ 
+┃     - 将不首屏渲染的代码分割成独立 chunk                        ┃  
+┃     - 减少首屏加载时间                                           ┃ 
+┃                                                                  ┃ 
+┃  2. 按需加载                                                     ┃ 
+┃     - 只有需要时才加载组件                                       ┃ 
+┃     - 节省带宽和内存                                             ┃ 
+┃                                                                  ┃ 
+┃  3. 并行加载                                                     ┃ 
+┃     - 多个异步组件可以并行加载                                  ┃  
+┃                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><p><strong>异步组件的使用</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 基础用法</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncModal</span> = <span class="hljs-title function_">defineAsyncComponent</span>(<span class="hljs-function">() =&gt;</span>
+  <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./Modal.vue&#x27;</span>)
+);
+
+<span class="hljs-comment">// 2. 带配置</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncModal</span> = <span class="hljs-title function_">defineAsyncComponent</span>({
+  <span class="hljs-attr">loader</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./Modal.vue&#x27;</span>),
+  <span class="hljs-attr">loadingComponent</span>: <span class="hljs-title class_">LoadingSpinner</span>,
+  <span class="hljs-attr">errorComponent</span>: <span class="hljs-title class_">ErrorMessage</span>,
+  <span class="hljs-attr">delay</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-attr">timeout</span>: <span class="hljs-number">5000</span>
+});
+
+<span class="hljs-comment">// 3. Suspense 配合</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">default</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">AsyncModal</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> #<span class="hljs-attr">fallback</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">LoadingSpinner</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
+</code></pre><p><strong>路由懒加载</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// router/index.js</span>
+<span class="hljs-keyword">import</span> { createRouter, createWebHistory } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-router&#x27;</span>;
+
+<span class="hljs-comment">// 路由懒加载</span>
+<span class="hljs-keyword">const</span> routes = [
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Home&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/Home.vue&#x27;</span>)
+  },
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/about&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;About&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/About.vue&#x27;</span>)
+  },
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/user&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;User&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/User.vue&#x27;</span>),
+    <span class="hljs-attr">children</span>: [
+      {
+        <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;profile&#x27;</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;UserProfile&#x27;</span>,
+        <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/UserProfile.vue&#x27;</span>)
+      },
+      {
+        <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;settings&#x27;</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;UserSettings&#x27;</span>,
+        <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/UserSettings.vue&#x27;</span>)
+      }
+    ]
+  }
+];
+
+<span class="hljs-keyword">const</span> router = <span class="hljs-title function_">createRouter</span>({
+  <span class="hljs-attr">history</span>: <span class="hljs-title function_">createWebHistory</span>(),
+  routes
+});
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> router;
+</code></pre><p><strong>预加载</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 使用 webpackChunkName 命名 chunk</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">AsyncModal</span> = <span class="hljs-title function_">defineAsyncComponent</span>(<span class="hljs-function">() =&gt;</span>
+  <span class="hljs-keyword">import</span>(<span class="hljs-comment">/* webpackChunkName: &quot;modal&quot; */</span> <span class="hljs-string">&#x27;./Modal.vue&#x27;</span>)
+);
+
+<span class="hljs-comment">// 预加载下一个路由</span>
+<span class="hljs-keyword">import</span> { preloadRoute } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-router&#x27;</span>;
+
+<span class="hljs-comment">// 路由元信息中标记需要预加载的路由</span>
+<span class="hljs-keyword">const</span> routes = [
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/products&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Products&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/Products.vue&#x27;</span>),
+    <span class="hljs-attr">children</span>: [
+      {
+        <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;:id&#x27;</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;ProductDetail&#x27;</span>,
+        <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/ProductDetail.vue&#x27;</span>)
+      }
+    ]
+  }
+];
+</code></pre><h3 id="5.1.3-keep-alive">5.1.3 keep-alive 缓存</h3>
+<p><strong>keep-alive 的使用</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 基本用法</span>
+&lt;keep-alive&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ComponentA</span> /&gt;</span></span>
+&lt;/keep-alive&gt;
+
+<span class="hljs-comment">// 2. 缓存指定组件</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">keep-alive</span> <span class="hljs-attr">:include</span>=<span class="hljs-string">&quot;[&#x27;Home&#x27;, &#x27;About&#x27;]&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">router-view</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">keep-alive</span>&gt;</span></span>
+
+<span class="hljs-comment">// 3. 排除组件</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">keep-alive</span> <span class="hljs-attr">:exclude</span>=<span class="hljs-string">&quot;[&#x27;Login&#x27;]&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">router-view</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">keep-alive</span>&gt;</span></span>
+
+<span class="hljs-comment">// 4. 最大缓存数</span>
+<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">keep-alive</span> <span class="hljs-attr">:max</span>=<span class="hljs-string">&quot;10&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">component</span> <span class="hljs-attr">:is</span>=<span class="hljs-string">&quot;currentComponent&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">keep-alive</span>&gt;</span></span>
+</code></pre><p><strong>生命周期变化</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 被缓存的组件</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-comment">// 首次渲染</span>
+  <span class="hljs-title function_">mounted</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;mounted&#x27;</span>);
+  },
+
+  <span class="hljs-comment">// 被缓存时触发</span>
+  <span class="hljs-title function_">onActivated</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;activated - 从缓存中恢复&#x27;</span>);
+    <span class="hljs-comment">// 适合：刷新数据、重置定时器</span>
+  },
+
+  <span class="hljs-comment">// 被缓存时触发</span>
+  <span class="hljs-title function_">onDeactivated</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;deactivated - 进入缓存&#x27;</span>);
+    <span class="hljs-comment">// 适合：保存状态、清理资源</span>
+  },
+
+  <span class="hljs-comment">// 被销毁时触发</span>
+  <span class="hljs-title function_">onUnmounted</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;unmounted - 真正销毁&#x27;</span>);
+  }
+};
+</code></pre><hr>
+<h2 id="vue-router">六、Vue Router</h2>
+<h3 id="6.1">6.1 路由守卫</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 全局守卫</span>
+<span class="hljs-keyword">const</span> router = <span class="hljs-title function_">createRouter</span>({ ... });
+
+<span class="hljs-comment">// 前置守卫</span>
+router.<span class="hljs-title function_">beforeEach</span>(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (to.<span class="hljs-property">meta</span>.<span class="hljs-property">requiresAuth</span> &amp;&amp; !isAuthenticated) {
+    <span class="hljs-title function_">next</span>(<span class="hljs-string">&#x27;/login&#x27;</span>);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-title function_">next</span>();
+  }
+});
+
+<span class="hljs-comment">// 后置守卫</span>
+router.<span class="hljs-title function_">afterEach</span>(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span></span>) =&gt;</span> {
+  <span class="hljs-comment">// 滚动行为</span>
+  <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">scrollTo</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+});
+
+<span class="hljs-comment">// 组件内守卫</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">beforeRouteEnter</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) {
+    <span class="hljs-comment">// 组件创建前调用</span>
+    <span class="hljs-title function_">next</span>(<span class="hljs-function"><span class="hljs-params">vm</span> =&gt;</span> {
+      <span class="hljs-comment">// vm 是组件实例</span>
+    });
+  },
+  <span class="hljs-title function_">beforeRouteUpdate</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) {
+    <span class="hljs-comment">// 路由参数变化时调用</span>
+    <span class="hljs-title function_">next</span>();
+  },
+  <span class="hljs-title function_">beforeRouteLeave</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) {
+    <span class="hljs-comment">// 离开组件时调用</span>
+    <span class="hljs-title function_">next</span>();
+  }
+};
+</code></pre><h3 id="6.1.1">6.1.1 路由守卫详解</h3>
+<p><strong>守卫执行顺序</strong>：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   
+┃                    路由守卫执行顺序                                ┃
+┃                                                                  ┃  
+┃  1. 导航触发                                                     ┃  
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  2. beforeRouteLeave (组件内)                                    ┃  
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  3. beforeEach (全局)                                           ┃   
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  4. beforeRouteUpdate (组件内)                                  ┃   
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  5. beforeEnter (路由独享)                                      ┃   
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  6. 解析异步路由组件                                             ┃  
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  7. beforeRouteEnter (组件内 - before)                          ┃   
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  8. 更新 DOM                                                     ┃  
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  9. afterEach (全局)                                            ┃   
+┃       ┃                                                          ┃  
+┃       ▼                                                          ┃  
+┃  10. beforeRouteEnter (组件内 - next(vm))                       ┃   
+┃                                                                  ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   
+
+</code></pre><p><strong>完整的路由守卫示例</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { createRouter, createWebHistory } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-router&#x27;</span>;
+
+<span class="hljs-comment">// 路由配置</span>
+<span class="hljs-keyword">const</span> routes = [
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Home&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/Home.vue&#x27;</span>)
+  },
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/login&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Login&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/Login.vue&#x27;</span>),
+    <span class="hljs-attr">meta</span>: { <span class="hljs-attr">requiresGuest</span>: <span class="hljs-literal">true</span> }
+  },
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/dashboard&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Dashboard&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/Dashboard.vue&#x27;</span>),
+    <span class="hljs-attr">meta</span>: { <span class="hljs-attr">requiresAuth</span>: <span class="hljs-literal">true</span> }
+  },
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/admin&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Admin&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;../views/Admin.vue&#x27;</span>),
+    <span class="hljs-attr">meta</span>: { <span class="hljs-attr">requiresAuth</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">requiresRole</span>: <span class="hljs-string">&#x27;admin&#x27;</span> },
+    <span class="hljs-attr">beforeEnter</span>: <span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) =&gt;</span> {
+      <span class="hljs-comment">// 路由独享守卫</span>
+      <span class="hljs-title function_">next</span>();
+    }
+  }
+];
+
+<span class="hljs-keyword">const</span> router = <span class="hljs-title function_">createRouter</span>({
+  <span class="hljs-attr">history</span>: <span class="hljs-title function_">createWebHistory</span>(),
+  routes
+});
+
+<span class="hljs-comment">// 全局前置守卫</span>
+router.<span class="hljs-title function_">beforeEach</span>(<span class="hljs-title function_">async</span> (to, <span class="hljs-keyword">from</span>, next) =&gt; {
+  <span class="hljs-comment">// 记录访问历史</span>
+  <span class="hljs-keyword">const</span> history = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;history&#x27;</span>) || <span class="hljs-string">&#x27;[]&#x27;</span>);
+  history.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">path</span>: <span class="hljs-keyword">from</span>.<span class="hljs-property">path</span>, <span class="hljs-attr">time</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() });
+  <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&#x27;history&#x27;</span>, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(history));
+
+  <span class="hljs-comment">// 检查是否需要登录</span>
+  <span class="hljs-keyword">if</span> (to.<span class="hljs-property">meta</span>.<span class="hljs-property">requiresAuth</span>) {
+    <span class="hljs-keyword">const</span> token = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;token&#x27;</span>);
+    <span class="hljs-keyword">if</span> (!token) {
+      <span class="hljs-comment">// 未登录，跳转到登录页</span>
+      <span class="hljs-title function_">next</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Login&#x27;</span>, <span class="hljs-attr">query</span>: { <span class="hljs-attr">redirect</span>: to.<span class="hljs-property">fullPath</span> } });
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">// 检查角色权限</span>
+    <span class="hljs-keyword">if</span> (to.<span class="hljs-property">meta</span>.<span class="hljs-property">requiresRole</span>) {
+      <span class="hljs-keyword">const</span> userRole = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;role&#x27;</span>);
+      <span class="hljs-keyword">if</span> (userRole !== to.<span class="hljs-property">meta</span>.<span class="hljs-property">requiresRole</span>) {
+        <span class="hljs-title function_">next</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Forbidden&#x27;</span> });
+        <span class="hljs-keyword">return</span>;
+      }
+    }
+  }
+
+  <span class="hljs-comment">// 检查访客专用页面</span>
+  <span class="hljs-keyword">if</span> (to.<span class="hljs-property">meta</span>.<span class="hljs-property">requiresGuest</span>) {
+    <span class="hljs-keyword">const</span> token = <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;token&#x27;</span>);
+    <span class="hljs-keyword">if</span> (token) {
+      <span class="hljs-title function_">next</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Dashboard&#x27;</span> });
+      <span class="hljs-keyword">return</span>;
+    }
+  }
+
+  <span class="hljs-title function_">next</span>();
+});
+
+<span class="hljs-comment">// 全局解析守卫</span>
+router.<span class="hljs-title function_">beforeResolve</span>(<span class="hljs-title function_">async</span> (to, <span class="hljs-keyword">from</span>, next) =&gt; {
+  <span class="hljs-comment">// 加载必要的异步数据</span>
+  <span class="hljs-keyword">if</span> (to.<span class="hljs-property">meta</span>.<span class="hljs-property">loadData</span>) {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">loadPageData</span>(to.<span class="hljs-property">name</span>);
+  }
+  <span class="hljs-title function_">next</span>();
+});
+
+<span class="hljs-comment">// 全局后置钩子</span>
+router.<span class="hljs-title function_">afterEach</span>(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span></span>) =&gt;</span> {
+  <span class="hljs-comment">// 设置页面标题</span>
+  <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span> = to.<span class="hljs-property">meta</span>.<span class="hljs-property">title</span> || <span class="hljs-string">&#x27;My App&#x27;</span>;
+
+  <span class="hljs-comment">// 发送页面访问统计</span>
+  <span class="hljs-keyword">if</span> (to.<span class="hljs-property">meta</span>.<span class="hljs-property">analytics</span>) {
+    <span class="hljs-title function_">sendAnalytics</span>({
+      <span class="hljs-attr">page</span>: to.<span class="hljs-property">fullPath</span>,
+      <span class="hljs-attr">title</span>: to.<span class="hljs-property">meta</span>.<span class="hljs-property">title</span>
+    });
+  }
+
+  <span class="hljs-comment">// 滚动到顶部</span>
+  <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">scrollTo</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+});
+
+<span class="hljs-comment">// 路由变化错误处理</span>
+router.<span class="hljs-title function_">onError</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;路由错误:&#x27;</span>, error);
+  <span class="hljs-comment">// 跳转到错误页面</span>
+  router.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Error&#x27;</span>, <span class="hljs-attr">params</span>: { <span class="hljs-attr">error</span>: error.<span class="hljs-property">message</span> } });
+});
+</code></pre><p><strong>组件内守卫详解</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-comment">// 1. beforeRouteEnter - 路由进入前</span>
+  <span class="hljs-comment">// 此时组件实例还未创建，不能访问 this</span>
+  <span class="hljs-title function_">beforeRouteEnter</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) {
+    <span class="hljs-comment">// 可以通过 next(vm) 回调访问组件实例</span>
+    <span class="hljs-title function_">next</span>(<span class="hljs-function"><span class="hljs-params">vm</span> =&gt;</span> {
+      <span class="hljs-comment">// vm 是组件实例</span>
+      vm.<span class="hljs-property">$data</span>.<span class="hljs-property">loaded</span> = <span class="hljs-literal">true</span>;
+    });
+  },
+
+  <span class="hljs-comment">// 2. beforeRouteUpdate - 路由更新时</span>
+  <span class="hljs-comment">// 路由参数变化，组件被复用时调用</span>
+  <span class="hljs-title function_">beforeRouteUpdate</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) {
+    <span class="hljs-comment">// 可以访问 this</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">$route</span>.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>);
+    <span class="hljs-comment">// 更新数据</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">loadData</span>(to.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>);
+    <span class="hljs-title function_">next</span>();
+  },
+
+  <span class="hljs-comment">// 3. beforeRouteLeave - 路由离开前</span>
+  <span class="hljs-comment">// 离开当前路由时调用</span>
+  <span class="hljs-title function_">beforeRouteLeave</span>(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) {
+    <span class="hljs-comment">// 提示用户保存未保存的更改</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">hasUnsavedChanges</span>) {
+      <span class="hljs-keyword">const</span> answer = <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">confirm</span>(<span class="hljs-string">&#x27;您有未保存的更改，确定要离开吗？&#x27;</span>);
+      <span class="hljs-keyword">if</span> (answer) {
+        <span class="hljs-title function_">next</span>();
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-title function_">next</span>(<span class="hljs-literal">false</span>);
+      }
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-title function_">next</span>();
+    }
+  }
+};
+</code></pre><hr>
+<h3 id="6.2">6.2 路由模式</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. Hash 模式</span>
+<span class="hljs-comment">// URL 带 # 号，兼容性好</span>
+<span class="hljs-keyword">const</span> router = <span class="hljs-title function_">createRouter</span>({
+  <span class="hljs-attr">history</span>: <span class="hljs-title function_">createWebHashHistory</span>(),
+  <span class="hljs-attr">routes</span>: [...]
+});
+
+<span class="hljs-comment">// 2. History 模式</span>
+<span class="hljs-comment">// URL 美观，需要服务器配置</span>
+<span class="hljs-keyword">const</span> router = <span class="hljs-title function_">createRouter</span>({
+  <span class="hljs-attr">history</span>: <span class="hljs-title function_">createWebHistory</span>(),
+  <span class="hljs-attr">routes</span>: [...]
+});
+
+<span class="hljs-comment">// 服务器配置示例 (Nginx)</span>
+<span class="hljs-comment">// location / {</span>
+<span class="hljs-comment">//   try_files $uri $uri/ /index.html;</span>
+<span class="hljs-comment">// }</span>
+</code></pre><h3 id="6.2.1">6.2.1 路由模式详解</h3>
+<p><strong>Hash vs History 对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">Hash 模式</th>
+<th style="text-align:left">History 模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">URL 格式</td>
+<td style="text-align:left">#/user</td>
+<td style="text-align:left">/user</td>
+</tr>
+<tr>
+<td style="text-align:left">兼容性</td>
+<td style="text-align:left">IE8+</td>
+<td style="text-align:left">IE10+</td>
+</tr>
+<tr>
+<td style="text-align:left">服务器配置</td>
+<td style="text-align:left">不需要</td>
+<td style="text-align:left">需要</td>
+</tr>
+<tr>
+<td style="text-align:left">刷新重定向</td>
+<td style="text-align:left">不需要</td>
+<td style="text-align:left">需要</td>
+</tr>
+<tr>
+<td style="text-align:left">SEO</td>
+<td style="text-align:left">较差</td>
+<td style="text-align:left">较好</td>
+</tr>
+</tbody>
+</table>
+<p><strong>History 模式服务器配置</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// Node.js / Express</span>
+<span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);
+<span class="hljs-keyword">const</span> history = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;connect-history-api-fallback&#x27;</span>);
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();
+
+app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">history</span>());
+app.<span class="hljs-title function_">use</span>(express.<span class="hljs-title function_">static</span>(<span class="hljs-string">&#x27;dist&#x27;</span>));
+
+app.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3000</span>);
+
+<span class="hljs-comment">// Nginx</span>
+server {
+    listen <span class="hljs-number">80</span>;
+    server_name example.<span class="hljs-property">com</span>;
+
+    root /<span class="hljs-keyword">var</span>/www/html;
+    index index.<span class="hljs-property">html</span>;
+
+    location / {
+        try_files $uri $uri/ /index.<span class="hljs-property">html</span>;
+    }
+}
+
+<span class="hljs-comment">// Apache (.htaccess)</span>
+&lt;<span class="hljs-title class_">IfModule</span> mod_rewrite.<span class="hljs-property">c</span>&gt;
+  <span class="hljs-title class_">RewriteEngine</span> <span class="hljs-title class_">On</span>
+  <span class="hljs-title class_">RewriteBase</span> /
+  <span class="hljs-title class_">RewriteRule</span> ^index\.<span class="hljs-property">html$</span> - [L]
+  <span class="hljs-title class_">RewriteCond</span> %{<span class="hljs-variable constant_">REQUEST_FILENAME</span>} !-f
+  <span class="hljs-title class_">RewriteCond</span> %{<span class="hljs-variable constant_">REQUEST_FILENAME</span>} !-d
+  <span class="hljs-title class_">RewriteRule</span> . /index.<span class="hljs-property">html</span> [L]
+&lt;/<span class="hljs-title class_">IfModule</span>&gt;
+</code></pre><p><strong>路由元信息</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 定义路由元信息</span>
+<span class="hljs-keyword">const</span> routes = [
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/admin&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-title class_">Admin</span>,
+    <span class="hljs-attr">meta</span>: {
+      <span class="hljs-attr">requiresAuth</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">requiresRole</span>: <span class="hljs-string">&#x27;admin&#x27;</span>,
+      <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;管理后台&#x27;</span>,
+      <span class="hljs-attr">keepAlive</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">analytics</span>: <span class="hljs-literal">true</span>
+    }
+  }
+];
+
+<span class="hljs-comment">// 使用元信息</span>
+router.<span class="hljs-title function_">beforeEach</span>(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) =&gt;</span> {
+  <span class="hljs-comment">// 访问 meta</span>
+  <span class="hljs-keyword">if</span> (to.<span class="hljs-property">meta</span>.<span class="hljs-property">requiresAuth</span>) {
+    <span class="hljs-comment">// 检查权限</span>
+  }
+
+  <span class="hljs-comment">// 设置页面标题</span>
+  <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span> = to.<span class="hljs-property">meta</span>.<span class="hljs-property">title</span> || <span class="hljs-string">&#x27;默认标题&#x27;</span>;
+
+  <span class="hljs-title function_">next</span>();
+});
+</code></pre><p><strong>路由参数和查询</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 路由定义</span>
+<span class="hljs-keyword">const</span> routes = [
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/user/:id&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;User&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-title class_">User</span>
+  },
+  {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/search&#x27;</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Search&#x27;</span>,
+    <span class="hljs-attr">component</span>: <span class="hljs-title class_">Search</span>
+  }
+];
+
+<span class="hljs-comment">// 在组件中使用</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> route = <span class="hljs-title function_">useRoute</span>();
+
+    <span class="hljs-comment">// 路由参数</span>
+    <span class="hljs-keyword">const</span> userId = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> route.<span class="hljs-property">params</span>.<span class="hljs-property">id</span>);
+
+    <span class="hljs-comment">// 查询参数</span>
+    <span class="hljs-keyword">const</span> query = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> route.<span class="hljs-property">query</span>);
+
+    <span class="hljs-comment">// 完整路径</span>
+    <span class="hljs-keyword">const</span> path = route.<span class="hljs-property">path</span>;
+
+    <span class="hljs-comment">// 完整查询字符串</span>
+    <span class="hljs-keyword">const</span> fullPath = route.<span class="hljs-property">fullPath</span>;
+
+    <span class="hljs-keyword">return</span> { userId, query, path, fullPath };
+  }
+};
+
+<span class="hljs-comment">// 编程式导航</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">navigate</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 跳转</span>
+  router.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;/user/1&#x27;</span>);
+
+  <span class="hljs-comment">// 带查询参数</span>
+  router.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/search&#x27;</span>, <span class="hljs-attr">query</span>: { <span class="hljs-attr">q</span>: <span class="hljs-string">&#x27;keyword&#x27;</span> });
+
+  <span class="hljs-comment">// 带命名路由</span>
+  router.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;User&#x27;</span>, <span class="hljs-attr">params</span>: { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> } });
+
+  <span class="hljs-comment">// 替换当前记录</span>
+  router.<span class="hljs-title function_">replace</span>(<span class="hljs-string">&#x27;/user/2&#x27;</span>);
+
+  <span class="hljs-comment">// 前进/后退</span>
+  router.<span class="hljs-title function_">go</span>(-<span class="hljs-number">1</span>);
+  router.<span class="hljs-title function_">go</span>(<span class="hljs-number">1</span>);
+}
+</code></pre><hr>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="2-1-React核心原理.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第2卷 React深入</span>
+          </a>
+              <a href="2-3-BFF架构.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第2卷 Node与BFF</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

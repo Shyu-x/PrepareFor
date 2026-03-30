@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第1卷-基础核心 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#1-htmlcss" class="toc-link "><span>第1章 HTML与CSS</span></a></li><li class="toc-item"><a href="#1.1-css" class="toc-link "><span>1.1 CSS 选择器优先级与计算规则</span></a></li><li class="toc-item"><a href="#1.2-css" class="toc-link "><span>1.2 CSS 盒模型深度理解</span></a></li><li class="toc-item"><a href="#1.3-bfc" class="toc-link "><span>1.3 BFC（块级格式化上下文）深度理解</span></a></li><li class="toc-item"><a href="#1.4-flexbox" class="toc-link "><span>1.4 Flexbox 布局完全指南</span></a></li><li class="toc-item"><a href="#1.5-grid" class="toc-link "><span>1.5 Grid 布局完全指南</span></a></li><li class="toc-item"><a href="#1.6-stacking-context" class="toc-link "><span>1.6 层叠上下文（Stacking Context）深度理解</span></a></li><li class="toc-item"><a href="#1.7" class="toc-link "><span>1.7 清除浮动的方法</span></a></li><li class="toc-item"><a href="#1.8" class="toc-link "><span>1.8 居中布局方案汇总</span></a></li><li class="toc-item"><a href="#1.9-repaintreflow" class="toc-link "><span>1.9 重绘（Repaint）与重排（Reflow）</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第1卷 基础核心 / 第1章 HTML与CSS</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第1卷 基础核心</span>
+            </div>
+            <h1 class="article-title">第1卷-基础核心</h1>
+          </header>
+
+          <div class="content"><h2 id="1-htmlcss">第1章 HTML与CSS</h2>
+<h3 id="1.1-css">1.1 CSS 选择器优先级与计算规则</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ 
+┃                    CSS 选择器优先级权重                          ┃
+┃  !important    ━━━━▶  无穷大（最高优先级）                       ┃
+┃  内联样式      ━━━━▶  1000                                      ┃
+ 
+┃  ID 选择器     ━━━━▶  100                                       ┃
+ 
+┃  类/属性/伪类  ━━━━▶  10                                         ┃
+┃  元素/伪元素   ━━━━▶  1                                          ┃
+┃  通配符/组合   ━━━━▶  0                                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ 
+
+</code></pre><p><strong>计算示例</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">/* 优先级: 0-1-0-1 = 101 */</span>
+<span class="hljs-selector-id">#nav</span> <span class="hljs-selector-class">.list-item</span> { }
+
+<span class="hljs-comment">/* 优先级: 0-0-2-0 = 20 */</span>
+<span class="hljs-selector-pseudo">:hover</span> <span class="hljs-selector-class">.active</span> { }
+
+<span class="hljs-comment">/* 优先级: 0-0-1-2 = 12 */</span>
+<span class="hljs-selector-tag">div</span> <span class="hljs-selector-tag">ul</span> <span class="hljs-selector-tag">li</span> { }
+
+<span class="hljs-comment">/* 优先级: 0-1-0-1 = 101 */</span>
+<span class="hljs-selector-id">#app</span> <span class="hljs-selector-class">.card</span><span class="hljs-selector-pseudo">:hover</span> { }
+</code></pre><p><strong>重要规则</strong>：</p>
+<ul>
+<li><code>!important</code> 优先级最高，慎用</li>
+<li>相同优先级时，后定义的样式覆盖先定义的</li>
+<li>组合选择器（逗号分隔）分别计算权重</li>
+<li><code>:not()</code> 内部选择器参与权重计算</li>
+<li><code>*</code> 通配符不增加权重</li>
+</ul>
+<hr>
+<h3 id="1.2-css">1.2 CSS 盒模型深度理解</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ 
+┃                        CSS 盒模型                                ┃
+┃                                                                  ┃
+┃    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓           ┃
+  
+┃    ┃                 margin (外边距)                 ┃           ┃
+┃    ┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃           ┃
+  
+┃    ┃  ┃            border (边框)                  ┃  ┃           ┃
+┃    ┃  ┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃  ┃           ┃
+  
+┃    ┃  ┃  ┃         padding (内边距)           ┃  ┃  ┃           ┃
+ 
+┃    ┃  ┃  ┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  ┃  ┃  ┃           ┃
+    
+┃    ┃  ┃  ┃  ┃                           ┃  ┃  ┃  ┃           ┃
+    
+┃    ┃  ┃  ┃  ┃     content (内容区)       ┃  ┃  ┃  ┃           ┃
+   
+┃    ┃  ┃  ┃  ┃                           ┃  ┃  ┃  ┃           ┃
+    
+┃    ┃  ┃  ┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃  ┃  ┃           ┃
+    
+┃    ┃  ┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃  ┃           ┃
+  
+┃    ┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  ┃           ┃
+  
+┃    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛           ┃
+  
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ 
+
+</code></pre><p><strong>两种盒模型</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">盒模型</th>
+<th style="text-align:left">设置方式</th>
+<th style="text-align:left">width 包含内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>content-box</strong>（默认）</td>
+<td style="text-align:left"><code>box-sizing: content-box</code></td>
+<td style="text-align:left">仅内容区域</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>border-box</strong></td>
+<td style="text-align:left"><code>box-sizing: border-box</code></td>
+<td style="text-align:left">content + padding + border</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际宽度计算</strong>：</p>
+<ul>
+<li><code>content-box</code>：<code>width</code> = 内容宽度，总宽度 = width + padding + border + margin</li>
+<li><code>border-box</code>：<code>width</code> = 内容 + padding + border，总宽度 = width + margin</li>
+</ul>
+<p><strong>建议</strong>：全局使用 <code>box-sizing: border-box</code>，避免 padding/border 导致的布局问题。</p>
+<hr>
+<h3 id="1.3-bfc">1.3 BFC（块级格式化上下文）深度理解</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>BFC 定义</strong>：
+BFC 是 CSS 渲染模型的一部分，是页面中一个独立的渲染区域，容器内的元素不会影响外部元素。</p>
+<p><strong>触发 BFC 的方式</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">/* 1. 根元素 */</span>
+<span class="hljs-selector-tag">html</span> { }
+
+<span class="hljs-comment">/* 2. float 不为 none */</span>
+<span class="hljs-attribute">float</span>: left | right;
+
+<span class="hljs-comment">/* 3. position 不为 static/relative */</span>
+<span class="hljs-attribute">position</span>: absolute | fixed;
+
+<span class="hljs-comment">/* 4. display 为 inline-block、table-cell、flex、grid 等 */</span>
+<span class="hljs-attribute">display</span>: inline-block | flex | grid | table-cell;
+
+<span class="hljs-comment">/* 5. overflow 不为 visible */</span>
+<span class="hljs-attribute">overflow</span>: auto | hidden | scroll;
+
+<span class="hljs-comment">/* 6. fieldset 元素 */</span>
+</code></pre><p><strong>BFC 特性</strong>：</p>
+<ol>
+<li>内部的 Box 垂直方向依次排列</li>
+<li>Box 垂直方向的距离由 margin 决定，<strong>同一 BFC 中相邻 Box 的 margin 会重叠</strong></li>
+<li>BFC 区域不会与 float 元素重叠</li>
+<li>计算 BFC 高度时，浮动元素也参与计算</li>
+</ol>
+<p><strong>应用场景</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">/* 1. 清除浮动 */</span>
+<span class="hljs-selector-class">.parent</span> {
+  <span class="hljs-attribute">overflow</span>: hidden; <span class="hljs-comment">/* 触发 BFC */</span>
+}
+
+<span class="hljs-comment">/* 2. 防止 margin 重叠 */</span>
+<span class="hljs-selector-class">.box1</span>, <span class="hljs-selector-class">.box2</span> {
+  <span class="hljs-attribute">margin-bottom</span>: <span class="hljs-number">20px</span>;
+}
+<span class="hljs-selector-class">.container</span> {
+  <span class="hljs-attribute">overflow</span>: hidden; <span class="hljs-comment">/* 创建独立 BFC，阻止 margin 重叠 */</span>
+}
+
+<span class="hljs-comment">/* 3. 自适应两栏布局 */</span>
+<span class="hljs-selector-class">.left</span> {
+  <span class="hljs-attribute">float</span>: left;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;
+}
+<span class="hljs-selector-class">.right</span> {
+  <span class="hljs-attribute">overflow</span>: hidden; <span class="hljs-comment">/* 触发 BFC，不与 left 重叠 */</span>
+}
+</code></pre><hr>
+<h3 id="1.4-flexbox">1.4 Flexbox 布局完全指南</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ 
+┃                      Flexbox 轴向系统                           ┃
+ 
+┃                                                                  ┃
+┃                    主轴 (Main Axis)                             ┃
+ 
+┃                    ◀━━━━━━━━━━━━━━━━━▶                         ┃
+  
+┃                                                                  ┃
+┃   ┏━━━━━━━━━┓ ┏━━━━━━━━━┓ ┏━━━━━━━━━┓ ┏━━━━━━━━━┓             ┃
+   
+┃   ┃  Item   ┃ ┃  Item   ┃ ┃  Item   ┃ ┃  Item   ┃             ┃
+   
+┃   ┗━━━━━━━━━┛ ┗━━━━━━━━━┛ ┗━━━━━━━━━┛ ┗━━━━━━━━━┛             ┃
+   
+┃                                                                  ┃
+┃                    ┃                                            ┃
+ 
+┃                    ┃ 交叉轴 (Cross Axis)                        ┃
+ 
+┃                    ┃                                            ┃
+ 
+┃                    ▼                                            ┃
+ 
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ 
+
+</code></pre><p><strong>容器属性</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">属性</th>
+<th style="text-align:left">值</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>display</code></td>
+<td style="text-align:left"><code>flex</code> / <code>inline-flex</code></td>
+<td style="text-align:left">开启 Flex 布局</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>flex-direction</code></td>
+<td style="text-align:left"><code>row</code> / <code>column</code> / <code>row-reverse</code> / <code>column-reverse</code></td>
+<td style="text-align:left">主轴方向</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>flex-wrap</code></td>
+<td style="text-align:left"><code>nowrap</code> / <code>wrap</code> / <code>wrap-reverse</code></td>
+<td style="text-align:left">是否换行</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>justify-content</code></td>
+<td style="text-align:left"><code>flex-start</code> / <code>flex-end</code> / <code>center</code> / <code>space-between</code> / <code>space-around</code></td>
+<td style="text-align:left">主轴对齐</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>align-items</code></td>
+<td style="text-align:left"><code>stretch</code> / <code>flex-start</code> / <code>flex-end</code> / <code>center</code> / <code>baseline</code></td>
+<td style="text-align:left">交叉轴对齐（单行）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>align-content</code></td>
+<td style="text-align:left"><code>stretch</code> / <code>flex-start</code> / <code>flex-end</code> / <code>center</code> / <code>space-between</code> / <code>space-around</code></td>
+<td style="text-align:left">交叉轴对齐（多行）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gap</code></td>
+<td style="text-align:left"><code>10px</code> / <code>1rem</code></td>
+<td style="text-align:left">项目间距</td>
+</tr>
+</tbody>
+</table>
+<p><strong>项目属性</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">属性</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>flex-grow</code></td>
+<td style="text-align:left">放大比例，默认 0</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>flex-shrink</code></td>
+<td style="text-align:left">缩小比例，默认 1</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>flex-basis</code></td>
+<td style="text-align:left">基础宽度，auto</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>flex</code></td>
+<td style="text-align:left">简写：<code>flex-grow flex-shrink flex-basis</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>align-self</code></td>
+<td style="text-align:left">覆盖容器的 align-items</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>order</code></td>
+<td style="text-align:left">排列顺序，数值越小越靠前</td>
+</tr>
+</tbody>
+</table>
+<p><strong>flex 速记</strong>：</p>
+<ul>
+<li><code>flex: 1</code> = <code>flex: 1 1 0%</code>（等分剩余空间）</li>
+<li><code>flex: auto</code> = <code>flex: 1 1 auto</code></li>
+<li><code>flex: none</code> = <code>flex: 0 0 auto</code></li>
+<li><code>flex: 0 auto</code> = <code>flex: 0 1 auto</code></li>
+</ul>
+<hr>
+<h3 id="1.5-grid">1.5 Grid 布局完全指南</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ 
+┃                      Grid 网格系统                               ┃
+┃                                                                  ┃
+┃         ┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓                         ┃
+ 
+┃         ┃  Area 1 ┃  Area 2 ┃  Area 3 ┃  ← row 1                ┃
+ 
+┃         ┃ (1,1)   ┃ (1,2)   ┃ (1,3)   ┃                         ┃
+ 
+┃         ┣━━━━━━━━━╋━━━━━━━━━╋━━━━━━━━━┫                         ┃
+ 
+┃         ┃  Area 4 ┃  Area 5 ┃  Area 6 ┃  ← row 2                ┃
+ 
+┃         ┃ (2,1)   ┃ (2,2)   ┃ (2,3)   ┃                         ┃
+ 
+┃         ┗━━━━━━━━━┻━━━━━━━━━┻━━━━━━━━━┛                         ┃
+ 
+┃            ↑          ↑          ↑                             ┃
+  
+┃          col 1      col 2      col 3                            ┃
+ 
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ 
+
+</code></pre><p><strong>容器属性</strong>：</p>
+<pre class="hljs"><code><span class="hljs-selector-class">.container</span> {
+  <span class="hljs-comment">/* 定义行列 */</span>
+  <span class="hljs-attribute">grid-template-columns</span>: <span class="hljs-number">100px</span> <span class="hljs-number">1</span>fr <span class="hljs-number">2</span>fr;  <span class="hljs-comment">/* 3 列：固定 + 自适应 + 2倍 */</span>
+  <span class="hljs-attribute">grid-template-rows</span>: <span class="hljs-number">50px</span> auto <span class="hljs-number">100px</span>;  <span class="hljs-comment">/* 3 行 */</span>
+
+  <span class="hljs-comment">/* 命名区域 */</span>
+  <span class="hljs-attribute">grid-template-areas</span>:
+    <span class="hljs-string">&quot;header header header&quot;</span>
+    <span class="hljs-string">&quot;sidebar main aside&quot;</span>
+    <span class="hljs-string">&quot;footer footer footer&quot;</span>;
+
+  <span class="hljs-comment">/* 简写 */</span>
+  <span class="hljs-attribute">gap</span>: <span class="hljs-number">20px</span>;        <span class="hljs-comment">/* grid-gap */</span>
+  <span class="hljs-attribute">row-gap</span>: <span class="hljs-number">10px</span>;
+  <span class="hljs-attribute">column-gap</span>: <span class="hljs-number">20px</span>;
+
+  <span class="hljs-comment">/* 对齐 */</span>
+  <span class="hljs-attribute">justify-items</span>: start | end | center | stretch;
+  <span class="hljs-attribute">align-items</span>: start | end | center | stretch;
+  <span class="hljs-attribute">place-items</span>: center center;  <span class="hljs-comment">/* 简写 */</span>
+
+  <span class="hljs-comment">/* 整网格对齐 */</span>
+  <span class="hljs-attribute">justify-content</span>: start | end | center | stretch | space-between | space-around | space-evenly;
+  <span class="hljs-attribute">align-content</span>: start | end | center | stretch | space-between | space-around | space-evenly;
+}
+</code></pre><p><strong>项目属性</strong>：</p>
+<pre class="hljs"><code><span class="hljs-selector-class">.item</span> {
+  <span class="hljs-comment">/* 定位 */</span>
+  <span class="hljs-attribute">grid-column</span>: <span class="hljs-number">1</span> / <span class="hljs-number">3</span>;    <span class="hljs-comment">/* 跨 2 列 */</span>
+  <span class="hljs-attribute">grid-row</span>: <span class="hljs-number">1</span> / <span class="hljs-number">2</span>;       <span class="hljs-comment">/* 跨 1 行 */</span>
+  <span class="hljs-attribute">grid-area</span>: header;     <span class="hljs-comment">/* 命名区域 */</span>
+
+  <span class="hljs-comment">/* 简写 */</span>
+  <span class="hljs-attribute">grid-column</span>: span <span class="hljs-number">2</span>;   <span class="hljs-comment">/* 跨 2 列 */</span>
+
+  <span class="hljs-comment">/* 对齐（覆盖容器） */</span>
+  <span class="hljs-attribute">justify-self</span>: start | end | center | stretch;
+  <span class="hljs-attribute">align-self</span>: start | end | center | stretch;
+}
+</code></pre><p><strong>fr 单位</strong>：</p>
+<ul>
+<li><code>1fr</code> = 1 份可用空间</li>
+<li><code>repeat(3, 1fr)</code> = 3 等分</li>
+<li><code>repeat(auto-fill, 100px)</code> = 自动填充列</li>
+<li><code>minmax(100px, 1fr)</code> = 最小 100px，最大等分</li>
+</ul>
+<hr>
+<h3 id="1.6-stacking-context">1.6 层叠上下文（Stacking Context）深度理解</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ 
+┃                    层叠顺序（从低到高）                          ┃
+┃                                                                  ┃
+┃  1. background / border        背景/边框（最低）                ┃
+ 
+┃     (负 z-index)               负 z-index                       ┃
+ 
+┃                                                                  ┃
+┃  2. block boxes                块级盒子                          ┃
+┃     float                      浮动元素                          ┃
+┃     inline boxes               行内盒子                          ┃
+┃                                                                  ┃
+┃  3. z-index: 0                 z-index: 0 / auto                ┃
+ 
+┃                                                                  ┃
+┃  4. inline boxes               行内元素（含 inline-block）       ┃
+┃                                                                  ┃
+┃  5. position: fixed            固定定位                          ┃
+┃                                                                  ┃
+┃  6. z-index: auto / 1+         正 z-index（最高）               ┃
+ 
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ 
+
+</code></pre><p><strong>层叠上下文触发条件</strong>：</p>
+<ol>
+<li>根元素 <code>&lt;html&gt;</code></li>
+<li><code>position</code> 不为 <code>static</code> + <code>z-index</code> 不为 <code>auto</code></li>
+<li><code>position: fixed</code></li>
+<li><code>z-index</code> 不为 <code>auto</code> 的 flex 子项</li>
+<li><code>opacity</code> &lt; 1</li>
+<li><code>transform</code> 不为 <code>none</code></li>
+<li><code>filter</code> 不为 <code>none</code></li>
+<li><code>isolation: isolate</code></li>
+<li><code>will-change</code> 指定上述属性</li>
+<li><code>-webkit-overflow-scrolling: touch</code></li>
+</ol>
+<p><strong>重要特性</strong>：</p>
+<ul>
+<li>层叠上下文可以嵌套</li>
+<li>子元素的层叠顺序相对于父元素</li>
+<li>同一个层叠上下文内按层叠顺序比较</li>
+<li>不同层叠上下文间无法通过 z-index 比较</li>
+</ul>
+<hr>
+<h3 id="1.7">1.7 清除浮动的方法</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>问题</strong>：浮动元素脱离文档流，导致父元素高度塌陷。</p>
+<p><strong>解决方案</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">/* 1. 父元素 overflow: hidden（触发 BFC） */</span>
+<span class="hljs-selector-class">.parent</span> {
+  <span class="hljs-attribute">overflow</span>: hidden;
+}
+
+<span class="hljs-comment">/* 2. 父元素添加 ::after 伪元素 */</span>
+<span class="hljs-selector-class">.parent</span><span class="hljs-selector-pseudo">::after</span> {
+  <span class="hljs-attribute">content</span>: <span class="hljs-string">&quot;&quot;</span>;
+  <span class="hljs-attribute">display</span>: block;
+  <span class="hljs-attribute">clear</span>: both;
+}
+
+<span class="hljs-comment">/* 3. 父元素添加额外空元素 */</span>
+&lt;<span class="hljs-selector-tag">div</span> class=&quot;parent&quot;&gt;
+  &lt;<span class="hljs-selector-tag">div</span> class=&quot;<span class="hljs-attribute">float</span>-<span class="hljs-attribute">left</span>&quot;&gt;&lt;/<span class="hljs-selector-tag">div</span>&gt;
+  &lt;<span class="hljs-selector-tag">div</span> class=&quot;<span class="hljs-attribute">float</span>-<span class="hljs-attribute">right</span>&quot;&gt;&lt;/<span class="hljs-selector-tag">div</span>&gt;
+  &lt;<span class="hljs-selector-tag">div</span> class=&quot;<span class="hljs-attribute">clear</span>&quot;&gt;&lt;/<span class="hljs-selector-tag">div</span>&gt;
+&lt;/<span class="hljs-selector-tag">div</span>&gt;
+<span class="hljs-selector-class">.clear</span> {
+  <span class="hljs-attribute">clear</span>: both;
+}
+
+<span class="hljs-comment">/* 4. 父元素 float（不推荐） */</span>
+<span class="hljs-selector-class">.parent</span> {
+  <span class="hljs-attribute">float</span>: left;
+}
+
+<span class="hljs-comment">/* 5. 父元素 display: flow-root（现代方案） */</span>
+<span class="hljs-selector-class">.parent</span> {
+  <span class="hljs-attribute">display</span>: flow-root;  <span class="hljs-comment">/* 触发 BFC，无副作用 */</span>
+}
+</code></pre><hr>
+<h3 id="1.8">1.8 居中布局方案汇总</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ 
+┃                        各种居中方案                              ┃
+┃                                                                  ┃
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓          ┃
+  
+┃   ┃                   水平居中                        ┃          ┃
+┃   ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫          ┃
+  
+┃   ┃  1. margin: 0 auto;          (块级元素)          ┃          ┃
+ 
+┃   ┃  2. text-align: center;      (行内/文字)        ┃          ┃
+  
+┃   ┃  3. flex: justify-content: center;              ┃          ┃
+  
+┃   ┃  4. grid: place-items: center;                  ┃          ┃
+  
+┃   ┃  5. absolute + transform                         ┃          ┃
+ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛          ┃
+  
+┃                                                                  ┃
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓          ┃
+  
+┃   ┃                   垂直居中                        ┃          ┃
+┃   ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫          ┃
+  
+┃   ┃  1. line-height = height     (单行文字)          ┃          ┃
+ 
+┃   ┃  2. flex: align-items: center;                  ┃          ┃
+  
+┃   ┃  3. grid: place-items: center;                  ┃          ┃
+  
+┃   ┃  4. absolute + transform                         ┃          ┃
+ 
+┃   ┃  5. table-cell + vertical-align                 ┃          ┃
+  
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛          ┃
+  
+┃                                                                  ┃
+┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓          ┃
+  
+┃   ┃                 完全居中 (水平和垂直)             ┃          ┃
+┃   ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫          ┃
+  
+┃   ┃  1. flex + justify-content + align-items       ┃          ┃
+   
+┃   ┃  2. grid + place-items: center                  ┃          ┃
+  
+┃   ┃  3. absolute + transform (translate -50%)       ┃          ┃
+  
+┃   ┃  4. absolute + margin: auto                      ┃          ┃
+ 
+┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛          ┃
+  
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ 
+
+</code></pre><p><strong>代码示例</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">/* Flex 方案（推荐） */</span>
+<span class="hljs-selector-class">.parent</span> {
+  <span class="hljs-attribute">display</span>: flex;
+  <span class="hljs-attribute">justify-content</span>: center;
+  <span class="hljs-attribute">align-items</span>: center;
+}
+
+<span class="hljs-comment">/* Grid 方案（最简） */</span>
+<span class="hljs-selector-class">.parent</span> {
+  <span class="hljs-attribute">display</span>: grid;
+  <span class="hljs-attribute">place-items</span>: center;
+}
+
+<span class="hljs-comment">/* Absolute + Transform（已知宽高） */</span>
+<span class="hljs-selector-class">.child</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">50%</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">50%</span>;
+  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translate</span>(-<span class="hljs-number">50%</span>, -<span class="hljs-number">50%</span>);
+}
+
+<span class="hljs-comment">/* Absolute + Margin（已知宽高） */</span>
+<span class="hljs-selector-class">.child</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">right</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">bottom</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">margin</span>: auto;
+}
+</code></pre><hr>
+<h3 id="1.9-repaintreflow">1.9 重绘（Repaint）与重排（Reflow）</h3>
+<p><strong>参考答案：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">概念</th>
+<th style="text-align:left">定义</th>
+<th style="text-align:left">触发条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>重排（Reflow）</strong></td>
+<td style="text-align:left">重新计算元素的几何属性（位置、尺寸）</td>
+<td style="text-align:left">页面布局变化</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>重绘（Repaint）</strong></td>
+<td style="text-align:left">重新绘制元素的外观（颜色、背景）</td>
+<td style="text-align:left">外观变化但布局不变</td>
+</tr>
+</tbody>
+</table>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ 
+┃                    重排 vs 重绘                                 ┃
+ 
+┃                                                                  ┃
+┃  重排（Reflow） ━━┳━━ 几何属性变化                               ┃
+┃     (严重)        ┣━━ 盒子模型变化                               ┃
+┃                   ┣━━ 增删 DOM 节点                              ┃
+┃                   ┣━━ 元素尺寸/位置变化                          ┃
+┃                   ┗━━ font-size, padding, margin, width...      ┃
+ 
+┃                                                                  ┃
+┃  重绘（Repaint） ━━┳━━ 外观变化                                  ┃
+┃     (较轻)        ┣━━ 颜色/背景变化                              ┃
+┃                   ┣━━ visibility, outline, border-color...     ┃
+  
+┃                   ┗━━ 不影响布局的属性                          ┃
+ 
+┃                                                                  ┃
+┃  优化 ━━━━━━━━━━►  使用 transform, opacity（触发合成）          ┃
+ 
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ 
+
+</code></pre><p><strong>避免重排的方法</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 不好：每次循环都触发重排</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++) {
+  element.<span class="hljs-property">style</span>.<span class="hljs-property">top</span> = i + <span class="hljs-string">&#x27;px&#x27;</span>;  <span class="hljs-comment">// 触发重排</span>
+}
+
+<span class="hljs-comment">// 更好：使用 transform</span>
+element.<span class="hljs-property">style</span>.<span class="hljs-property">transform</span> = <span class="hljs-string">`translateY(<span class="hljs-subst">${i * <span class="hljs-number">100</span>}</span>px)`</span>;  <span class="hljs-comment">// 触发合成</span>
+
+<span class="hljs-comment">// 更好：缓存布局信息</span>
+<span class="hljs-keyword">const</span> width = element.<span class="hljs-property">offsetWidth</span>;  <span class="hljs-comment">// 缓存</span>
+element.<span class="hljs-property">style</span>.<span class="hljs-property">width</span> = width + <span class="hljs-string">&#x27;px&#x27;</span>;
+</code></pre><hr>
+<h3 id="1.10-css">1.10 CSS 动画与性能优化</h3>
+<p><strong>参考答案：</strong></p>
+<p><strong>动画性能黄金法则</strong>：</p>
+<ul>
+<li>动画属性分为三档：<strong>合成器线程</strong> &gt; 布局 &gt; 绘制</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">动画属性</th>
+<th style="text-align:left">线程</th>
+<th style="text-align:left">性能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>transform</code></td>
+<td style="text-align:left">合成器</td>
+<td style="text-align:left">最佳</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>opacity</code></td>
+<td style="text-align:left">合成器</td>
+<td style="text-align:left">最佳</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>filter</code></td>
+<td style="text-align:left">合成器</td>
+<td style="text-align:left">良好</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>will-change</code></td>
+<td style="text-align:left">提示合成</td>
+<td style="text-align:left">优化</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>width</code>, <code>height</code></td>
+<td style="text-align:left">布局</td>
+<td style="text-align:left">较差</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>background-color</code></td>
+<td style="text-align:left">绘制</td>
+<td style="text-align:left">一般</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>color</code></td>
+<td style="text-align:left">绘制</td>
+<td style="text-align:left">一般</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最佳实践</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">/* 使用 transform 和 opacity */</span>
+<span class="hljs-selector-class">.element</span> {
+  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateX</span>(<span class="hljs-number">100px</span>);
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0.5</span>;
+}
+
+<span class="hljs-comment">/* 避免使用动画属性 */</span>
+<span class="hljs-selector-class">.element</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100px</span>;      <span class="hljs-comment">/* 触发重排 */</span>
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">100px</span>;       <span class="hljs-comment">/* 触发重排 */</span>
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">100px</span>;        <span class="hljs-comment">/* 触发重排 */</span>
+  <span class="hljs-attribute">margin</span>: <span class="hljs-number">10px</span>;      <span class="hljs-comment">/* 触发重排 */</span>
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span>;     <span class="hljs-comment">/* 触发重排 */</span>
+  <span class="hljs-attribute">background</span>: red;   <span class="hljs-comment">/* 触发重绘 */</span>
+}
+</code></pre><p><strong>will-change 优化</strong>：</p>
+<pre class="hljs"><code><span class="hljs-selector-class">.element</span> {
+  <span class="hljs-comment">/* 提前告知浏览器即将变化 */</span>
+  <span class="hljs-attribute">will-change</span>: transform, opacity;
+}
+
+<span class="hljs-comment">/* 动画结束后移除，避免内存浪费 */</span>
+<span class="hljs-selector-class">.element</span> {
+  <span class="hljs-attribute">will-change</span>: auto;
+}
+</code></pre><hr>
+<h3 id="1.11-css">1.11 CSS 渲染与合成层底层原理</h3>
+<p><strong>参考答案：</strong></p>
+<h4 id="1.11.1-css-style-calculation">1.11.1 CSS 样式计算过程 (Style Calculation)</h4>
+<p><strong>选择器匹配过程</strong>：</p>
+<ol>
+<li><strong>遍历 DOM 树</strong>：从根节点遍历每个元素</li>
+<li><strong>收集适用规则</strong>：为每个元素收集匹配的 CSS 规则</li>
+<li><strong>计算优先级</strong>：根据选择器类型计算特异性</li>
+<li><strong>层叠处理</strong>：应用层叠算法确定最终样式</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-comment">// 简化选择器匹配流程</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">matchRule</span>(<span class="hljs-params">element, rules</span>) {
+  <span class="hljs-keyword">const</span> matchedRules = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> rule <span class="hljs-keyword">of</span> rules) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-title function_">matchSelector</span>(element, rule.<span class="hljs-property">selector</span>)) {
+      matchedRules.<span class="hljs-title function_">push</span>(rule);
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">sortBySpecificity</span>(matchedRules);
+}
+</code></pre><p><strong>优先级计算详细</strong>：</p>
+<ul>
+<li><code>id</code> 选择器：<code>#nav</code> = 100</li>
+<li>类/属性/伪类：<code>.active</code> = 10</li>
+<li>元素/伪元素：<code>div</code> = 1</li>
+<li>通配符/组合符：<code>*</code>, <code>&gt;</code>, <code>+</code>, <code>~</code> = 0</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">/* 优先级: 0-1-1-1 = 111 */</span>
+<span class="hljs-selector-tag">ul</span> <span class="hljs-selector-tag">li</span> <span class="hljs-selector-class">.item</span> { <span class="hljs-attribute">color</span>: blue; }
+
+<span class="hljs-comment">/* 优先级: 0-1-0-1 = 101 */</span>
+<span class="hljs-selector-id">#nav</span> <span class="hljs-selector-class">.item</span> { <span class="hljs-attribute">color</span>: red; }  <span class="hljs-comment">/* 胜出 */</span>
+
+<span class="hljs-comment">/* !important 最高优先级 */</span>
+<span class="hljs-selector-class">.item</span> { <span class="hljs-attribute">color</span>: green <span class="hljs-meta">!important</span>; }
+</code></pre><p><strong>规则树 (Rule Tree) 缓存机制</strong>：</p>
+<ul>
+<li>Blink/WebKit 使用<strong>规则树</strong>缓存选择器匹配结果</li>
+<li>避免重复计算相同样式组合</li>
+<li>样式共享：相同计算样式的元素共享同一样式对象</li>
+</ul>
+<h4 id="1.11.2-vs">1.11.2 渲染层 vs 图形层</h4>
+<p><strong>何时创建独立合成层</strong>：</p>
+<ul>
+<li>3D transform: <code>transform: translate3d(0,0,0)</code></li>
+<li>video、canvas 元素</li>
+<li>动画使用 <code>will-change</code></li>
+<li>CSS 滤镜：<code>filter: blur(5px)</code></li>
+<li>节点具有 CSS 动画/过渡</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">/* 创建合成层 */</span>
+<span class="hljs-selector-class">.layer</span> {
+  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateZ</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-attribute">will-change</span>: transform;
+}
+</code></pre></div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              
+              <a href="1-2-JavaScript核心概念.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第1卷 JavaScript基础</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,3134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2卷-框架生态 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#3-nodebff" class="toc-link "><span>第3章 Node与BFF</span></a></li><li class="toc-item"><a href="#1.1-bff" class="toc-link "><span>1.1 什么是BFF</span></a></li><li class="toc-item"><a href="#1.2-bff" class="toc-link "><span>1.2 BFF 架构的技术选型与最佳实践</span></a></li><li class="toc-item"><a href="#node.js" class="toc-link "><span>第二章 Node.js 核心原理</span></a></li><li class="toc-item"><a href="#2.1-node.js-event-loop" class="toc-link "><span>2.1 Node.js 事件循环机制 (Event Loop)</span></a></li><li class="toc-item"><a href="#2.2-node.js" class="toc-link "><span>2.2 Node.js 进程与线程</span></a></li><li class="toc-item"><a href="#2.3-buffer-stream" class="toc-link "><span>2.3 Buffer 与 Stream</span></a></li><li class="toc-item"><a href="#2.4-node.js" class="toc-link "><span>2.4 Node.js 模块系统</span></a></li><li class="toc-item"><a href="#2.5-promiseasyncawait" class="toc-link "><span>2.5 异步编程 (Promise、async/await)</span></a></li><li class="toc-item"><a href="#2.6-node.js" class="toc-link "><span>2.6 Node.js 错误处理</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第2卷 框架生态 / 第3章 Node与BFF</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第2卷 框架生态</span>
+            </div>
+            <h1 class="article-title">第2卷-框架生态</h1>
+          </header>
+
+          <div class="content"><hr>
+<h2 id="3-nodebff">第3章 Node与BFF</h2>
+<hr>
+<h3 id="1.1-bff">1.1 什么是BFF</h3>
+<p><strong>面试常问题目</strong>:
+BFF (Backend For Frontend) 是一种架构模式，为每种前端设备（如 Web、移动端桌面端）提供专用的后端服务。BFF 层作为前端与后端微服务之间的桥梁，主要职责是聚合多个后端服务的数据，按前端需求进行裁剪和转换。</p>
+<p><strong>BFF 的核心优势</strong>:</p>
+<ol>
+<li><strong>减少前端请求次数</strong>: 传统模式下，前端需要调用多个后端接口才能渲染一个页面。BFF 层可以将多个后端接口聚合成一个接口，大幅减少网络请求次数，提升页面加载速度。</li>
+<li><strong>保护前端不受后端变化影响</strong>: 多个前端应用共享后端微服务时，后端 API 的任何变更都需要通知所有前端团队。使用 BFF 后，后端 API 变更只需在 BFF 层处理，前端无感知。</li>
+<li><strong>接口定制化</strong>: BFF 可以根据前端的具体需求，返回精简的、符合前端使用习惯的数据结构，避免返回冗余字段。</li>
+<li><strong>SSR 服务端渲染支持</strong>: BFF 可以负责服务端渲染，在服务端完成 HTML 生成，首屏加载更快，SEO 更友好。</li>
+</ol>
+<h3 id="1.2-bff">1.2 BFF 架构的技术选型与最佳实践</h3>
+<p><strong>面试常问题目</strong>:
+在实际项目中，BFF 层应该如何选型和落地，以下是关键考量点：</p>
+<ol>
+<li><strong>选择合适的框架</strong>: 推荐使用 Express/Koa（轻量、灵活）或 NestJS（企业级、TypeScript 支持好）。NestJS 提供了依赖注入、模块化等企业级特性。</li>
+<li><strong>接口缓存策略</strong>: 使用 Redis 缓存热点接口数据，减少后端压力。同时可以缓存用户接口（如用户信息）到内存或 Redis 中，减少数据库查询。</li>
+<li><strong>监控与告警</strong>: 引入 Prometheus/Grafana 监控系统，监控 CPU、内存、请求延迟（P99）等关键指标，设置告警阈值。</li>
+<li><strong>服务稳定性保障</strong>: 使用 PM2 管理和监控 Node.js 服务的集群模式，利用 Cluster 自动重启和负载均衡，保证服务高可用。</li>
+</ol>
+<hr>
+<h2 id="node.js">第二章 Node.js 核心原理</h2>
+<h3 id="2.1-node.js-event-loop">2.1 Node.js 事件循环机制 (Event Loop)</h3>
+<p><strong>面试常问题目</strong>:
+Node.js 是单线程异步非阻塞 I/O 模型，其核心是 libuv 库实现的事件循环机制。事件循环包含 6 个阶段，按顺序执行：</p>
+<ol>
+<li><strong>Timers (定时器阶段)</strong>: 执行 setTimeout 和 setInterval 回调函数。</li>
+<li><strong>Pending Callbacks</strong>: 执行被延迟到下一次循环的 I/O 回调。</li>
+<li><strong>Idle, Prepare</strong>: 仅 libuv 内部使用。</li>
+<li><strong>Poll (轮询阶段)</strong>: 处理 I/O 事件，执行大部分回调。如果 Poll 队列为空且 Check 队列有回调，会等待一段时间后进入 Check 阶段。</li>
+<li><strong>Check (检查阶段)</strong>: 执行 setImmediate() 回调函数。</li>
+<li><strong>Close Callbacks</strong>: 执行 close 事件回调，如 socket.on(‘close’, …)。</li>
+</ol>
+<p><strong>特别注意</strong>:
+Node.js 中有两个特殊的队列：process.nextTick 队列和 Promise.then 队列，它们的优先级高于其他微任务队列。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 事件循环执行顺序示例</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. 主线程同步代码&#x27;</span>);
+
+<span class="hljs-comment">// 定时器 - 阶段1</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. setTimeout 回调&#x27;</span>);
+}, <span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// 立即执行 - 阶段5</span>
+<span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. setImmediate 回调&#x27;</span>);
+});
+
+<span class="hljs-comment">// nextTick - 优先级最高</span>
+process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;4. nextTick 回调&#x27;</span>);
+});
+
+<span class="hljs-comment">// Promise 微任务</span>
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;5. Promise.then 回调&#x27;</span>);
+});
+
+<span class="hljs-comment">// 同步代码最后执行</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;6. 主线程同步代码结束&#x27;</span>);
+
+<span class="hljs-comment">// 输出顺序: 1 -&gt; 6 -&gt; 4 -&gt; 5 -&gt; 2 -&gt; 3</span>
+<span class="hljs-comment">// 说明: 同步代码先执行，然后是 nextTick 和 Promise.then 两个微任务队列，</span>
+<span class="hljs-comment">//      最后才是宏任务队列按阶段执行</span>
+</code></pre><h4 id="2.1.1">2.1.1 深入理解微任务与宏任务</h4>
+<p>在 Node.js 中，任务分为微任务（Microtask）和宏任务（Macrotask）：</p>
+<p><strong>微任务</strong>:</p>
+<ul>
+<li>Promise 回调 (Promise.then, Promise.catch, Promise.finally)</li>
+<li>process.nextTick()</li>
+<li>async/await (本质也是 Promise)</li>
+<li>Object.observe, MutationObserver</li>
+</ul>
+<p><strong>宏任务</strong>:</p>
+<ul>
+<li>setTimeout, setInterval</li>
+<li>setImmediate</li>
+<li>I/O 操作</li>
+<li>script 整体代码</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// 微任务与宏任务执行顺序深度分析</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;=== Start ===&#x27;</span>);
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;setTimeout&#x27;</span>);
+}, <span class="hljs-number">0</span>);
+
+<span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;setImmediate&#x27;</span>);
+});
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Promise 1&#x27;</span>);
+});
+
+process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;nextTick&#x27;</span>);
+});
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Promise 2&#x27;</span>);
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;=== End ===&#x27;</span>);
+
+<span class="hljs-comment">// 实际输出:</span>
+<span class="hljs-comment">// === Start ===</span>
+<span class="hljs-comment">// === End ===</span>
+<span class="hljs-comment">// nextTick</span>
+<span class="hljs-comment">// Promise 1</span>
+<span class="hljs-comment">// Promise 2</span>
+<span class="hljs-comment">// setTimeout  (或 setImmediate，取决于 I/O 状态)</span>
+</code></pre><h4 id="2.1.2-io">2.1.2 事件循环在 I/O 操作中的行为</h4>
+<p>Node.js 的 I/O 操作由 libuv 线程池处理，不阻塞主线程：</p>
+<pre class="hljs"><code><span class="hljs-comment">// I/O 操作不会阻塞事件循环</span>
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;开始读取文件...&#x27;</span>);
+
+fs.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&#x27;./large-file.txt&#x27;</span>, <span class="hljs-string">&#x27;utf8&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, data</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;文件读取完成，数据长度:&#x27;</span>, data.<span class="hljs-property">length</span>);
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;文件读取请求已发起，主线程继续执行...&#x27;</span>);
+
+<span class="hljs-comment">// 模拟其他同步操作</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++) {
+  <span class="hljs-comment">// 同步循环不会阻塞文件读取</span>
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;同步循环执行完毕&#x27;</span>);
+<span class="hljs-comment">// 在文件读取完成后，回调函数才会被执行</span>
+</code></pre><h4 id="2.1.3-settimeout-vs-setimmediate">2.1.3 经典面试题：setTimeout vs setImmediate</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 题目1: 在 I/O 循环中两者的执行顺序</span>
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+
+fs.<span class="hljs-title function_">readFile</span>(__filename, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;setTimeout&#x27;</span>);
+  }, <span class="hljs-number">0</span>);
+
+  <span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;setImmediate&#x27;</span>);
+  });
+});
+
+<span class="hljs-comment">// 输出: setImmediate -&gt; setTimeout</span>
+<span class="hljs-comment">// 原因: 在 I/O 回调中，Check 阶段在 Timers 阶段之前执行</span>
+
+<span class="hljs-comment">// 题目2: 嵌套 setTimeout</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;timeout1&#x27;</span>);
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;timeout1-inner&#x27;</span>);
+  }, <span class="hljs-number">0</span>);
+}, <span class="hljs-number">0</span>);
+
+<span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;immediate1&#x27;</span>);
+});
+
+<span class="hljs-comment">// 输出可能是:</span>
+<span class="hljs-comment">// timeout1</span>
+<span class="hljs-comment">// immediate1</span>
+<span class="hljs-comment">// timeout1-inner</span>
+<span class="hljs-comment">// 或:</span>
+<span class="hljs-comment">// immediate1</span>
+<span class="hljs-comment">// timeout1</span>
+<span class="hljs-comment">// timeout1-inner</span>
+</code></pre><h4 id="2.1.4-process.nexttick-promise">2.1.4 process.nextTick 与 Promise 的执行顺序</h4>
+<pre class="hljs"><code><span class="hljs-comment">// process.nextTick 的优先级高于 Promise</span>
+process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;nextTick 1&#x27;</span>);
+});
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;promise 1&#x27;</span>);
+});
+
+process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;nextTick 2&#x27;</span>);
+});
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;promise 2&#x27;</span>);
+});
+
+<span class="hljs-comment">// 输出:</span>
+<span class="hljs-comment">// nextTick 1</span>
+<span class="hljs-comment">// nextTick 2</span>
+<span class="hljs-comment">// promise 1</span>
+<span class="hljs-comment">// promise 2</span>
+</code></pre><h4 id="2.1.5-node.js-14">2.1.5 事件循环与 Node.js 14+ 版本的变化</h4>
+<p>Node.js 14 引入了浏览器兼容的 Promise 微任务实现，但在某些场景下行为有所不同：</p>
+<pre class="hljs"><code><span class="hljs-comment">// Node.js 14+ 的变化</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">bar</span>();
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;bar after&#x27;</span>);
+}
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">bar</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;bar before&#x27;</span>);
+}
+
+<span class="hljs-title function_">foo</span>();
+
+<span class="hljs-comment">// Node.js 14 之前: bar before -&gt; bar after</span>
+<span class="hljs-comment">// Node.js 14+: bar before -&gt; bar after (行为一致)</span>
+<span class="hljs-comment">// 但如果 bar() 返回 Promise.thenable，行为可能有差异</span>
+</code></pre><h4 id="2.1.6-libuv">2.1.6 libuv 架构与事件循环底层原理</h4>
+<p><strong>面试常问题目</strong>:
+理解 Node.js 事件循环的底层原理是进阶面试中的高频考点。Node.js 的事件循环由 libuv 库实现，它是跨平台的异步 I/O 库。</p>
+<h5>libuv 架构解析</h5>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃                   Node.js                   ┃ 
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃  
+┃  ┃           V8 JavaScript 引擎         ┃   ┃ 
+┃  ┃  (执行 JavaScript 代码，管理堆内存)   ┃   ┃
+┃  ┗━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┛   ┃  
+┃                     ┃                        ┃
+┃                     ▼                        ┃
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃  
+┃  ┃           libuv 事件循环             ┃   ┃ 
+┃  ┃  ┏━━━━━━━━━┓ ┏━━━━━━━━━┓ ┏━━━━━━━┓ ┃   ┃   
+┃  ┃  ┃Timers   ┃ ┃Pending  ┃ ┃ Check ┃ ┃   ┃   
+┃  ┃  ┃         ┃ ┃Callbacks┃ ┃       ┃ ┃   ┃   
+┃  ┃  ┗━━━━┳━━━━┛ ┗━━━━┳━━━━┛ ┗━━━┳━━━┛ ┃   ┃   
+┃  ┃       ┃           ┃          ┃      ┃   ┃  
+┃  ┃       ▼           ▼          ▼      ┃   ┃  
+┃  ┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ ┃   ┃  
+┃  ┃  ┃       6 个阶段循环执行          ┃ ┃   ┃ 
+┃  ┃  ┃  timers → pending → idle →    ┃ ┃   ┃   
+┃  ┃  ┃  poll → check → close          ┃ ┃   ┃  
+┃  ┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ ┃   ┃  
+┃  ┗━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┛   ┃  
+┃                     ┃                        ┃
+┃                     ▼                        ┃
+┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃  
+┃  ┃           线程池 (Thread Pool)       ┃   ┃ 
+┃  ┃    处理文件 I/O、DNS、压缩等         ┃   ┃ 
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ┃  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+</code></pre><h5>事件循环 6 个阶段详解</h5>
+<pre class="hljs"><code><span class="hljs-comment">// 事件循环每个阶段的任务队列</span>
+
+<span class="hljs-comment">// 阶段1: Timers (定时器阶段)</span>
+<span class="hljs-comment">// 执行 setTimeout 和 setInterval 回调，时间阈值 &gt;= 0</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;timers 阶段执行&#x27;</span>);
+}, <span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// 阶段2: Pending Callbacks</span>
+<span class="hljs-comment">// 执行被延迟到下一次循环的 I/O 回调</span>
+
+<span class="hljs-comment">// 阶段3: Idle, Prepare (仅 libuv 内部使用)</span>
+<span class="hljs-comment">// 开发者无需关注</span>
+
+<span class="hljs-comment">// 阶段4: Poll (轮询阶段)</span>
+<span class="hljs-comment">// 处理 I/O 事件，执行大部分回调</span>
+<span class="hljs-comment">// 如果 poll 队列不为空，依次执行回调直到队列为空</span>
+<span class="hljs-comment">// 如果 poll 队列为空且 check 队列有回调，会等待一段时间后进入 check 阶段</span>
+
+<span class="hljs-comment">// 阶段5: Check (检查阶段)</span>
+<span class="hljs-comment">// 执行 setImmediate() 回调</span>
+<span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;check 阶段执行&#x27;</span>);
+});
+
+<span class="hljs-comment">// 阶段6: Close Callbacks</span>
+<span class="hljs-comment">// 执行 close 事件回调，如 socket.destroy(), socket.on(&#x27;close&#x27;)</span>
+</code></pre><h5>Node.js 特有的微任务执行时机</h5>
+<pre class="hljs"><code><span class="hljs-comment">// Node.js 微任务执行时机详解</span>
+
+<span class="hljs-comment">// 重要结论：</span>
+<span class="hljs-comment">// 1. 每个阶段之间都会执行微任务队列</span>
+<span class="hljs-comment">// 2. process.nextTick 优先级高于 Promise</span>
+<span class="hljs-comment">// 3. nextTick 队列在每个阶段结束后单独执行，不与其他微任务混合</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. 同步代码 start&#x27;</span>);
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. setTimeout 回调&#x27;</span>);
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;   Promise in setTimeout&#x27;</span>);
+  });
+}, <span class="hljs-number">0</span>);
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. Promise.then&#x27;</span>);
+});
+
+process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;4. nextTick&#x27;</span>);
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;5. 同步代码 end&#x27;</span>);
+
+<span class="hljs-comment">// 输出顺序:</span>
+<span class="hljs-comment">// 1. 同步代码 start</span>
+<span class="hljs-comment">// 5. 同步代码 end</span>
+<span class="hljs-comment">// 4. nextTick (nextTick 队列优先执行)</span>
+<span class="hljs-comment">// 3. Promise.then (Promise 队列)</span>
+<span class="hljs-comment">// 2. setTimeout 回调 (下一个事件循环阶段)</span>
+
+<span class="hljs-comment">// 特别注意：nextTick 会在每个阶段之间执行</span>
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+
+fs.<span class="hljs-title function_">readFile</span>(__filename, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;I/O 回调&#x27;</span>);
+
+  <span class="hljs-comment">// 在 I/O 回调中执行微任务</span>
+  process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;nextTick in I/O&#x27;</span>));
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Promise in I/O&#x27;</span>));
+});
+
+<span class="hljs-comment">// 微任务执行流程图</span>
+<span class="hljs-comment">// ┏━━━━━━━━━━━━━━━━━━━━━━━┓ </span>
+<span class="hljs-comment">// ┃  主线程同步代码        ┃</span>
+<span class="hljs-comment">// ┗━━━━━━━━━┳━━━━━━━━━━━━━┛ </span>
+<span class="hljs-comment">//           ▼</span>
+<span class="hljs-comment">// ┏━━━━━━━━━━━━━━━━━━━━━━━┓             </span>
+<span class="hljs-comment">// ┃  nextTick 队列        ┃ ← 最高优先级</span>
+<span class="hljs-comment">// ┗━━━━━━━━━┳━━━━━━━━━━━━━┛             </span>
+<span class="hljs-comment">//           ▼</span>
+<span class="hljs-comment">// ┏━━━━━━━━━━━━━━━━━━━━━━━┓            </span>
+<span class="hljs-comment">// ┃  Promise 队列          ┃ ← 次优先级</span>
+<span class="hljs-comment">// ┗━━━━━━━━━┳━━━━━━━━━━━━━┛            </span>
+<span class="hljs-comment">//           ▼</span>
+<span class="hljs-comment">// ┏━━━━━━━━━━━━━━━━━━━━━━━┓ </span>
+<span class="hljs-comment">// ┃  事件循环阶段1: Timers ┃</span>
+<span class="hljs-comment">// ┗━━━━━━━━━┳━━━━━━━━━━━━━┛ </span>
+<span class="hljs-comment">//           ▼</span>
+<span class="hljs-comment">// ┏━━━━━━━━━━━━━━━━━━━━━━━┓</span>
+<span class="hljs-comment">// ┃  微任务队列 (nextTick ┃</span>
+<span class="hljs-comment">// ┃  + Promise)          ┃ </span>
+<span class="hljs-comment">// ┗━━━━━━━━━┳━━━━━━━━━━━━━┛</span>
+<span class="hljs-comment">//           ▼</span>
+<span class="hljs-comment">// ┃  ... 其他阶段 ...     ┃</span>
+<span class="hljs-comment">//           ▼</span>
+<span class="hljs-comment">// ┏━━━━━━━━━━━━━━━━━━━━━━━┓</span>
+<span class="hljs-comment">// ┃  阶段5: Check         ┃</span>
+<span class="hljs-comment">// ┗━━━━━━━━━┳━━━━━━━━━━━━━┛</span>
+<span class="hljs-comment">//           ▼</span>
+<span class="hljs-comment">// ┏━━━━━━━━━━━━━━━━━━━━━━━┓</span>
+<span class="hljs-comment">// ┃  微任务队列           ┃</span>
+<span class="hljs-comment">// ┗━━━━━━━━━━━━━━━━━━━━━━━┛</span>
+</code></pre><h5>经典面试题：事件循环执行顺序</h5>
+<pre class="hljs"><code><span class="hljs-comment">// 面试题1: 多个 setTimeout 和 setImmediate</span>
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+
+fs.<span class="hljs-title function_">readFile</span>(__filename, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. I/O 回调&#x27;</span>);
+
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. setTimeout&#x27;</span>), <span class="hljs-number">0</span>);
+  <span class="hljs-title function_">setImmediate</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. setImmediate&#x27;</span>));
+});
+
+<span class="hljs-comment">// 答案: 1 -&gt; 3 -&gt; 2</span>
+<span class="hljs-comment">// 解释: I/O 回调在 poll 阶段执行，执行完后进入 check 阶段，</span>
+<span class="hljs-comment">//       然后才是 timers 阶段</span>
+
+<span class="hljs-comment">// 面试题2: process.nextTick 嵌套</span>
+process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. nextTick 1&#x27;</span>);
+
+  process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. nextTick 2&#x27;</span>);
+
+    process.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. nextTick 3&#x27;</span>);
+    });
+  });
+});
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;4. Promise 1&#x27;</span>);
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;5. 同步代码&#x27;</span>);
+
+<span class="hljs-comment">// 输出: 5 -&gt; 1 -&gt; 2 -&gt; 3 -&gt; 4</span>
+<span class="hljs-comment">// 解释: nextTick 队列会清空后再执行 Promise 队列</span>
+
+<span class="hljs-comment">// 面试题3: async/await 与微任务</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">async1</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. async1 start&#x27;</span>);
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">async2</span>();
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. async1 end&#x27;</span>);
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">async2</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. async2&#x27;</span>);
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;4. 同步代码&#x27;</span>);
+
+<span class="hljs-title function_">async1</span>();
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;5. Promise&#x27;</span>);
+});
+
+<span class="hljs-comment">// 输出: 4 -&gt; 1 -&gt; 3 -&gt; 5 -&gt; 2</span>
+<span class="hljs-comment">// 解释: await 后面的代码相当于 Promise.then，会作为微任务执行</span>
+</code></pre><h3 id="2.2-node.js">2.2 Node.js 进程与线程</h3>
+<p><strong>面试常问题目</strong>:
+Node.js 是单线程的，但可以通过子进程和 Worker Threads 实现多线程编程。理解进程与线程的区别对于编写高性能 Node.js 应用至关重要。</p>
+<h4 id="2.2.1">2.2.1 进程与线程的区别</h4>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>进程</th>
+<th>线程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>资源分配</td>
+<td>独立地址空间</td>
+<td>共享进程资源</td>
+</tr>
+<tr>
+<td>开销</td>
+<td>大（需复制内存）</td>
+<td>小（共享内存）</td>
+</tr>
+<tr>
+<td>通信</td>
+<td>复杂（IPC）</td>
+<td>简单（共享内存）</td>
+</tr>
+<tr>
+<td>独立性</td>
+<td>互不影响</td>
+<td>一个崩溃可能影响其他</td>
+</tr>
+</tbody>
+</table>
+<pre class="hljs"><code><span class="hljs-comment">// Node.js 主进程</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;主进程 PID:&#x27;</span>, process.<span class="hljs-property">pid</span>);
+
+<span class="hljs-comment">// 查看系统 CPU 核心数</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;CPU 核心数:&#x27;</span>, <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;os&#x27;</span>).<span class="hljs-title function_">cpus</span>().<span class="hljs-property">length</span>);
+</code></pre><h4 id="2.2.2-child-process">2.2.2 子进程模块 (child_process)</h4>
+<p>Node.js 提供了四种创建子进程的方式：</p>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> { spawn, exec, execFile, fork } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>);
+
+<span class="hljs-comment">// 1. spawn: 用于流式处理大量数据</span>
+<span class="hljs-keyword">const</span> spawnProcess = <span class="hljs-title function_">spawn</span>(<span class="hljs-string">&#x27;ls&#x27;</span>, [<span class="hljs-string">&#x27;-la&#x27;</span>], {
+  <span class="hljs-attr">cwd</span>: <span class="hljs-string">&#x27;/usr/bin&#x27;</span>,
+  <span class="hljs-attr">env</span>: { ...process.<span class="hljs-property">env</span> }
+});
+
+spawnProcess.<span class="hljs-property">stdout</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;spawn stdout:&#x27;</span>, data.<span class="hljs-title function_">toString</span>());
+});
+
+spawnProcess.<span class="hljs-property">stderr</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;spawn stderr:&#x27;</span>, data.<span class="hljs-title function_">toString</span>());
+});
+
+spawnProcess.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">code</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;spawn 进程退出码:&#x27;</span>, code);
+});
+
+<span class="hljs-comment">// 2. exec: 用于执行 shell 命令，返回完整结果</span>
+<span class="hljs-title function_">exec</span>(<span class="hljs-string">&#x27;ls -la&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">error, stdout, stderr</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;exec 错误:&#x27;</span>, error);
+    <span class="hljs-keyword">return</span>;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;exec stdout:&#x27;</span>, stdout);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;exec stderr:&#x27;</span>, stderr);
+});
+
+<span class="hljs-comment">// 3. execFile: 直接执行可执行文件</span>
+<span class="hljs-title function_">execFile</span>(<span class="hljs-string">&#x27;node&#x27;</span>, [<span class="hljs-string">&#x27;--version&#x27;</span>], <span class="hljs-function">(<span class="hljs-params">error, stdout, stderr</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;execFile:&#x27;</span>, stdout.<span class="hljs-title function_">trim</span>());
+});
+
+<span class="hljs-comment">// 4. fork: 创建 Node.js 子进程，可进行 IPC 通信</span>
+<span class="hljs-comment">// 子进程文件 child.js</span>
+<span class="hljs-comment">// parent.js</span>
+<span class="hljs-keyword">const</span> forked = <span class="hljs-title function_">fork</span>(<span class="hljs-string">&#x27;./child.js&#x27;</span>);
+
+forked.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;收到子进程消息:&#x27;</span>, msg);
+});
+
+forked.<span class="hljs-title function_">send</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;START&#x27;</span> });
+
+<span class="hljs-comment">// child.js</span>
+process.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (msg.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;START&#x27;</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;子进程收到消息&#x27;</span>);
+    process.<span class="hljs-title function_">send</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;RESPONSE&#x27;</span>, <span class="hljs-attr">data</span>: <span class="hljs-string">&#x27;Hello from child&#x27;</span> });
+  }
+});
+</code></pre><h4 id="2.2.3-ipc">2.2.3 进程间通信 (IPC)</h4>
+<pre class="hljs"><code><span class="hljs-comment">// IPC 通信示例 - 父进程</span>
+<span class="hljs-keyword">const</span> { fork } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>);
+
+<span class="hljs-keyword">const</span> child = <span class="hljs-title function_">fork</span>(<span class="hljs-string">&#x27;./child-process.js&#x27;</span>, [], {
+  <span class="hljs-attr">stdio</span>: [<span class="hljs-string">&#x27;pipe&#x27;</span>, <span class="hljs-string">&#x27;pipe&#x27;</span>, <span class="hljs-string">&#x27;pipe&#x27;</span>, <span class="hljs-string">&#x27;ipc&#x27;</span>]
+});
+
+child.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">payload</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;父进程收到:&#x27;</span>, payload);
+});
+
+<span class="hljs-comment">// 发送消息给子进程</span>
+child.<span class="hljs-title function_">send</span>({ <span class="hljs-attr">command</span>: <span class="hljs-string">&#x27;compute&#x27;</span>, <span class="hljs-attr">data</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>] });
+
+<span class="hljs-comment">// 处理子进程错误</span>
+child.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;子进程错误:&#x27;</span>, err);
+});
+
+<span class="hljs-comment">// 处理子进程退出</span>
+child.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;exit&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">code</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;子进程退出，退出码:&#x27;</span>, code);
+});
+
+<span class="hljs-comment">// child-process.js</span>
+process.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">payload</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (payload.<span class="hljs-property">command</span> === <span class="hljs-string">&#x27;compute&#x27;</span>) {
+    <span class="hljs-keyword">const</span> sum = payload.<span class="hljs-property">data</span>.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b, <span class="hljs-number">0</span>);
+    process.<span class="hljs-title function_">send</span>({ <span class="hljs-attr">result</span>: sum });
+  }
+});
+</code></pre><h4 id="2.2.4-cluster">2.2.4 Cluster 模块实现多进程</h4>
+<pre class="hljs"><code><span class="hljs-comment">// cluster 模块实现多进程负载均衡</span>
+<span class="hljs-keyword">const</span> cluster = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;cluster&#x27;</span>);
+<span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;os&#x27;</span>);
+
+<span class="hljs-keyword">const</span> numCPUs = os.<span class="hljs-title function_">cpus</span>().<span class="hljs-property">length</span>;
+
+<span class="hljs-keyword">if</span> (cluster.<span class="hljs-property">isMaster</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`主进程 <span class="hljs-subst">${process.pid}</span> 正在运行`</span>);
+
+  <span class="hljs-comment">// 衍生工作进程</span>
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; numCPUs; i++) {
+    cluster.<span class="hljs-title function_">fork</span>();
+  }
+
+  <span class="hljs-comment">// 监听工作进程退出</span>
+  cluster.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;exit&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">worker, code, signal</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`工作进程 <span class="hljs-subst">${worker.process.pid}</span> 退出`</span>);
+    <span class="hljs-comment">// 重启工作进程</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;正在重启工作进程...&#x27;</span>);
+    cluster.<span class="hljs-title function_">fork</span>();
+  });
+} <span class="hljs-keyword">else</span> {
+  <span class="hljs-comment">// 工作进程可以运行任何 Node.js 代码</span>
+  <span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;http&#x27;</span>);
+
+  <span class="hljs-keyword">const</span> server = http.<span class="hljs-title function_">createServer</span>(<span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+    res.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">200</span>);
+    res.<span class="hljs-title function_">end</span>(<span class="hljs-string">`响应来自进程 <span class="hljs-subst">${process.pid}</span>\n`</span>);
+  });
+
+  server.<span class="hljs-title function_">listen</span>(<span class="hljs-number">8000</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`工作进程 <span class="hljs-subst">${process.pid}</span> 启动，监听端口 8000`</span>);
+  });
+}
+</code></pre><h4 id="2.2.5-worker-threads">2.2.5 Worker Threads 实现真正的多线程</h4>
+<pre class="hljs"><code><span class="hljs-comment">// worker-threads 实现真正的多线程</span>
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">Worker</span>, isMainThread, parentPort, workerData } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;worker_threads&#x27;</span>);
+
+<span class="hljs-keyword">if</span> (isMainThread) {
+  <span class="hljs-comment">// 主线程代码</span>
+  <span class="hljs-keyword">const</span> worker = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Worker</span>(__filename, {
+    <span class="hljs-attr">workerData</span>: { <span class="hljs-attr">value</span>: <span class="hljs-number">100</span> }
+  });
+
+  worker.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;主线程收到结果:&#x27;</span>, msg);
+  });
+
+  worker.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Worker 错误:&#x27;</span>, err);
+  });
+
+  worker.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;exit&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">code</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (code !== <span class="hljs-number">0</span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Worker 退出，退出码:&#x27;</span>, code);
+    }
+  });
+} <span class="hljs-keyword">else</span> {
+  <span class="hljs-comment">// Worker 线程代码</span>
+  <span class="hljs-keyword">const</span> { workerData } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;worker_threads&#x27;</span>);
+
+  <span class="hljs-comment">// 模拟耗时计算</span>
+  <span class="hljs-keyword">let</span> result = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; workerData.<span class="hljs-property">value</span>; i++) {
+    result += i;
+  }
+
+  <span class="hljs-comment">// 将结果发送给主线程</span>
+  parentPort.<span class="hljs-title function_">postMessage</span>(result);
+}
+</code></pre><h4 id="2.2.6-pm2">2.2.6 进程守护与 PM2 实践</h4>
+<pre class="hljs"><code><span class="hljs-comment">// ecosystem.config.js - PM2 配置文件</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">apps</span>: [{
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;my-app&#x27;</span>,
+    <span class="hljs-attr">script</span>: <span class="hljs-string">&#x27;./app.js&#x27;</span>,
+    <span class="hljs-attr">instances</span>: <span class="hljs-string">&#x27;max&#x27;</span>, <span class="hljs-comment">// 使用所有 CPU 核心</span>
+    <span class="hljs-attr">exec_mode</span>: <span class="hljs-string">&#x27;cluster&#x27;</span>, <span class="hljs-comment">// 集群模式</span>
+    <span class="hljs-attr">env</span>: {
+      <span class="hljs-attr">NODE_ENV</span>: <span class="hljs-string">&#x27;development&#x27;</span>,
+      <span class="hljs-attr">PORT</span>: <span class="hljs-number">3000</span>
+    },
+    <span class="hljs-attr">env_production</span>: {
+      <span class="hljs-attr">NODE_ENV</span>: <span class="hljs-string">&#x27;production&#x27;</span>,
+      <span class="hljs-attr">PORT</span>: <span class="hljs-number">8080</span>
+    },
+    <span class="hljs-comment">// 日志配置</span>
+    <span class="hljs-attr">log_date_format</span>: <span class="hljs-string">&#x27;YYYY-MM-DD HH:mm:ss Z&#x27;</span>,
+    <span class="hljs-attr">log_file</span>: <span class="hljs-string">&#x27;./logs/combined.log&#x27;</span>,
+    <span class="hljs-attr">error_file</span>: <span class="hljs-string">&#x27;./logs/error.log&#x27;</span>,
+    <span class="hljs-attr">out_file</span>: <span class="hljs-string">&#x27;./logs/out.log&#x27;</span>,
+    <span class="hljs-comment">// 进程守护配置</span>
+    <span class="hljs-attr">autorestart</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">watch</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">max_memory_restart</span>: <span class="hljs-string">&#x27;1G&#x27;</span>,
+    <span class="hljs-comment">// 健康检查</span>
+    <span class="hljs-attr">wait_ready</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">listen_timeout</span>: <span class="hljs-number">3000</span>,
+    <span class="hljs-comment">// 平滑重启</span>
+    <span class="hljs-attr">kill_timeout</span>: <span class="hljs-number">5000</span>
+  }]
+};
+
+<span class="hljs-comment">// PM2 常用命令</span>
+<span class="hljs-comment">// pm2 start ecosystem.config.js</span>
+<span class="hljs-comment">// pm2 list</span>
+<span class="hljs-comment">// pm2 logs my-app</span>
+<span class="hljs-comment">// pm2 restart my-app</span>
+<span class="hljs-comment">// pm2 reload my-app (平滑重启)</span>
+<span class="hljs-comment">// pm2 stop my-app</span>
+<span class="hljs-comment">// pm2 delete my-app</span>
+<span class="hljs-comment">// pm2 monit (监控面板)</span>
+<span class="hljs-comment">// pm2 plus (在线监控)</span>
+</code></pre><h4 id="2.2.7-node.js">2.2.7 经典面试题：Node.js 是单线程的吗？</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 常见面试题解答</span>
+
+<span class="hljs-comment">// Q1: Node.js 是单线程的吗？</span>
+<span class="hljs-comment">// A: Node.js 主线程是单线程的，但 I/O 操作由 libuv 线程池处理，</span>
+<span class="hljs-comment">//    可以理解为&quot;单线程事件循环 + 多线程 I/O&quot;架构。</span>
+
+<span class="hljs-comment">// Q2: 为什么 Node.js 能处理高并发？</span>
+<span class="hljs-comment">// A: 虽然是单线程，但通过事件循环和非阻塞 I/O，可以高效处理大量并发请求。</span>
+<span class="hljs-comment">//    当进行 I/O 操作时，线程不会被阻塞，可以继续处理其他请求。</span>
+
+<span class="hljs-comment">// Q3: 单线程的缺点是什么？</span>
+<span class="hljs-comment">// A: 1. 无法利用多核 CPU</span>
+<span class="hljs-comment">//    2. 计算密集型任务会阻塞事件循环</span>
+<span class="hljs-comment">//    3. 一个未处理的异常会导致整个进程崩溃</span>
+
+<span class="hljs-comment">// Q4: 如何解决单线程问题？</span>
+<span class="hljs-comment">// A: 1. 使用 Cluster 模块利用多核</span>
+<span class="hljs-comment">//    2. 使用 Worker Threads 进行 CPU 密集型计算</span>
+<span class="hljs-comment">//    3. 将计算密集型任务拆分，使用子进程处理</span>
+<span class="hljs-comment">//    4. 合理设计架构，避免阻塞事件循环</span>
+</code></pre><h3 id="2.3-buffer-stream">2.3 Buffer 与 Stream</h3>
+<p><strong>面试常问题目</strong>:
+Node.js 中的 Buffer 和 Stream 是处理二进制数据和流式数据的重要概念。理解它们的工作原理对于编写高效的 Node.js 应用至关重要。</p>
+<h4 id="2.3.1-buffer">2.3.1 Buffer 核心概念</h4>
+<pre class="hljs"><code><span class="hljs-comment">// Buffer 是 Node.js 用于处理二进制数据的类</span>
+
+<span class="hljs-comment">// 1. 创建 Buffer</span>
+<span class="hljs-keyword">const</span> buf1 = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">alloc</span>(<span class="hljs-number">10</span>); <span class="hljs-comment">// 分配 10 字节的初始化内存</span>
+<span class="hljs-keyword">const</span> buf2 = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">allocUnsafe</span>(<span class="hljs-number">10</span>); <span class="hljs-comment">// 快速分配，未初始化</span>
+<span class="hljs-keyword">const</span> buf3 = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;hello&#x27;</span>); <span class="hljs-comment">// 从字符串创建</span>
+<span class="hljs-keyword">const</span> buf4 = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]); <span class="hljs-comment">// 从数组创建</span>
+<span class="hljs-keyword">const</span> buf5 = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;5a7f8e&#x27;</span>, <span class="hljs-string">&#x27;hex&#x27;</span>); <span class="hljs-comment">// 从十六进制字符串创建</span>
+
+<span class="hljs-comment">// 2. Buffer 与字符串转换</span>
+<span class="hljs-keyword">const</span> str = <span class="hljs-string">&#x27;你好 Node.js&#x27;</span>;
+<span class="hljs-keyword">const</span> buf = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(str, <span class="hljs-string">&#x27;utf8&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;字符串转 Buffer:&#x27;</span>, buf);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Buffer 转字符串:&#x27;</span>, buf.<span class="hljs-title function_">toString</span>(<span class="hljs-string">&#x27;utf8&#x27;</span>));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Buffer 长度:&#x27;</span>, buf.<span class="hljs-property">length</span>);
+
+<span class="hljs-comment">// 3. Buffer 常用操作</span>
+<span class="hljs-keyword">const</span> buffer = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;Hello World&#x27;</span>);
+
+<span class="hljs-comment">// 访问字节</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;第0个字节:&#x27;</span>, buffer[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 72</span>
+
+<span class="hljs-comment">// 写入数据</span>
+buffer.<span class="hljs-title function_">write</span>(<span class="hljs-string">&#x27;Hi&#x27;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;utf8&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;写入后:&#x27;</span>, buffer.<span class="hljs-title function_">toString</span>());
+
+<span class="hljs-comment">// 截取子 Buffer</span>
+<span class="hljs-keyword">const</span> subBuf = buffer.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;截取:&#x27;</span>, subBuf.<span class="hljs-title function_">toString</span>());
+
+<span class="hljs-comment">// 复制 Buffer</span>
+<span class="hljs-keyword">const</span> copyBuf = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">alloc</span>(<span class="hljs-number">5</span>);
+buffer.<span class="hljs-title function_">copy</span>(copyBuf, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">5</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;复制:&#x27;</span>, copyBuf.<span class="hljs-title function_">toString</span>());
+
+<span class="hljs-comment">// 拼接 Buffer</span>
+<span class="hljs-keyword">const</span> bufA = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;Hello&#x27;</span>);
+<span class="hljs-keyword">const</span> bufB = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27; World&#x27;</span>);
+<span class="hljs-keyword">const</span> combined = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">concat</span>([bufA, bufB]);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;拼接:&#x27;</span>, combined.<span class="hljs-title function_">toString</span>());
+</code></pre><h4 id="2.3.2-stream">2.3.2 Stream 核心概念</h4>
+<pre class="hljs"><code><span class="hljs-comment">// Stream 有四种类型</span>
+
+<span class="hljs-comment">// 1. Readable Stream (可读流)</span>
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">Readable</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;stream&#x27;</span>);
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyReadable</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Readable</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">data</span>) {
+    <span class="hljs-variable language_">super</span>();
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span> = data;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">index</span> = <span class="hljs-number">0</span>;
+  }
+
+  <span class="hljs-title function_">_read</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">index</span> &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>.<span class="hljs-property">length</span>) {
+      <span class="hljs-keyword">const</span> chunk = <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>[<span class="hljs-variable language_">this</span>.<span class="hljs-property">index</span>++];
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;推送数据块:&#x27;</span>, chunk);
+      <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">push</span>(chunk);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">push</span>(<span class="hljs-literal">null</span>); <span class="hljs-comment">// 表示数据结束</span>
+    }
+  }
+}
+
+<span class="hljs-keyword">const</span> readable = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MyReadable</span>([<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>]);
+
+<span class="hljs-comment">// 消费可读流</span>
+readable.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;收到数据:&#x27;</span>, chunk.<span class="hljs-title function_">toString</span>());
+});
+
+readable.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;数据读取完成&#x27;</span>);
+});
+
+readable.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;错误:&#x27;</span>, err);
+});
+</code></pre><h4 id="2.3.3">2.3.3 文件流操作</h4>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>);
+
+<span class="hljs-comment">// 1. 读取文件流</span>
+<span class="hljs-keyword">const</span> readStream = fs.<span class="hljs-title function_">createReadStream</span>(
+  path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">&#x27;large-file.txt&#x27;</span>),
+  {
+    <span class="hljs-attr">encoding</span>: <span class="hljs-string">&#x27;utf8&#x27;</span>,
+    <span class="hljs-attr">highWaterMark</span>: <span class="hljs-number">64</span> * <span class="hljs-number">1024</span>, <span class="hljs-comment">// 64KB 缓冲区</span>
+    <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,
+    <span class="hljs-attr">end</span>: <span class="hljs-number">1000</span>
+  }
+);
+
+readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;接收到数据块，大小:&#x27;</span>, chunk.<span class="hljs-property">length</span>);
+});
+
+readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;文件读取完成&#x27;</span>);
+});
+
+readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;读取错误:&#x27;</span>, err);
+});
+
+<span class="hljs-comment">// 2. 写入文件流</span>
+<span class="hljs-keyword">const</span> writeStream = fs.<span class="hljs-title function_">createWriteStream</span>(
+  path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">&#x27;output.txt&#x27;</span>),
+  {
+    <span class="hljs-attr">flags</span>: <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-comment">// 追加模式</span>
+    <span class="hljs-attr">encoding</span>: <span class="hljs-string">&#x27;utf8&#x27;</span>,
+    <span class="hljs-attr">highWaterMark</span>: <span class="hljs-number">16</span> * <span class="hljs-number">1024</span>
+  }
+);
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++) {
+  <span class="hljs-keyword">const</span> canContinue = writeStream.<span class="hljs-title function_">write</span>(<span class="hljs-string">`第 <span class="hljs-subst">${i}</span> 行数据\n`</span>);
+  <span class="hljs-keyword">if</span> (!canContinue) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;缓冲区已满，等待 drain 事件&#x27;</span>);
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> writeStream.<span class="hljs-title function_">once</span>(<span class="hljs-string">&#x27;drain&#x27;</span>, resolve));
+  }
+}
+
+writeStream.<span class="hljs-title function_">end</span>(<span class="hljs-string">&#x27;写入完成&#x27;</span>);
+
+<span class="hljs-comment">// 3. 管道流 (pipe)</span>
+<span class="hljs-keyword">const</span> zlib = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;zlib&#x27;</span>);
+
+<span class="hljs-comment">// 压缩文件示例</span>
+fs.<span class="hljs-title function_">createReadStream</span>(<span class="hljs-string">&#x27;./input.txt&#x27;</span>)
+  .<span class="hljs-title function_">pipe</span>(zlib.<span class="hljs-title function_">createGzip</span>())
+  .<span class="hljs-title function_">pipe</span>(fs.<span class="hljs-title function_">createWriteStream</span>(<span class="hljs-string">&#x27;./input.txt.gz&#x27;</span>));
+
+<span class="hljs-comment">// 解压文件示例</span>
+fs.<span class="hljs-title function_">createReadStream</span>(<span class="hljs-string">&#x27;./input.txt.gz&#x27;</span>)
+  .<span class="hljs-title function_">pipe</span>(zlib.<span class="hljs-title function_">createGunzip</span>())
+  .<span class="hljs-title function_">pipe</span>(fs.<span class="hljs-title function_">createWriteStream</span>(<span class="hljs-string">&#x27;./input-uncompressed.txt&#x27;</span>));
+
+<span class="hljs-comment">// 4. Transform 流 (转换流)</span>
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">Transform</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;stream&#x27;</span>);
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UpperCaseTransform</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Transform</span> {
+  <span class="hljs-title function_">_transform</span>(<span class="hljs-params">chunk, encoding, callback</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">push</span>(chunk.<span class="hljs-title function_">toString</span>().<span class="hljs-title function_">toUpperCase</span>());
+    <span class="hljs-title function_">callback</span>();
+  }
+}
+
+<span class="hljs-keyword">const</span> transform = <span class="hljs-keyword">new</span> <span class="hljs-title class_">UpperCaseTransform</span>();
+
+transform.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;转换后:&#x27;</span>, chunk.<span class="hljs-title function_">toString</span>());
+});
+
+transform.<span class="hljs-title function_">write</span>(<span class="hljs-string">&#x27;hello &#x27;</span>);
+transform.<span class="hljs-title function_">write</span>(<span class="hljs-string">&#x27;world&#x27;</span>);
+transform.<span class="hljs-title function_">end</span>();
+</code></pre><h4 id="2.3.4-stream">2.3.4 Stream 背压问题与解决</h4>
+<pre class="hljs"><code><span class="hljs-comment">// Stream 背压问题及解决方案</span>
+
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+
+<span class="hljs-comment">// 错误示例：未处理背压</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">copyFileWrong</span>(<span class="hljs-params">source, dest</span>) {
+  <span class="hljs-keyword">const</span> readStream = fs.<span class="hljs-title function_">createReadStream</span>(source);
+  <span class="hljs-keyword">const</span> writeStream = fs.<span class="hljs-title function_">createWriteStream</span>(dest);
+
+  readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+    <span class="hljs-comment">// 直接写入，不检查返回结果</span>
+    <span class="hljs-keyword">const</span> result = writeStream.<span class="hljs-title function_">write</span>(chunk);
+    <span class="hljs-keyword">if</span> (!result) {
+      <span class="hljs-comment">// 背压发生，但未处理</span>
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;发生背压！&#x27;</span>);
+    }
+  });
+
+  readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    writeStream.<span class="hljs-title function_">end</span>();
+  });
+}
+
+<span class="hljs-comment">// 正确示例：使用 pipe 或手动处理背压</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">copyFileCorrect</span>(<span class="hljs-params">source, dest</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> readStream = fs.<span class="hljs-title function_">createReadStream</span>(source);
+    <span class="hljs-keyword">const</span> writeStream = fs.<span class="hljs-title function_">createWriteStream</span>(dest);
+
+    readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> canContinue = writeStream.<span class="hljs-title function_">write</span>(chunk);
+      <span class="hljs-keyword">if</span> (!canContinue) {
+        <span class="hljs-comment">// 暂停读取，等待 drain 事件</span>
+        readStream.<span class="hljs-title function_">pause</span>();
+        writeStream.<span class="hljs-title function_">once</span>(<span class="hljs-string">&#x27;drain&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+          readStream.<span class="hljs-title function_">resume</span>();
+        });
+      }
+    });
+
+    readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+      writeStream.<span class="hljs-title function_">end</span>();
+      <span class="hljs-title function_">resolve</span>();
+    });
+
+    readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject);
+    writeStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject);
+  });
+}
+
+<span class="hljs-comment">// 最简方式：使用 pipe (Node.js 自动处理背压)</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">copyFileWithPipe</span>(<span class="hljs-params">source, dest</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> readStream = fs.<span class="hljs-title function_">createReadStream</span>(source);
+    <span class="hljs-keyword">const</span> writeStream = fs.<span class="hljs-title function_">createWriteStream</span>(dest);
+
+    readStream.<span class="hljs-title function_">pipe</span>(writeStream);
+
+    writeStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;finish&#x27;</span>, resolve);
+    readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject);
+    writeStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject);
+  });
+}
+</code></pre><h4 id="2.3.5-stream-bff">2.3.5 经典面试题：Stream 在 BFF 中的应用</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 面试题：在 BFF 中如何利用 Stream 处理大文件？</span>
+
+<span class="hljs-comment">// 场景：后端返回 10GB 的日志文件，前端需要下载</span>
+<span class="hljs-comment">// 方案：使用 Stream 边读边传，避免内存溢出</span>
+
+<span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;http&#x27;</span>);
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+
+<span class="hljs-keyword">const</span> server = http.<span class="hljs-title function_">createServer</span>(<span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> filePath = <span class="hljs-string">&#x27;/path/to/large-file.log&#x27;</span>;
+
+  <span class="hljs-comment">// 设置响应头</span>
+  res.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-string">&#x27;application/octet-stream&#x27;</span>);
+  res.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;Content-Disposition&#x27;</span>, <span class="hljs-string">&#x27;attachment; filename=&quot;large-file.log&quot;&#x27;</span>);
+
+  <span class="hljs-comment">// 使用 Stream 管道传输</span>
+  <span class="hljs-keyword">const</span> readStream = fs.<span class="hljs-title function_">createReadStream</span>(filePath);
+
+  readStream.<span class="hljs-title function_">pipe</span>(res);
+
+  readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+    res.<span class="hljs-property">statusCode</span> = <span class="hljs-number">500</span>;
+    res.<span class="hljs-title function_">end</span>(<span class="hljs-string">&#x27;文件读取错误&#x27;</span>);
+  });
+
+  req.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    readStream.<span class="hljs-title function_">destroy</span>();
+  });
+});
+
+server.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3000</span>);
+
+<span class="hljs-comment">// 场景：聚合多个后端接口，使用 Stream 进行流式处理</span>
+<span class="hljs-keyword">const</span> axios = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;axios&#x27;</span>);
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">aggregateWithStream</span>(<span class="hljs-params">req, res</span>) {
+  <span class="hljs-comment">// 并行请求多个接口</span>
+  <span class="hljs-keyword">const</span> [userRes, orderRes, productRes] = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([
+    axios.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;http://backend-api/user&#x27;</span>),
+    axios.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;http://backend-api/orders&#x27;</span>),
+    axios.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;http://backend-api/products&#x27;</span>)
+  ]);
+
+  <span class="hljs-comment">// 使用 Stream 返回聚合数据</span>
+  res.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-string">&#x27;application/json&#x27;</span>);
+
+  res.<span class="hljs-title function_">write</span>(<span class="hljs-string">&#x27;{&#x27;</span>);
+  res.<span class="hljs-title function_">write</span>(<span class="hljs-string">`&quot;user&quot;:<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(userRes.data)}</span>,`</span>);
+  res.<span class="hljs-title function_">write</span>(<span class="hljs-string">`&quot;orders&quot;:<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(orderRes.data)}</span>,`</span>);
+  res.<span class="hljs-title function_">write</span>(<span class="hljs-string">`&quot;products&quot;:<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(productRes.data)}</span>`</span>);
+  res.<span class="hljs-title function_">write</span>(<span class="hljs-string">&#x27;}&#x27;</span>);
+
+  res.<span class="hljs-title function_">end</span>();
+}
+</code></pre><h3 id="2.4-node.js">2.4 Node.js 模块系统</h3>
+<p><strong>面试常问题目</strong>:
+Node.js 使用 CommonJS 模块系统，每个文件都是一个模块，通过 require 和 module.exports 进行模块导入导出。</p>
+<h4 id="2.4.1">2.4.1 模块导出方式</h4>
+<pre class="hljs"><code><span class="hljs-comment">// module.js</span>
+
+<span class="hljs-comment">// 方式1: exports 对象</span>
+<span class="hljs-built_in">exports</span>.<span class="hljs-property">foo</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;foo&#x27;</span>;
+};
+
+<span class="hljs-built_in">exports</span>.<span class="hljs-property">bar</span> = <span class="hljs-string">&#x27;bar&#x27;</span>;
+
+<span class="hljs-comment">// 方式2: module.exports</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;module&#x27;</span>,
+  <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.0.0&#x27;</span>,
+
+  <span class="hljs-comment">// 导出函数</span>
+  <span class="hljs-attr">fn</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;function&#x27;</span>;
+  },
+
+  <span class="hljs-comment">// 导出类</span>
+  <span class="hljs-attr">class</span>: <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyClass</span> {
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> = <span class="hljs-number">0</span>;
+    }
+  },
+
+  <span class="hljs-comment">// 导出箭头函数</span>
+  <span class="hljs-attr">arrowFn</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;arrow&#x27;</span>,
+
+  <span class="hljs-comment">// 导出异步函数</span>
+  <span class="hljs-attr">asyncFn</span>: <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;async result&#x27;</span>;
+  }
+};
+
+<span class="hljs-comment">// 方式3: 重新赋值 module.exports</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;直接导出函数&#x27;</span>);
+};
+
+<span class="hljs-comment">// 方式4: 导出单例对象</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">new</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Service</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span> = [];
+  }
+
+  <span class="hljs-title function_">add</span>(<span class="hljs-params">item</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>.<span class="hljs-title function_">push</span>(item);
+  }
+}();
+</code></pre><h4 id="2.4.2">2.4.2 模块加载机制</h4>
+<pre class="hljs"><code><span class="hljs-comment">// require 加载顺序</span>
+
+<span class="hljs-comment">// 1. 先检查缓存</span>
+<span class="hljs-comment">// const cachedModule = require.cache[modulePath];</span>
+
+<span class="hljs-comment">// 2. 加载顺序：</span>
+<span class="hljs-comment">//    - 核心模块 (fs, path, http 等) -&gt; 优先</span>
+<span class="hljs-comment">//    - 相对路径模块 (./, ../) -&gt; 次优先</span>
+<span class="hljs-comment">//    - node_modules 模块 -&gt; 最后查找</span>
+
+<span class="hljs-comment">// 3. 文件扩展名查找顺序：</span>
+<span class="hljs-comment">//    - .js</span>
+<span class="hljs-comment">//    - .json</span>
+<span class="hljs-comment">//    - .node (C++ 扩展)</span>
+
+<span class="hljs-comment">// 4. 目录作为模块</span>
+<span class="hljs-comment">//    - 查找 package.json 的 main 字段</span>
+<span class="hljs-comment">//    - 查找 index.js</span>
+
+<span class="hljs-comment">// 模块缓存示例</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;模块缓存:&#x27;</span>, <span class="hljs-built_in">require</span>.<span class="hljs-property">cache</span>);
+
+<span class="hljs-comment">// 清除指定模块缓存</span>
+<span class="hljs-keyword">delete</span> <span class="hljs-built_in">require</span>.<span class="hljs-property">cache</span>[<span class="hljs-built_in">require</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;./myModule&#x27;</span>)];
+
+<span class="hljs-comment">// 动态导入模块</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">dynamicImport</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./es-module.mjs&#x27;</span>);
+  <span class="hljs-variable language_">module</span>.<span class="hljs-title function_">default</span>();
+}
+</code></pre><h4 id="2.4.3">2.4.3 模块循环引用</h4>
+<pre class="hljs"><code><span class="hljs-comment">// a.js</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;a.js 开始&#x27;</span>);
+<span class="hljs-keyword">const</span> b = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./b&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;a.js 结束&#x27;</span>);
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;a&#x27;</span>,
+  <span class="hljs-attr">b</span>: b
+};
+
+<span class="hljs-comment">// b.js</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;b.js 开始&#x27;</span>);
+<span class="hljs-keyword">const</span> a = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./a&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;b.js 结束&#x27;</span>);
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;b&#x27;</span>,
+  <span class="hljs-attr">a</span>: a
+};
+
+<span class="hljs-comment">// 输出:</span>
+<span class="hljs-comment">// a.js 开始</span>
+<span class="hljs-comment">// b.js 开始</span>
+<span class="hljs-comment">// b.js 结束</span>
+<span class="hljs-comment">// a.js 结束</span>
+
+<span class="hljs-comment">// 原因: Node.js 使用浅拷贝解决循环引用问题，</span>
+<span class="hljs-comment">//       当 a.js require b.js 时，a.js 模块对象已创建（但未完成初始化）</span>
+<span class="hljs-comment">//       此时 b.js 可以获取到 a.js 的导出对象（但其属性可能尚未赋值）</span>
+</code></pre><h4 id="2.4.4-es-modules-vs-commonjs">2.4.4 ES Modules vs CommonJS</h4>
+<pre class="hljs"><code><span class="hljs-comment">// ES Modules (需要设置 &quot;type&quot;: &quot;module&quot; 或使用 .mjs 扩展名)</span>
+
+<span class="hljs-comment">// import.js</span>
+<span class="hljs-keyword">import</span> { foo, bar } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./module.js&#x27;</span>;
+<span class="hljs-keyword">import</span> defaultExport <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./module.js&#x27;</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> all <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./module.js&#x27;</span>;
+
+<span class="hljs-comment">// 动态导入</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = <span class="hljs-keyword">await</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./module.js&#x27;</span>);
+
+<span class="hljs-comment">// CommonJS</span>
+<span class="hljs-keyword">const</span> { foo, bar } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./module.js&#x27;</span>);
+<span class="hljs-keyword">const</span> defaultExport = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./module.js&#x27;</span>);
+
+<span class="hljs-comment">// 混合使用 (Node.js 12+ 支持)</span>
+<span class="hljs-keyword">import</span> { createRequire } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;module&#x27;</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">require</span> = <span class="hljs-title function_">createRequire</span>(<span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">url</span>);
+<span class="hljs-keyword">const</span> commonjsModule = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./commonjs.cjs&#x27;</span>);
+</code></pre><h3 id="2.5-promiseasyncawait">2.5 异步编程 (Promise、async/await)</h3>
+<p><strong>面试常问题目</strong>:
+Node.js 的异步编程是核心知识点，需要深入理解 Promise、async/await 的工作原理以及错误处理机制。</p>
+<h4 id="2.5.1-promise">2.5.1 Promise 深入理解</h4>
+<pre class="hljs"><code><span class="hljs-comment">// Promise 基础</span>
+<span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+  <span class="hljs-comment">// 异步操作</span>
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> success = <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">if</span> (success) {
+      <span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;操作成功&#x27;</span>);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;操作失败&#x27;</span>));
+    }
+  }, <span class="hljs-number">1000</span>);
+});
+
+promise
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result))
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error))
+  .<span class="hljs-title function_">finally</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;操作完成&#x27;</span>));
+
+<span class="hljs-comment">// Promise 链式调用</span>
+<span class="hljs-title function_">fetchUser</span>(<span class="hljs-number">1</span>)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> <span class="hljs-title function_">fetchUserPosts</span>(user.<span class="hljs-property">id</span>))
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">posts</span> =&gt;</span> <span class="hljs-title function_">fetchPostComments</span>(posts[<span class="hljs-number">0</span>].<span class="hljs-property">id</span>))
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">comments</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(comments))
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error));
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchUser</span>(<span class="hljs-params">id</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> {
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">resolve</span>({ id, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;User&#x27;</span> + id });
+    }, <span class="hljs-number">100</span>);
+  });
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchUserPosts</span>(<span class="hljs-params">userId</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> {
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">resolve</span>([
+        { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, userId, <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Post 1&#x27;</span> },
+        { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, userId, <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Post 2&#x27;</span> }
+      ]);
+    }, <span class="hljs-number">100</span>);
+  });
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchPostComments</span>(<span class="hljs-params">postId</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> {
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">resolve</span>([
+        { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, postId, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Comment 1&#x27;</span> },
+        { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, postId, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Comment 2&#x27;</span> }
+      ]);
+    }, <span class="hljs-number">100</span>);
+  });
+}
+</code></pre><h4 id="2.5.2-promise">2.5.2 Promise 并发处理</h4>
+<pre class="hljs"><code><span class="hljs-comment">// Promise.all - 所有 Promise 都成功才成功</span>
+<span class="hljs-keyword">const</span> promise1 = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">1</span>);
+<span class="hljs-keyword">const</span> promise2 = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">2</span>);
+<span class="hljs-keyword">const</span> promise3 = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">3</span>);
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([promise1, promise2, promise3])
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">values</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(values)); <span class="hljs-comment">// [1, 2, 3]</span>
+
+<span class="hljs-comment">// Promise.all - 任意一个失败则失败</span>
+<span class="hljs-keyword">const</span> promises = [
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">1</span>),
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;error&#x27;</span>)),
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">3</span>)
+];
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(promises)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">values</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(values))
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error)); <span class="hljs-comment">// Error: error</span>
+
+<span class="hljs-comment">// Promise.allSettled - 等待所有 Promise 结束</span>
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">allSettled</span>(promises).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">results</span> =&gt;</span> {
+  results.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">result, index</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (result.<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;fulfilled&#x27;</span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Promise <span class="hljs-subst">${index}</span>: <span class="hljs-subst">${result.value}</span>`</span>);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Promise <span class="hljs-subst">${index}</span>: <span class="hljs-subst">${result.reason}</span>`</span>);
+    }
+  });
+});
+
+<span class="hljs-comment">// Promise.race - 返回最先完成（无论成功或失败）的 Promise</span>
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">race</span>([
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;fast&#x27;</span>), <span class="hljs-number">100</span>)),
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;slow&#x27;</span>), <span class="hljs-number">200</span>)),
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">_, reject</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;error&#x27;</span>)), <span class="hljs-number">50</span>))
+]).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value)); <span class="hljs-comment">// &#x27;error&#x27;</span>
+
+<span class="hljs-comment">// Promise.any - 返回第一个成功的 Promise</span>
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">any</span>([
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;error1&#x27;</span>)),
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;error2&#x27;</span>)),
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;success&#x27;</span>)
+]).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value)); <span class="hljs-comment">// &#x27;success&#x27;</span>
+</code></pre><h4 id="2.5.3-asyncawait">2.5.3 async/await 深入理解</h4>
+<pre class="hljs"><code><span class="hljs-comment">// async/await 是 Promise 的语法糖</span>
+
+<span class="hljs-comment">// 基本用法</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>);
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+    <span class="hljs-keyword">return</span> data;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;获取数据失败:&#x27;</span>, error);
+    <span class="hljs-keyword">throw</span> error;
+  }
+}
+
+<span class="hljs-comment">// 并行执行多个 async 操作</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchMultipleData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 串行执行 (不推荐)</span>
+<span class="hljs-comment">//   const user = await fetchUser(1);</span>
+<span class="hljs-comment">//   const posts = await fetchUserPosts(1);</span>
+<span class="hljs-comment">//   const products = await fetchProducts();</span>
+
+<span class="hljs-comment">// 并行执行 (推荐)</span>
+  <span class="hljs-keyword">const</span> [user, posts, products] = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([
+    <span class="hljs-title function_">fetchUser</span>(<span class="hljs-number">1</span>),
+    <span class="hljs-title function_">fetchUserPosts</span>(<span class="hljs-number">1</span>),
+    <span class="hljs-title function_">fetchProducts</span>()
+  ]);
+
+  <span class="hljs-keyword">return</span> { user, posts, products };
+}
+
+<span class="hljs-comment">// async 函数的返回值</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">asyncReturn</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// async 函数总是返回 Promise</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;直接返回值&#x27;</span>; <span class="hljs-comment">// 等同于 Promise.resolve(&#x27;直接返回值&#x27;)</span>
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">asyncThrow</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;async 错误&#x27;</span>); <span class="hljs-comment">// 等同于 Promise.reject(new Error(&#x27;async 错误&#x27;))</span>
+}
+
+<span class="hljs-comment">// await 会等待 Promise resolve，但不会改变其状态</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">awaitPromise</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> promise = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;resolved&#x27;</span>);
+
+  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> promise;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result); <span class="hljs-comment">// &#x27;resolved&#x27;</span>
+
+  <span class="hljs-comment">// 如果 Promise 被拒绝，await 会抛出错误</span>
+  <span class="hljs-keyword">const</span> rejectedPromise = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;rejected&#x27;</span>));
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> rejectedPromise;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;捕获到错误:&#x27;</span>, error.<span class="hljs-property">message</span>);
+  }
+}
+</code></pre><h4 id="2.5.4">2.5.4 异步迭代器</h4>
+<pre class="hljs"><code><span class="hljs-comment">// for await...of 遍历异步迭代器</span>
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span>* <span class="hljs-title function_">asyncGenerator</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">100</span>));
+    <span class="hljs-keyword">yield</span> i;
+  }
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">for</span> <span class="hljs-title function_">await</span> (<span class="hljs-keyword">const</span> value <span class="hljs-keyword">of</span> <span class="hljs-title function_">asyncGenerator</span>()) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value);
+  }
+}
+
+<span class="hljs-title function_">main</span>();
+
+<span class="hljs-comment">// 实际应用：流式处理</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">processStream</span>(<span class="hljs-params">stream</span>) {
+  <span class="hljs-keyword">const</span> chunks = [];
+  <span class="hljs-keyword">for</span> <span class="hljs-title function_">await</span> (<span class="hljs-keyword">const</span> chunk <span class="hljs-keyword">of</span> stream) {
+    chunks.<span class="hljs-title function_">push</span>(chunk);
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">concat</span>(chunks);
+}
+</code></pre><h4 id="2.5.5-asyncawait">2.5.5 经典面试题：async/await 错误处理</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 面试题1: async/await vs Promise.then/catch</span>
+
+<span class="hljs-comment">// 使用 Promise.then/catch</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchWithPromise</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">fetchData</span>()
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-title function_">processData</span>(data))
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> <span class="hljs-title function_">formatResult</span>(result))
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;错误:&#x27;</span>, error);
+      <span class="hljs-keyword">return</span> defaultValue;
+    });
+}
+
+<span class="hljs-comment">// 使用 async/await</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchWithAsyncAwait</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchData</span>();
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-title function_">processData</span>(data);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">formatResult</span>(result);
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;错误:&#x27;</span>, error);
+    <span class="hljs-keyword">return</span> defaultValue;
+  }
+}
+
+<span class="hljs-comment">// 面试题2: for...of 循环中的异步操作</span>
+
+<span class="hljs-comment">// 错误示例：循环中的 await 会串行执行</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">wrongApproach</span>(<span class="hljs-params">items</span>) {
+  <span class="hljs-keyword">const</span> results = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> items) {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-title function_">processItem</span>(item); <span class="hljs-comment">// 串行执行，效率低</span>
+    results.<span class="hljs-title function_">push</span>(result);
+  }
+  <span class="hljs-keyword">return</span> results;
+}
+
+<span class="hljs-comment">// 正确示例：使用 Promise.all 并行执行</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">correctApproach</span>(<span class="hljs-params">items</span>) {
+  <span class="hljs-keyword">const</span> promises = items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> <span class="hljs-title function_">processItem</span>(item));
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(promises);
+}
+
+<span class="hljs-comment">// 正确示例：需要串行执行时</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">sequentialApproach</span>(<span class="hljs-params">items</span>) {
+  <span class="hljs-keyword">const</span> results = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> items) {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-title function_">processItem</span>(item);
+    results.<span class="hljs-title function_">push</span>(result);
+  }
+  <span class="hljs-keyword">return</span> results;
+}
+
+<span class="hljs-comment">// 面试题3: 立即执行 async 函数</span>
+(<span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;立即执行&#x27;</span>);
+})();
+</code></pre><h3 id="2.6-node.js">2.6 Node.js 错误处理</h3>
+<p><strong>面试常问题目</strong>:
+Node.js 的错误处理机制是构建健壮应用的关键，需要理解同步和异步错误处理的差异。</p>
+<h4 id="2.6.1">2.6.1 同步错误处理</h4>
+<pre class="hljs"><code><span class="hljs-comment">// try...catch 同步错误处理</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-string">&#x27;invalid json&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;解析错误:&#x27;</span>, error.<span class="hljs-property">message</span>);
+}
+
+<span class="hljs-comment">// 捕获抛出错误</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;同步错误&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;捕获错误:&#x27;</span>, error.<span class="hljs-property">message</span>);
+}
+</code></pre><h4 id="2.6.2">2.6.2 异步错误处理</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 回调函数错误处理</span>
+fs.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&#x27;./file.txt&#x27;</span>, <span class="hljs-string">&#x27;utf8&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, data</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;读取文件错误:&#x27;</span>, err);
+    <span class="hljs-keyword">return</span>;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;文件内容:&#x27;</span>, data);
+});
+
+<span class="hljs-comment">// 2. Promise 错误处理</span>
+<span class="hljs-title function_">fetchData</span>()
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data))
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error));
+
+<span class="hljs-comment">// 3. async/await 错误处理</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleAsyncError</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchData</span>();
+    <span class="hljs-keyword">return</span> data;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;异步错误:&#x27;</span>, error);
+    <span class="hljs-keyword">throw</span> error;
+  }
+}
+
+<span class="hljs-comment">// 4. process 事件监听</span>
+process.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;uncaughtException&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;未捕获的异常:&#x27;</span>, error);
+  <span class="hljs-comment">// 记录错误日志</span>
+  <span class="hljs-comment">// 优雅退出</span>
+  process.<span class="hljs-title function_">exit</span>(<span class="hljs-number">1</span>);
+});
+
+process.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;unhandledRejection&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">reason, promise</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;未处理的 Promise 拒绝:&#x27;</span>, reason);
+  <span class="hljs-comment">// 记录错误日志</span>
+});
+</code></pre><h4 id="2.6.3-domain">2.6.3 域 (Domain) 模块 (已废弃)</h4>
+<pre class="hljs"><code><span class="hljs-comment">// Domain 模块在 Node.js 12+ 已废弃，使用 async_hooks 替代</span>
+
+<span class="hljs-comment">// 旧代码示例 (仅作了解)</span>
+<span class="hljs-keyword">const</span> domain = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;domain&#x27;</span>);
+
+<span class="hljs-keyword">const</span> d = domain.<span class="hljs-title function_">create</span>();
+
+d.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;Domain 捕获错误:&#x27;</span>, error.<span class="hljs-property">message</span>);
+});
+
+d.<span class="hljs-title function_">run</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 这里的错误会被 domain 捕获</span>
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Domain 内的错误&#x27;</span>);
+});
+</code></pre><h4 id="2.6.4">2.6.4 错误传播与错误类</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 自定义错误类</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AppError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Error</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">message, statusCode</span>) {
+    <span class="hljs-variable language_">super</span>(message);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">statusCode</span> = statusCode;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">isOperational</span> = <span class="hljs-literal">true</span>;
+    <span class="hljs-title class_">Error</span>.<span class="hljs-title function_">captureStackTrace</span>(<span class="hljs-variable language_">this</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">constructor</span>);
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ValidationError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">AppError</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">message</span>) {
+    <span class="hljs-variable language_">super</span>(message, <span class="hljs-number">400</span>);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;ValidationError&#x27;</span>;
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">NotFoundError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">AppError</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">message</span>) {
+    <span class="hljs-variable language_">super</span>(message, <span class="hljs-number">404</span>);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;NotFoundError&#x27;</span>;
+  }
+}
+
+<span class="hljs-comment">// 使用自定义错误</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchUser</span>(<span class="hljs-params">id</span>) {
+  <span class="hljs-keyword">if</span> (!id) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ValidationError</span>(<span class="hljs-string">&#x27;用户ID不能为空&#x27;</span>);
+  }
+
+  <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> db.<span class="hljs-property">users</span>.<span class="hljs-title function_">find</span>(id);
+  <span class="hljs-keyword">if</span> (!user) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">NotFoundError</span>(<span class="hljs-string">`用户 <span class="hljs-subst">${id}</span> 不存在`</span>);
+  }
+
+  <span class="hljs-keyword">return</span> user;
+}
+
+<span class="hljs-comment">// 错误处理中间件</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">errorHandler</span>(<span class="hljs-params">err, req, res, next</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;错误:&#x27;</span>, err);
+
+  <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">ValidationError</span>) {
+    <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">status</span>(<span class="hljs-number">400</span>).<span class="hljs-title function_">json</span>({
+      <span class="hljs-attr">error</span>: err.<span class="hljs-property">name</span>,
+      <span class="hljs-attr">message</span>: err.<span class="hljs-property">message</span>
+    });
+  }
+
+  <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">NotFoundError</span>) {
+    <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">status</span>(<span class="hljs-number">404</span>).<span class="hljs-title function_">json</span>({
+      <span class="hljs-attr">error</span>: err.<span class="hljs-property">name</span>,
+      <span class="hljs-attr">message</span>: err.<span class="hljs-property">message</span>
+    });
+  }
+
+  <span class="hljs-comment">// 未知错误</span>
+  res.<span class="hljs-title function_">status</span>(<span class="hljs-number">500</span>).<span class="hljs-title function_">json</span>({
+    <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;InternalServerError&#x27;</span>,
+    <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;服务器内部错误&#x27;</span>
+  });
+}
+</code></pre><h3 id="2.7-node.js">2.7 Node.js 性能优化</h3>
+<p><strong>面试常问题目</strong>:
+Node.js 性能优化涉及多个方面，包括内存管理、CPU 使用、I/O 优化等。</p>
+<h4 id="2.7.1">2.7.1 内存管理与垃圾回收</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 手动触发垃圾回收 (仅在需要时使用)</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">global</span>.<span class="hljs-property">gc</span>) {
+  <span class="hljs-variable language_">global</span>.<span class="hljs-title function_">gc</span>();
+}
+
+<span class="hljs-comment">// 2. 监控内存使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">monitorMemory</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> used = process.<span class="hljs-title function_">memoryUsage</span>();
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;内存使用情况:&#x27;</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`  heapUsed: <span class="hljs-subst">${<span class="hljs-built_in">Math</span>.round(used.heapUsed / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>)}</span> MB`</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`  heapTotal: <span class="hljs-subst">${<span class="hljs-built_in">Math</span>.round(used.heapTotal / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>)}</span> MB`</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`  rss: <span class="hljs-subst">${<span class="hljs-built_in">Math</span>.round(used.rss / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>)}</span> MB`</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`  external: <span class="hljs-subst">${<span class="hljs-built_in">Math</span>.round(used.external / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>)}</span> MB`</span>);
+}
+
+<span class="hljs-comment">// 3. 避免内存泄漏</span>
+<span class="hljs-comment">// 常见内存泄漏场景及解决方案</span>
+
+<span class="hljs-comment">// 场景1: 全局变量</span>
+<span class="hljs-comment">// 错误</span>
+<span class="hljs-variable language_">global</span>.<span class="hljs-property">someData</span> = [];
+
+<span class="hljs-comment">// 正确</span>
+<span class="hljs-keyword">const</span> someData = [];
+
+<span class="hljs-comment">// 场景2: 闭包</span>
+<span class="hljs-comment">// 错误 - 闭包引用大对象</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">leak</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> largeData = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(<span class="hljs-number">1000000</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> largeData; <span class="hljs-comment">// largeData 不会被回收</span>
+  };
+}
+
+<span class="hljs-comment">// 正确</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">noLeak</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> largeData = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(<span class="hljs-number">1000000</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> largeData.<span class="hljs-property">length</span>; <span class="hljs-comment">// 只保留需要的属性</span>
+  };
+}
+
+<span class="hljs-comment">// 场景3: 事件监听器未移除</span>
+<span class="hljs-keyword">const</span> emitter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventEmitter</span>();
+
+<span class="hljs-comment">// 错误 - 重复添加监听器</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">addHandler</span>(<span class="hljs-params"></span>) {
+  emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;event&#x27;</span>, handler); <span class="hljs-comment">// 每次调用都会添加，导致内存泄漏</span>
+}
+
+<span class="hljs-comment">// 正确 - 移除后再添加</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">addHandlerFixed</span>(<span class="hljs-params"></span>) {
+  emitter.<span class="hljs-title function_">removeListener</span>(<span class="hljs-string">&#x27;event&#x27;</span>, handler); <span class="hljs-comment">// 先移除</span>
+  emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;event&#x27;</span>, handler); <span class="hljs-comment">// 再添加</span>
+}
+
+<span class="hljs-comment">// 场景4: 定时器未清理</span>
+<span class="hljs-comment">// 错误</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">startTimer</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 定时任务</span>
+  }, <span class="hljs-number">1000</span>);
+}
+
+<span class="hljs-comment">// 正确</span>
+<span class="hljs-keyword">const</span> timers = [];
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">startTimerFixed</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 定时任务</span>
+  }, <span class="hljs-number">1000</span>);
+  timers.<span class="hljs-title function_">push</span>(timer);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">stopAllTimers</span>(<span class="hljs-params"></span>) {
+  timers.<span class="hljs-title function_">forEach</span>(<span class="hljs-built_in">clearInterval</span>);
+  timers.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>;
+}
+</code></pre><h4 id="2.7.2-v8">2.7.2 V8 引擎优化技巧</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 优化对象结构 - 使用相同形状的对象</span>
+<span class="hljs-comment">// 不好 - 对象形状不一致</span>
+<span class="hljs-keyword">const</span> users1 = [
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Alice&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">25</span> },
+  { <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Bob&#x27;</span> }, <span class="hljs-comment">// 不同顺序</span>
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Charlie&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>, <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;NYC&#x27;</span> } <span class="hljs-comment">// 更多属性</span>
+];
+
+<span class="hljs-comment">// 好 - 对象形状一致</span>
+<span class="hljs-keyword">const</span> users2 = [
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Alice&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">25</span>, <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;&#x27;</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Bob&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;&#x27;</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Charlie&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">35</span>, <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;NYC&#x27;</span> }
+];
+
+<span class="hljs-comment">// 2. 避免数组中混合类型</span>
+<span class="hljs-comment">// 不好</span>
+<span class="hljs-keyword">const</span> mixed = [<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;two&#x27;</span>, { <span class="hljs-attr">three</span>: <span class="hljs-number">3</span> }];
+
+<span class="hljs-comment">// 好</span>
+<span class="hljs-keyword">const</span> numbers = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+<span class="hljs-keyword">const</span> strings = [<span class="hljs-string">&#x27;one&#x27;</span>, <span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-string">&#x27;three&#x27;</span>];
+
+<span class="hljs-comment">// 3. 使用构造函数创建对象</span>
+<span class="hljs-comment">// 好 - 使用构造函数</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">x, y</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">x</span> = x;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">y</span> = y;
+  }
+}
+
+<span class="hljs-comment">// 不好 - 使用对象字面量每次创建新结构</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createPoint</span>(<span class="hljs-params">x, y</span>) {
+  <span class="hljs-keyword">return</span> { x, y };
+}
+
+<span class="hljs-comment">// 4. 预分配数组大小</span>
+<span class="hljs-comment">// 好</span>
+<span class="hljs-keyword">const</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(<span class="hljs-number">1000</span>);
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) {
+  arr[i] = i;
+}
+</code></pre><h4 id="2.7.3-io">2.7.3 I/O 优化</h4>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>).<span class="hljs-property">promises</span>;
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>);
+
+<span class="hljs-comment">// 1. 使用流处理大文件</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">processLargeFile</span>(<span class="hljs-params">filePath</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> readStream = fs.<span class="hljs-title function_">createReadStream</span>(filePath, {
+      <span class="hljs-attr">highWaterMark</span>: <span class="hljs-number">64</span> * <span class="hljs-number">1024</span>
+    });
+
+    <span class="hljs-keyword">let</span> lineCount = <span class="hljs-number">0</span>;
+
+    readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+      <span class="hljs-comment">// 逐块处理</span>
+      <span class="hljs-keyword">const</span> lines = chunk.<span class="hljs-title function_">toString</span>().<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);
+      lineCount += lines.<span class="hljs-property">length</span>;
+    });
+
+    readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(lineCount));
+    readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject);
+  });
+}
+
+<span class="hljs-comment">// 2. 批量操作减少 I/O 次数</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">batchWrite</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> data = <span class="hljs-title function_">generateData</span>(<span class="hljs-number">10000</span>);
+
+  <span class="hljs-comment">// 不好 - 逐条写入</span>
+  <span class="hljs-comment">// for (const item of data) {</span>
+  <span class="hljs-comment">//   await fs.writeFile(`./data/${item.id}.json&#x27;, JSON.stringify(item));</span>
+  <span class="hljs-comment">// }</span>
+
+  <span class="hljs-comment">// 好 - 批量写入</span>
+  <span class="hljs-keyword">const</span> batch = data.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> ({
+    <span class="hljs-attr">path</span>: path.<span class="hljs-title function_">join</span>(__dirname, <span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-string">`<span class="hljs-subst">${item.id}</span>.json`</span>),
+    <span class="hljs-attr">content</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(item)
+  }));
+
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(
+    batch.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">b</span> =&gt;</span> fs.<span class="hljs-title function_">writeFile</span>(b.<span class="hljs-property">path</span>, b.<span class="hljs-property">content</span>))
+  );
+
+  <span class="hljs-comment">// 更好 - 写入单个大文件</span>
+  <span class="hljs-keyword">const</span> combined = data.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(item)).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);
+  <span class="hljs-keyword">await</span> fs.<span class="hljs-title function_">writeFile</span>(<span class="hljs-string">&#x27;./data/all.json&#x27;</span>, combined);
+}
+
+<span class="hljs-comment">// 3. 使用缓存减少重复 I/O</span>
+<span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">readWithCache</span>(<span class="hljs-params">filePath</span>) {
+  <span class="hljs-keyword">const</span> cached = cache.<span class="hljs-title function_">get</span>(filePath);
+  <span class="hljs-keyword">if</span> (cached) {
+    <span class="hljs-keyword">return</span> cached;
+  }
+
+  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> fs.<span class="hljs-title function_">readFile</span>(filePath, <span class="hljs-string">&#x27;utf8&#x27;</span>);
+  cache.<span class="hljs-title function_">set</span>(filePath, data);
+  <span class="hljs-keyword">return</span> data;
+}
+
+<span class="hljs-comment">// 4. 异步 I/O vs 同步 I/O</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ioComparison</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 同步 - 阻塞</span>
+  <span class="hljs-keyword">const</span> data1 = fs.<span class="hljs-title function_">readFileSync</span>(<span class="hljs-string">&#x27;./file.txt&#x27;</span>, <span class="hljs-string">&#x27;utf8&#x27;</span>);
+
+  <span class="hljs-comment">// 异步 - 非阻塞</span>
+  fs.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&#x27;./file.txt&#x27;</span>, <span class="hljs-string">&#x27;utf8&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">err, data2</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data2);
+  });
+
+  <span class="hljs-comment">// Promise 风格</span>
+  fs.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&#x27;./file.txt&#x27;</span>, <span class="hljs-string">&#x27;utf8&#x27;</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">data3</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data3));
+}
+</code></pre><h4 id="2.7.4">2.7.4 连接池与资源复用</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 1. HTTP 连接池</span>
+<span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;http&#x27;</span>);
+<span class="hljs-keyword">const</span> agent = <span class="hljs-keyword">new</span> http.<span class="hljs-title class_">Agent</span>({
+  <span class="hljs-attr">keepAlive</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">maxSockets</span>: <span class="hljs-number">10</span>,
+  <span class="hljs-attr">maxFreeSockets</span>: <span class="hljs-number">5</span>,
+  <span class="hljs-attr">timeout</span>: <span class="hljs-number">60000</span>
+});
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">makeRequest</span>(<span class="hljs-params">url</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> req = http.<span class="hljs-title function_">get</span>(url, { agent }, <span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> {
+      <span class="hljs-keyword">let</span> data = <span class="hljs-string">&#x27;&#x27;</span>;
+      res.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function"><span class="hljs-params">chunk</span> =&gt;</span> data += chunk);
+      res.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(data));
+    });
+    req.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject);
+  });
+}
+
+<span class="hljs-comment">// 2. 数据库连接池</span>
+<span class="hljs-keyword">const</span> { <span class="hljs-title class_">Pool</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;pg&#x27;</span>);
+
+<span class="hljs-keyword">const</span> pool = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Pool</span>({
+  <span class="hljs-attr">max</span>: <span class="hljs-number">20</span>, <span class="hljs-comment">// 最大连接数</span>
+  <span class="hljs-attr">idleTimeoutMillis</span>: <span class="hljs-number">30000</span>,
+  <span class="hljs-attr">connectionTimeoutMillis</span>: <span class="hljs-number">2000</span>
+});
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">queryWithPool</span>(<span class="hljs-params">text, params</span>) {
+  <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">await</span> pool.<span class="hljs-title function_">connect</span>();
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>(text, params);
+    <span class="hljs-keyword">return</span> result.<span class="hljs-property">rows</span>;
+  } <span class="hljs-keyword">finally</span> {
+    client.<span class="hljs-title function_">release</span>(); <span class="hljs-comment">// 释放连接回池中</span>
+  }
+}
+
+<span class="hljs-comment">// 3. Redis 连接池</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Redis</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;ioredis&#x27;</span>);
+
+<span class="hljs-keyword">const</span> redis = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Redis</span>({
+  <span class="hljs-attr">maxRetriesPerRequest</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">enableReadyCheck</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">lazyConnect</span>: <span class="hljs-literal">true</span>
+});
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">useRedis</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">await</span> redis.<span class="hljs-title function_">connect</span>();
+  <span class="hljs-comment">// 使用 Redis</span>
+}
+</code></pre><hr>
+<h3 id="2.8-node.js">2.8 Node.js 内存管理</h3>
+<p><strong>面试常问题目</strong>:
+理解 Node.js 的内存管理机制对于编写高性能应用和排查内存问题至关重要。Node.js 使用 V8 引擎的垃圾回收机制，但开发者仍需了解内存配置和常见内存问题。</p>
+<h4 id="2.8.1">2.8.1 堆内存配置</h4>
+<pre class="hljs"><code><span class="hljs-comment">// Node.js 堆内存配置</span>
+
+<span class="hljs-comment">// 1. 查看默认内存限制</span>
+<span class="hljs-comment">// node --max-old-space-size=4096 app.js  设置老年带为 4GB</span>
+
+<span class="hljs-comment">// 2. 内存统计 API</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">memoryUsage</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> used = process.<span class="hljs-title function_">memoryUsage</span>();
+
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;heapUsed:&#x27;</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(used.<span class="hljs-property">heapUsed</span> / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>), <span class="hljs-string">&#x27;MB&#x27;</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;heapTotal:&#x27;</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(used.<span class="hljs-property">heapTotal</span> / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>), <span class="hljs-string">&#x27;MB&#x27;</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;rss (Resident Set Size):&#x27;</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(used.<span class="hljs-property">rss</span> / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>), <span class="hljs-string">&#x27;MB&#x27;</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;external:&#x27;</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(used.<span class="hljs-property">external</span> / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>), <span class="hljs-string">&#x27;MB&#x27;</span>);
+
+  <span class="hljs-comment">// rss: 进程占用的总内存</span>
+  <span class="hljs-comment">// heapTotal: V8 堆内存总量</span>
+  <span class="hljs-comment">// heapUsed: 已使用的堆内存</span>
+  <span class="hljs-comment">// external: V8 管理的 C++ 对象内存</span>
+};
+
+<span class="hljs-comment">// 3. 堆内存各区域说明</span>
+<span class="hljs-comment">// 新生代 (New Space): 1-8MB，分为 from-space 和 to-space</span>
+<span class="hljs-comment">// 老年带 (Old Space): 存放长时间存活的对象</span>
+<span class="hljs-comment">// 大对象区 (Large Object Space): 存放大于老年带阈值的大对象</span>
+<span class="hljs-comment">// 代码区 (Code Space): 存放编译后的代码</span>
+<span class="hljs-comment">// 属性区 (Property Cell Space): 存放属性槽</span>
+<span class="hljs-comment">// 调试区 (Debugger Space): 调试相关</span>
+</code></pre><h4 id="2.8.2">2.8.2 垃圾回收机制</h4>
+<pre class="hljs"><code><span class="hljs-comment">// V8 垃圾回收机制</span>
+
+<span class="hljs-comment">// 1. Scavenge (新生代垃圾回收)</span>
+<span class="hljs-comment">// 适用于生命周期短的对象，使用 from-space 和 to-space 复制</span>
+<span class="hljs-comment">// 效率高，但内存利用率只有 50%</span>
+
+<span class="hljs-comment">// 2. Mark-Sweep / Mark-Compact (老年带垃圾回收)</span>
+<span class="hljs-comment">// Mark-Sweep: 标记清除，回收死亡对象</span>
+<span class="hljs-comment">// Mark-Compact: 标记整理，整理碎片化内存</span>
+
+<span class="hljs-comment">// 3. 增量标记 (Incremental Marking)</span>
+<span class="hljs-comment">// 将 GC 分为多个小步骤，避免长时间停顿</span>
+
+<span class="hljs-comment">// 4. 垃圾回收触发时机</span>
+<span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> used = process.<span class="hljs-title function_">memoryUsage</span>();
+  <span class="hljs-keyword">const</span> heapUsedMB = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(used.<span class="hljs-property">heapUsed</span> / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>);
+
+  <span class="hljs-comment">// 如果老年带使用超过 70%，建议触发 GC 或排查内存</span>
+  <span class="hljs-keyword">if</span> (heapUsedMB &gt; <span class="hljs-number">1024</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&#x27;Memory usage high:&#x27;</span>, heapUsedMB, <span class="hljs-string">&#x27;MB&#x27;</span>);
+  }
+}, <span class="hljs-number">5000</span>);
+
+<span class="hljs-comment">// 5. 手动触发 GC (仅用于调试)</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">global</span>.<span class="hljs-property">gc</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Running GC...&#x27;</span>);
+  <span class="hljs-variable language_">global</span>.<span class="hljs-title function_">gc</span>();
+}
+
+<span class="hljs-comment">// 启动时启用 GC 调试</span>
+<span class="hljs-comment">// node --expose-gc --inspect app.js</span>
+</code></pre><h4 id="2.8.3">2.8.3 内存泄漏排查</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 内存泄漏排查方法</span>
+
+<span class="hljs-comment">// 1. 使用 --inspect 进行内存分析</span>
+<span class="hljs-comment">// node --inspect app.js</span>
+<span class="hljs-comment">// 打开 Chrome DevTools -&gt; Memory -&gt; Heap Snapshot</span>
+
+<span class="hljs-comment">// 2. 定位内存泄漏代码</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">leakDetector</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> used = process.<span class="hljs-title function_">memoryUsage</span>();
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">heapUsed</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(used.<span class="hljs-property">heapUsed</span> / <span class="hljs-number">1024</span> / <span class="hljs-number">1024</span>),
+    <span class="hljs-comment">// 对比不同时刻的 heapUsed，持续增长说明有内存泄漏</span>
+  };
+};
+
+<span class="hljs-comment">// 3. 常见内存泄漏场景</span>
+
+<span class="hljs-comment">// 场景1: 全局变量泄漏</span>
+<span class="hljs-comment">// 错误</span>
+<span class="hljs-variable language_">global</span>.<span class="hljs-property">cacheData</span> = [];
+<span class="hljs-variable language_">global</span>.<span class="hljs-property">cacheData</span>.<span class="hljs-title function_">push</span>(largeObject);
+
+<span class="hljs-comment">// 解决: 使用 WeakMap 或及时清理</span>
+<span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>();
+
+<span class="hljs-comment">// 场景2: 闭包引用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createClosure</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> bigData = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(<span class="hljs-number">1000000</span>);
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">getData</span>: <span class="hljs-function">() =&gt;</span> bigData.<span class="hljs-property">length</span>, <span class="hljs-comment">// 错误: 整个 bigData 被保留</span>
+    <span class="hljs-attr">getSize</span>: <span class="hljs-function">() =&gt;</span> bigData.<span class="hljs-property">length</span>  <span class="hljs-comment">// 正确: 只保留需要的数据</span>
+  };
+}
+
+<span class="hljs-comment">// 场景3: 事件监听器未移除</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EventManager</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">listeners</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  }
+
+  <span class="hljs-title function_">subscribe</span>(<span class="hljs-params">event, handler</span>) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.<span class="hljs-property">listeners</span>.<span class="hljs-title function_">has</span>(event)) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">listeners</span>.<span class="hljs-title function_">set</span>(event, []);
+    }
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">listeners</span>.<span class="hljs-title function_">get</span>(event).<span class="hljs-title function_">push</span>(handler);
+  }
+
+  <span class="hljs-title function_">unsubscribe</span>(<span class="hljs-params">event, handler</span>) {
+    <span class="hljs-keyword">const</span> handlers = <span class="hljs-variable language_">this</span>.<span class="hljs-property">listeners</span>.<span class="hljs-title function_">get</span>(event);
+    <span class="hljs-keyword">if</span> (handlers) {
+      <span class="hljs-keyword">const</span> index = handlers.<span class="hljs-title function_">indexOf</span>(handler);
+      <span class="hljs-keyword">if</span> (index &gt; -<span class="hljs-number">1</span>) handlers.<span class="hljs-title function_">splice</span>(index, <span class="hljs-number">1</span>);
+    }
+  }
+
+  <span class="hljs-comment">// 内存泄漏: 组件销毁时未取消订阅</span>
+}
+
+<span class="hljs-comment">// 正确做法</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SafeEventManager</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">EventManager</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">super</span>();
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cleanupCallbacks</span> = [];
+  }
+
+  <span class="hljs-title function_">subscribeWithCleanup</span>(<span class="hljs-params">event, handler</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">subscribe</span>(event, handler);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cleanupCallbacks</span>.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">unsubscribe</span>(event, handler));
+  }
+
+  <span class="hljs-title function_">destroy</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cleanupCallbacks</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">cb</span> =&gt;</span> <span class="hljs-title function_">cb</span>());
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cleanupCallbacks</span> = [];
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">listeners</span>.<span class="hljs-title function_">clear</span>();
+  }
+}
+
+<span class="hljs-comment">// 场景4: 定时器未清理</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TimerLeak</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">timers</span> = [];
+  }
+
+  <span class="hljs-title function_">startPolling</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 轮询任务</span>
+    }, <span class="hljs-number">1000</span>);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">timers</span>.<span class="hljs-title function_">push</span>(timer);
+  }
+
+  <span class="hljs-title function_">stopPolling</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">timers</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-built_in">clearInterval</span>);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">timers</span> = [];
+  }
+}
+
+<span class="hljs-comment">// 场景5: 模块级缓存无限增长</span>
+<span class="hljs-comment">// 错误</span>
+<span class="hljs-keyword">const</span> cache = {};
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getData</span>(<span class="hljs-params">id</span>) {
+  <span class="hljs-keyword">if</span> (!cache[id]) {
+    cache[id] = <span class="hljs-title function_">fetchFromDB</span>(id);
+  }
+  <span class="hljs-keyword">return</span> cache[id];
+}
+
+<span class="hljs-comment">// 解决: 使用 LRU 缓存或设置过期时间</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">LRU</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;lru-cache&#x27;</span>);
+<span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title function_">LRU</span>({
+  <span class="hljs-attr">max</span>: <span class="hljs-number">1000</span>,
+  <span class="hljs-attr">ttl</span>: <span class="hljs-number">1000</span> * <span class="hljs-number">60</span> * <span class="hljs-number">10</span> <span class="hljs-comment">// 10 分钟过期</span>
+});
+</code></pre><h4 id="2.8.4">2.8.4 内存优化最佳实践</h4>
+<pre class="hljs"><code><span class="hljs-comment">// 内存优化技巧</span>
+
+<span class="hljs-comment">// 1. 对象池模式 - 复用对象减少 GC 压力</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ObjectPool</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">factory, maxSize = <span class="hljs-number">100</span></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span> = [];
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">factory</span> = factory;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">maxSize</span> = maxSize;
+  }
+
+  <span class="hljs-title function_">acquire</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">pop</span>() || <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">factory</span>();
+  }
+
+  <span class="hljs-title function_">release</span>(<span class="hljs-params">obj</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-property">length</span> &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">maxSize</span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">pool</span>.<span class="hljs-title function_">push</span>(obj);
+    }
+  }
+}
+
+<span class="hljs-comment">// 示例: 复用 Buffer</span>
+<span class="hljs-keyword">const</span> bufferPool = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectPool</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">alloc</span>(<span class="hljs-number">8192</span>));
+<span class="hljs-keyword">const</span> buf = bufferPool.<span class="hljs-title function_">acquire</span>();
+<span class="hljs-comment">// 使用 buffer</span>
+bufferPool.<span class="hljs-title function_">release</span>(buf);
+
+<span class="hljs-comment">// 2. 流式处理 - 避免一次性加载大文件</span>
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);
+<span class="hljs-keyword">const</span> readStream = fs.<span class="hljs-title function_">createReadStream</span>(<span class="hljs-string">&#x27;large-file.txt&#x27;</span>);
+<span class="hljs-keyword">const</span> chunks = [];
+
+readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">chunk</span>) =&gt;</span> {
+  chunks.<span class="hljs-title function_">push</span>(chunk);
+  <span class="hljs-comment">// 处理每个 chunk，而不是等待全部加载</span>
+});
+
+readStream.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Buffer</span>.<span class="hljs-title function_">concat</span>(chunks);
+});
+
+<span class="hljs-comment">// 3. 及时释放大对象引用</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">processLargeData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> largeData = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchLargeData</span>();
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">transform</span>(largeData);
+    <span class="hljs-keyword">return</span> result;
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-comment">// 显式释放</span>
+    largeData.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>;
+  }
+}
+
+<span class="hljs-comment">// 4. 使用 WeakRef 和 FinalizationRegistry</span>
+<span class="hljs-comment">// (Node.js 14+)</span>
+<span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FinalizationRegistry</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Object with value&#x27;</span>, value, <span class="hljs-string">&#x27;is being garbage collected&#x27;</span>);
+});
+
+<span class="hljs-keyword">let</span> obj = { <span class="hljs-attr">data</span>: <span class="hljs-string">&#x27;important&#x27;</span> };
+registry.<span class="hljs-title function_">register</span>(obj, obj.<span class="hljs-property">data</span>);
+obj = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 不再持有引用，对象可被回收</span>
+</code></pre><hr>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="2-2-Vue3核心特性.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第2卷 Vue框架</span>
+          </a>
+              <a href="2-4-Canvas与SVG.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第2卷 可视化与WebGL</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

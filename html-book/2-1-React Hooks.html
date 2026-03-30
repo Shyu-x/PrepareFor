@@ -1,0 +1,2467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2卷-框架生态 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#1-react" class="toc-link "><span>第1章 React深入</span></a></li><li class="toc-item"><a href="#2.1-reacthooks" class="toc-link "><span>2.1 ReactHooks核心原理</span></a></li><li class="toc-item"><a href="#2.2-useeffect" class="toc-link "><span>2.2 useEffect深入理解</span></a></li><li class="toc-item"><a href="#2.3-usememousecallback" class="toc-link "><span>2.3 useMemo与useCallback</span></a></li><li class="toc-item"><a href="#2.4-useref" class="toc-link "><span>2.4 useRef深入理解</span></a></li><li class="toc-item"><a href="#2.5-hook" class="toc-link "><span>2.5 自定义Hook</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第2卷 框架生态 / 第1章 React深入</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第2卷 框架生态</span>
+            </div>
+            <h1 class="article-title">第2卷-框架生态</h1>
+          </header>
+
+          <div class="content"><hr>
+<h2 id="1-react">第1章 React深入</h2>
+<hr>
+<h3 id="2.1-reacthooks">2.1 ReactHooks核心原理</h3>
+<h4 id="2.1.1-usestate">2.1.1 useState深入理解</h4>
+<h4 id="2.1.1-usestate">2.1.1 useState基本用法</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// useState 基础用法</span>
+<span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Count: {count}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(count + 1)}&gt;Increment<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 函数式更新（当新值依赖旧值时）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">CounterFunctional</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-comment">// 正确：使用函数式更新</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">increment</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">prevCount</span> =&gt;</span> prevCount + <span class="hljs-number">1</span>);
+  };
+
+  <span class="hljs-comment">// 错误：闭包陷阱</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">incrementWrong</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-comment">// 这里的 count 永远是 0</span>
+    <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>);
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Count: {count}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increment}</span>&gt;</span>Increment<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 惰性初始化（复杂计算时使用）</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ExpensiveComponent</span>(<span class="hljs-params">{ items }</span>) {
+  <span class="hljs-comment">// 错误：每次渲染都会执行 computeExpensiveValue</span>
+  <span class="hljs-keyword">const</span> [sortedItems, setSortedItems] = <span class="hljs-title function_">useState</span>(
+    items.<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">name</span>.<span class="hljs-title function_">localeCompare</span>(b.<span class="hljs-property">name</span>))
+  );
+
+  <span class="hljs-comment">// 正确：只在首次渲染时执行</span>
+  <span class="hljs-keyword">const</span> [sortedItemsLazy, setSortedItemsLazy] = <span class="hljs-title function_">useState</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> items.<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">name</span>.<span class="hljs-title function_">localeCompare</span>(b.<span class="hljs-property">name</span>));
+  });
+
+  <span class="hljs-comment">// 更好的方式：使用 useMemo</span>
+  <span class="hljs-keyword">const</span> sortedItemsMemo = <span class="hljs-title function_">useMemo</span>(
+    <span class="hljs-function">() =&gt;</span> items.<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">name</span>.<span class="hljs-title function_">localeCompare</span>(b.<span class="hljs-property">name</span>)),
+    [items]
+  );
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{/* ... */}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre><h4 id="2.1.2-usestate">2.1.2 useState闭包问题详解</h4>
+<p><strong>参考答案：</strong></p>
+<p>闭包问题是 React Hooks 中最常见的问题之一。</p>
+<pre class="hljs"><code><span class="hljs-comment">// 问题 1：setInterval 中的闭包陷阱</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">CounterWithInterval</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> id = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 问题：这里的 count 永远是 0</span>
+      <span class="hljs-comment">// 因为 useEffect 只在首次渲染时执行一次</span>
+      <span class="hljs-comment">// 回调函数形成了闭包，捕获了当时的 count 值</span>
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Count:&#x27;</span>, count);
+    }, <span class="hljs-number">1000</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearInterval</span>(id);
+  }, []); <span class="hljs-comment">// 空依赖数组</span>
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 解决方案 1：使用函数式更新</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">CounterWithIntervalFixed1</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> id = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 使用函数式更新，获取最新的 count 值</span>
+      <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">prevCount</span> =&gt;</span> prevCount + <span class="hljs-number">1</span>);
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Count:&#x27;</span>, prevCount); <span class="hljs-comment">// 注意：这里还是闭包中的值</span>
+    }, <span class="hljs-number">1000</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearInterval</span>(id);
+  }, []);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 解决方案 2：使用 useRef 存储最新值</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">CounterWithIntervalFixed2</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> countRef = <span class="hljs-title function_">useRef</span>(count);
+
+  <span class="hljs-comment">// 保持 ref 和 state 同步</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    countRef.<span class="hljs-property">current</span> = count;
+  }, [count]);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> id = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 通过 ref 获取最新值</span>
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Count:&#x27;</span>, countRef.<span class="hljs-property">current</span>);
+      <span class="hljs-title function_">setCount</span>(countRef.<span class="hljs-property">current</span> + <span class="hljs-number">1</span>);
+    }, <span class="hljs-number">1000</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearInterval</span>(id);
+  }, []);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 问题 2：事件处理函数中的闭包</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">FormHandler</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [value, setValue] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-comment">// 问题：handleClick 中只能看到首次渲染时的 value</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Value:&#x27;</span>, value); <span class="hljs-comment">// 永远是空字符串</span>
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{value}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> setValue(e.target.value)} /&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span>&gt;</span>Log Value<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 解决方案：使用 useRef 或将依赖加入依赖数组</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">FormHandlerFixed</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [value, setValue] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> valueRef = <span class="hljs-title function_">useRef</span>(value);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    valueRef.<span class="hljs-property">current</span> = value;
+  }, [value]);
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Value:&#x27;</span>, valueRef.<span class="hljs-property">current</span>);
+  };
+
+  <span class="hljs-comment">// 或者使用 useCallback 配合依赖数组</span>
+  <span class="hljs-keyword">const</span> handleClickWithDeps = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Value:&#x27;</span>, value);
+  }, [value]); <span class="hljs-comment">// value 变化时重新创建函数</span>
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{value}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> setValue(e.target.value)} /&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClickWithDeps}</span>&gt;</span>Log Value<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 问题 3：异步操作中的闭包</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">DataFetcher</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [data, setData] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [id, setId] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">1</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/data/<span class="hljs-subst">${id}</span>`</span>)
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> res.<span class="hljs-title function_">json</span>())
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+        <span class="hljs-comment">// 问题：这里的 id 可能是旧值</span>
+        <span class="hljs-comment">// 因为 useEffect 在 id 变化时重新执行</span>
+        <span class="hljs-comment">// 但异步回调可能在新的 useEffect 执行后才完成</span>
+        <span class="hljs-title function_">setData</span>(result);
+      });
+  }, [id]);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{data &amp;&amp; data.name}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 解决方案：使用 useRef 存储最新的 id</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">DataFetcherFixed</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [data, setData] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [id, setId] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">1</span>);
+  <span class="hljs-keyword">const</span> idRef = <span class="hljs-title function_">useRef</span>(id);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    idRef.<span class="hljs-property">current</span> = id;
+  }, [id]);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">let</span> cancelled = <span class="hljs-literal">false</span>;
+
+    <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/data/<span class="hljs-subst">${id}</span>`</span>)
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> res.<span class="hljs-title function_">json</span>())
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+        <span class="hljs-comment">// 检查是否已经被取消</span>
+        <span class="hljs-keyword">if</span> (!cancelled) {
+          <span class="hljs-comment">// 使用 ref 获取最新 id，确保数据匹配</span>
+          <span class="hljs-keyword">if</span> (result.<span class="hljs-property">requestedId</span> === idRef.<span class="hljs-property">current</span>) {
+            <span class="hljs-title function_">setData</span>(result);
+          }
+        }
+      });
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      cancelled = <span class="hljs-literal">true</span>;
+    };
+  }, [id]);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{data &amp;&amp; data.name}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre><h4 id="2.1.3-usestate">2.1.3 useState的实现原理</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// useState 的简化实现</span>
+<span class="hljs-keyword">let</span> hooks = [];
+<span class="hljs-keyword">let</span> hookIndex = <span class="hljs-number">0</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useState</span>(<span class="hljs-params">initialValue</span>) {
+  <span class="hljs-keyword">const</span> currentIndex = hookIndex;
+  hooks[hookIndex] = hooks[hookIndex] || initialValue;
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">setState</span>(<span class="hljs-params">newValue</span>) {
+    <span class="hljs-comment">// 判断是函数还是值</span>
+    <span class="hljs-keyword">const</span> valueToSet = <span class="hljs-keyword">typeof</span> newValue === <span class="hljs-string">&#x27;function&#x27;</span>
+      ? <span class="hljs-title function_">newValue</span>(hooks[currentIndex])
+      : newValue;
+
+    <span class="hljs-comment">// 更新值</span>
+    hooks[currentIndex] = valueToSet;
+
+    <span class="hljs-comment">// 触发重新渲染</span>
+    <span class="hljs-title function_">scheduleReRender</span>();
+  }
+
+  hookIndex++;
+  <span class="hljs-keyword">return</span> [hooks[currentIndex], setState];
+}
+
+<span class="hljs-comment">// 实际 React 源码中的实现更复杂</span>
+<span class="hljs-comment">// 考虑到了并发模式、批量更新等场景</span>
+</code></pre><hr>
+<h3 id="2.2-useeffect">2.2 useEffect深入理解</h3>
+<h4 id="2.2.1-useeffect">2.2.1 useEffect执行时机</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// useEffect vs useLayoutEffect 执行时机对比</span>
+<span class="hljs-keyword">import</span> { useEffect, useLayoutEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">EffectTiming</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [value, setValue] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-comment">// 1. 组件渲染 - 同步执行组件函数</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;1. Render:&#x27;</span>, value);
+
+  <span class="hljs-comment">// 2. DOM 更新完成 - 浏览器还未渲染</span>
+  <span class="hljs-title function_">useLayoutEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;2. useLayoutEffect - DOM 更新后，渲染前&#x27;</span>);
+    <span class="hljs-comment">// 这里可以读取 DOM，进行测量等操作</span>
+    <span class="hljs-comment">// 不会导致闪烁</span>
+  }, [value]);
+
+  <span class="hljs-comment">// 3. 浏览器渲染 (Paint)</span>
+  <span class="hljs-comment">// 此时用户看到界面</span>
+
+  <span class="hljs-comment">// 4. useEffect 执行</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;3. useEffect - 渲染完成后&#x27;</span>);
+    <span class="hljs-comment">// 适合：数据获取、订阅、日志上报等</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Cleanup - 组件卸载或依赖变化前&#x27;</span>);
+    };
+  }, [value]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setValue(v =&gt; v + 1)}&gt;
+      Count: {value}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 实际执行顺序：</span>
+<span class="hljs-comment">// 1. Render: 0</span>
+<span class="hljs-comment">// 2. 浏览器更新 DOM</span>
+<span class="hljs-comment">// 3. useLayoutEffect - DOM 更新后，渲染前</span>
+<span class="hljs-comment">// 4. 浏览器渲染 (Paint)</span>
+<span class="hljs-comment">// 5. useEffect - 渲染完成后</span>
+<span class="hljs-comment">// 6. Cleanup - 依赖变化前（如果依赖变化）</span>
+<span class="hljs-comment">// 7. 下一个渲染周期...</span>
+</code></pre><h4 id="2.2.2-useeffect">2.2.2 useEffect依赖数组详解</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 依赖数组的各种情况</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">DependencyArray</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-comment">// 情况 1：无依赖数组 - 每次渲染都执行</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Every render&#x27;</span>);
+  });
+
+  <span class="hljs-comment">// 情况 2：空依赖数组 - 只在挂载时执行一次</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Mount only&#x27;</span>);
+
+    <span class="hljs-comment">// 适合：订阅、计时器、一次性初始化</span>
+    <span class="hljs-keyword">const</span> subscription = someAPI.<span class="hljs-title function_">subscribe</span>();
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 清理函数：组件卸载时执行</span>
+      subscription.<span class="hljs-title function_">unsubscribe</span>();
+    };
+  }, []);
+
+  <span class="hljs-comment">// 情况 3：指定依赖 - 依赖变化时执行</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Count changed:&#x27;</span>, count);
+
+    <span class="hljs-comment">// 适合：基于 props 或 state 的副作用</span>
+  }, [count]); <span class="hljs-comment">// count 变化时执行</span>
+
+  <span class="hljs-comment">// 情况 4：多个依赖</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Count or name changed:&#x27;</span>, count, name);
+  }, [count, name]);
+
+  <span class="hljs-comment">// 情况 5：函数作为依赖</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;click&#x27;</span>);
+  };
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;handleClick changed&#x27;</span>);
+  }, [handleClick]); <span class="hljs-comment">// handleClick 引用变化时执行</span>
+
+  <span class="hljs-comment">// 优化：使用 useCallback 稳定函数引用</span>
+  <span class="hljs-keyword">const</span> handleClickStable = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;click&#x27;</span>);
+  }, []);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;handleClickStable changed&#x27;</span>);
+  }, [handleClickStable]); <span class="hljs-comment">// 依赖稳定</span>
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span>&gt;</span>Click<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre><h4 id="2.2.3-useeffect">2.2.3 useEffect常见陷阱</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 陷阱 1：忘记依赖数组导致闭包陷阱</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">WrongDependency</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 问题：没有依赖数组，每次渲染都执行</span>
+    <span class="hljs-comment">// 但这里可能期望只在挂载时执行一次</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Effect ran&#x27;</span>);
+  });
+
+  <span class="hljs-comment">// 问题 2：依赖数组错误导致无限循环</span>
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">WrongDependency2</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> [obj, setObj] = <span class="hljs-title function_">useState</span>({ <span class="hljs-attr">value</span>: <span class="hljs-number">0</span> });
+
+    <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 问题：每次渲染都创建新对象</span>
+      <span class="hljs-comment">// 导致依赖变化，触发无限循环</span>
+      <span class="hljs-title function_">setObj</span>({ <span class="hljs-attr">value</span>: obj.<span class="hljs-property">value</span> + <span class="hljs-number">1</span> });
+    }, [obj]); <span class="hljs-comment">// obj 作为依赖，每次都变</span>
+
+    <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{obj.value}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+  }
+
+  <span class="hljs-comment">// 正确做法</span>
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">CorrectDependency</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> [obj, setObj] = <span class="hljs-title function_">useState</span>({ <span class="hljs-attr">value</span>: <span class="hljs-number">0</span> });
+
+    <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// 使用函数式更新，不依赖当前 state</span>
+      <span class="hljs-title function_">setObj</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =&gt;</span> ({ <span class="hljs-attr">value</span>: prev.<span class="hljs-property">value</span> + <span class="hljs-number">1</span> }));
+    }, []); <span class="hljs-comment">// 空依赖，运行一次</span>
+
+    <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{obj.value}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+  }
+
+  <span class="hljs-comment">// 陷阱 3：异步 useEffect</span>
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">AsyncEffect</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> [data, setData] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+
+    <span class="hljs-title function_">useEffect</span>(<span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-comment">// 问题：async 函数会返回 Promise</span>
+      <span class="hljs-comment">// useEffect 不支持返回 Promise</span>
+      <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url);
+      <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+      <span class="hljs-title function_">setData</span>(json);
+    }, [url]);
+
+    <span class="hljs-comment">// 正确做法</span>
+    <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">let</span> cancelled = <span class="hljs-literal">false</span>;
+
+      <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url);
+        <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+        <span class="hljs-keyword">if</span> (!cancelled) {
+          <span class="hljs-title function_">setData</span>(json);
+        }
+      }
+
+      <span class="hljs-title function_">fetchData</span>();
+
+      <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+        cancelled = <span class="hljs-literal">true</span>;
+      };
+    }, [url]);
+
+    <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{data}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+  }
+
+  <span class="hljs-comment">// 陷阱 4：清理函数时机问题</span>
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">CleanupTiming</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+    <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Effect:&#x27;</span>, count);
+
+      <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Cleanup:&#x27;</span>, count);
+      };
+    }, [count]);
+
+    <span class="hljs-keyword">return</span> (
+      <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(c =&gt; c + 1)}&gt;
+        {count}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+    );
+  }
+  <span class="hljs-comment">// 执行顺序：</span>
+  <span class="hljs-comment">// 1. 初始渲染 count=0: Effect: 0</span>
+  <span class="hljs-comment">// 2. 点击后 count=1: Cleanup: 0 -&gt; Effect: 1</span>
+  <span class="hljs-comment">// cleanup 函数使用的是上一次渲染的 count 值！</span>
+}
+</code></pre><hr>
+<h3 id="2.3-usememousecallback">2.3 useMemo与useCallback</h3>
+<h4 id="2.3.1-usememo">2.3.1 useMemo用法详解</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// useMemo 的基本用法</span>
+<span class="hljs-keyword">import</span> { useMemo } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ExpensiveCalculation</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [a, setA] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">1</span>);
+  <span class="hljs-keyword">const</span> [b, setB] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">2</span>);
+
+  <span class="hljs-comment">// 基本用法</span>
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Computing...&#x27;</span>);
+    <span class="hljs-comment">// 模拟昂贵计算</span>
+    <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++) {
+      sum += <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sqrt</span>(i);
+    }
+    <span class="hljs-keyword">return</span> a + b + sum % <span class="hljs-number">1000</span>;
+  }, [a, b]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Result: {result}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setA(a + 1)}&gt;A: {a}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setB(b + 1)}&gt;B: {b}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 场景 1：避免子组件不必要的重渲染</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Parent</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;John&#x27;</span>);
+
+  <span class="hljs-comment">// data 变化时才重新计算</span>
+  <span class="hljs-keyword">const</span> processedData = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">items</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>],
+      <span class="hljs-attr">sorted</span>: [<span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>]
+    };
+  }, []);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(c =&gt; c + 1)}&gt;
+        Count: {count}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ExpensiveChild</span>
+        <span class="hljs-attr">name</span>=<span class="hljs-string">{name}</span>
+        <span class="hljs-attr">data</span>=<span class="hljs-string">{processedData}</span>
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">ExpensiveChild</span> = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">memo</span>(<span class="hljs-function">(<span class="hljs-params">{ name, data }</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Child rendered&#x27;</span>);
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{name}: {data.items.join(&#x27;,&#x27;)}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+});
+
+<span class="hljs-comment">// 场景 2：配合 useEffect 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">WithUseEffect</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [data, setData] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [filter, setFilter] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-keyword">const</span> filteredData = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span> [];
+    <span class="hljs-keyword">return</span> data.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span>
+      item.<span class="hljs-property">name</span>.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(filter.<span class="hljs-title function_">toLowerCase</span>())
+    );
+  }, [data, filter]);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Filtered data changed:&#x27;</span>, filteredData);
+  }, [filteredData]);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{filteredData.length} items<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 场景 3：复杂对象比较</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ObjectComparison</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [config, setConfig] = <span class="hljs-title function_">useState</span>({
+    <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;dark&#x27;</span>,
+    <span class="hljs-attr">language</span>: <span class="hljs-string">&#x27;en&#x27;</span>
+  });
+
+  <span class="hljs-comment">// 错误：每次渲染都创建新对象</span>
+  <span class="hljs-comment">// const value = computeSomething(config);</span>
+
+  <span class="hljs-comment">// 正确：使用 useMemo</span>
+  <span class="hljs-keyword">const</span> value = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">computeSomething</span>(config);
+  }, [config]);
+
+  <span class="hljs-comment">// 或者拆分状态</span>
+  <span class="hljs-keyword">const</span> [theme, setTheme] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;dark&#x27;</span>);
+  <span class="hljs-keyword">const</span> [language, setLanguage] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;en&#x27;</span>);
+  <span class="hljs-keyword">const</span> valueSplit = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">computeSomething</span>({ theme, language });
+  }, [theme, language]);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{value}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre><h4 id="2.3.2-usecallback">2.3.2 useCallback用法详解</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// useCallback 的基本用法</span>
+<span class="hljs-keyword">import</span> { useCallback } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">CallbackExample</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-comment">// 基本用法 - 缓存函数引用</span>
+  <span class="hljs-keyword">const</span> handleClick = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Clicked:&#x27;</span>, count);
+  }, [count]);
+
+  <span class="hljs-comment">// useCallback(fn, deps) 等价于 useMemo(() =&gt; fn, deps)</span>
+  <span class="hljs-keyword">const</span> handleClickEquivalent = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Clicked:&#x27;</span>, count);
+    };
+  }, [count]);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span>&gt;</span>Click<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 场景 1：配合 React.memo 避免子组件重渲染</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Parent</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [counter, setCounter] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;John&#x27;</span>);
+
+  <span class="hljs-comment">// 每次 counter 变化都创建新函数</span>
+  <span class="hljs-comment">// 导致 Child 组件不必要地重渲染</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Clicked&#x27;</span>);
+  };
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCounter(c =&gt; c + 1)}&gt;
+        Counter: {counter}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Child</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span> <span class="hljs-attr">name</span>=<span class="hljs-string">{name}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 解决方案：使用 useCallback</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ParentFixed</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [counter, setCounter] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;John&#x27;</span>);
+
+  <span class="hljs-comment">// 只有 name 变化时才创建新函数</span>
+  <span class="hljs-keyword">const</span> handleClick = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Clicked&#x27;</span>);
+  }, [name]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCounter(c =&gt; c + 1)}&gt;
+        Counter: {counter}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Child</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span> <span class="hljs-attr">name</span>=<span class="hljs-string">{name}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Child</span> = <span class="hljs-title class_">React</span>.<span class="hljs-title function_">memo</span>(<span class="hljs-function">(<span class="hljs-params">{ onClick, name }</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Child rendered&#x27;</span>);
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onClick}</span>&gt;</span>{name}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+});
+
+<span class="hljs-comment">// 场景 2：useRef 配合 useCallback</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">UseRefWithCallback</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> inputRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+
+  <span class="hljs-comment">// 每次渲染都返回同一个函数</span>
+  <span class="hljs-keyword">const</span> focusInput = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    inputRef.<span class="hljs-property">current</span>?.<span class="hljs-title function_">focus</span>();
+  }, []);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{inputRef}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{focusInput}</span>&gt;</span>Focus<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 场景 3：事件处理函数防抖</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">DebouncedSearch</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-keyword">const</span> handleSearch = <span class="hljs-title function_">useCallback</span>(
+    <span class="hljs-title function_">debounce</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Searching:&#x27;</span>, value);
+      <span class="hljs-comment">// 执行搜索逻辑</span>
+    }, <span class="hljs-number">300</span>),
+    []
+  );
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+      <span class="hljs-attr">value</span>=<span class="hljs-string">{query}</span>
+      <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> {
+        setQuery(e.target.value);
+        handleSearch(e.target.value);
+      }}
+    /&gt;</span>
+  );
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">debounce</span>(<span class="hljs-params">fn, delay</span>) {
+  <span class="hljs-keyword">let</span> timeoutId;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) {
+    <span class="hljs-built_in">clearTimeout</span>(timeoutId);
+    timeoutId = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args), delay);
+  };
+}
+</code></pre><h4 id="2.3.3-usememousecallback">2.3.3 useMemo与useCallback的区别</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// useMemo vs useCallback 区别</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">MemoVsCallback</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [value, setValue] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-comment">// useMemo: 缓存计算结果</span>
+  <span class="hljs-keyword">const</span> memoizedValue = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">computeExpensiveValue</span>(value);
+  }, [value]);
+
+  <span class="hljs-comment">// useCallback: 缓存函数引用</span>
+  <span class="hljs-keyword">const</span> memoizedCallback = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">doSomething</span>(value);
+  }, [value]);
+
+  <span class="hljs-comment">// 实际上 useCallback 等价于：</span>
+  <span class="hljs-keyword">const</span> memoizedCallbackEquivalent = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">doSomething</span>(value);
+  }, [value]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Value: {memoizedValue}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{memoizedCallback}</span>&gt;</span>Click<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 使用场景对比</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">UseCaseComparison</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [items, setItems] = <span class="hljs-title function_">useState</span>([]);
+
+  <span class="hljs-comment">// useMemo 适用于：</span>
+  <span class="hljs-comment">// 1. 复杂计算</span>
+  <span class="hljs-keyword">const</span> sortedItems = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> [...items].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">name</span>.<span class="hljs-title function_">localeCompare</span>(b.<span class="hljs-property">name</span>));
+  }, [items]);
+
+  <span class="hljs-comment">// 2. 创建复杂对象</span>
+  <span class="hljs-keyword">const</span> config = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> ({
+    <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;dark&#x27;</span>,
+    <span class="hljs-attr">language</span>: <span class="hljs-string">&#x27;en&#x27;</span>,
+    <span class="hljs-attr">items</span>: items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> ({ ...i, <span class="hljs-attr">processed</span>: <span class="hljs-literal">true</span> }))
+  }), [items]);
+
+  <span class="hljs-comment">// 3. 派生状态</span>
+  <span class="hljs-keyword">const</span> total = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> items.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, item</span>) =&gt;</span> sum + item.<span class="hljs-property">price</span>, <span class="hljs-number">0</span>);
+  }, [items]);
+
+  <span class="hljs-comment">// useCallback 适用于：</span>
+  <span class="hljs-comment">// 1. 传递给子组件的回调函数</span>
+  <span class="hljs-keyword">const</span> handleSubmit = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+    <span class="hljs-title function_">setItems</span>([...items, data]);
+  }, [items]);
+
+  <span class="hljs-comment">// 2. 事件处理函数</span>
+  <span class="hljs-keyword">const</span> handleClick = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;clicked&#x27;</span>);
+  }, []);
+
+  <span class="hljs-comment">// 3. 作为其他 Hook 的依赖</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">handler</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;resize&#x27;</span>);
+    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;resize&#x27;</span>, handler);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;resize&#x27;</span>, handler);
+  }, [handleClick]); <span class="hljs-comment">// handleClick 稳定，effect 只运行一次</span>
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{/* ... */}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre><hr>
+<h3 id="2.4-useref">2.4 useRef深入理解</h3>
+<h4 id="2.4.1-useref">2.4.1 useRef基本用法</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// useRef 的基本用法</span>
+<span class="hljs-keyword">import</span> { useRef, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">UseRefBasics</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> inputRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> countRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleClick</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 访问 DOM 元素</span>
+    inputRef.<span class="hljs-property">current</span>.<span class="hljs-title function_">focus</span>();
+
+    <span class="hljs-comment">// 存储值但不触发重渲染</span>
+    countRef.<span class="hljs-property">current</span>++;
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Count:&#x27;</span>, countRef.<span class="hljs-property">current</span>);
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{inputRef}</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span>&gt;</span>Focus &amp; Count<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// useRef vs useState 对比</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">RefVsState</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> countRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">updateState</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>); <span class="hljs-comment">// 触发重渲染</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;State:&#x27;</span>, count + <span class="hljs-number">1</span>); <span class="hljs-comment">// 此时还是旧值</span>
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">updateRef</span>(<span class="hljs-params"></span>) {
+    countRef.<span class="hljs-property">current</span>++; <span class="hljs-comment">// 不触发重渲染</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Ref:&#x27;</span>, countRef.<span class="hljs-property">current</span>); <span class="hljs-comment">// 是新值</span>
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>State: {count}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Ref: {countRef.current}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{updateState}</span>&gt;</span>Update State<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{updateRef}</span>&gt;</span>Update Ref<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 常见用途 1：存储上一个状态值</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">PreviousValue</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [value, setValue] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> previousValue = <span class="hljs-title function_">useRef</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    previousValue.<span class="hljs-property">current</span> = value;
+  }, [value]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">value</span>=<span class="hljs-string">{value}</span>
+        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> setValue(e.target.value)}
+      /&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Current: {value}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Previous: {previousValue.current}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 常见用途 2：存储定时器 ID</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Timer</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [seconds, setSeconds] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> intervalRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    intervalRef.<span class="hljs-property">current</span> = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">setSeconds</span>(<span class="hljs-function"><span class="hljs-params">s</span> =&gt;</span> s + <span class="hljs-number">1</span>);
+    }, <span class="hljs-number">1000</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearInterval</span>(intervalRef.<span class="hljs-property">current</span>);
+  }, []);
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Seconds: {seconds}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 常见用途 3：存储不稳定的回调</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">UnstableCallback</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-comment">// 使用 ref 存储最新的回调</span>
+  <span class="hljs-keyword">const</span> latestCallback = <span class="hljs-title function_">useRef</span>();
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    latestCallback.<span class="hljs-property">current</span> = <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Query:&#x27;</span>, query);
+    };
+  }, [query]);
+
+  <span class="hljs-keyword">const</span> handleSearch = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">q</span>) =&gt;</span> {
+    <span class="hljs-comment">// 使用 ref 访问最新值</span>
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Searching:&#x27;</span>, latestCallback.<span class="hljs-property">current</span>);
+  }, []);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+      <span class="hljs-attr">value</span>=<span class="hljs-string">{query}</span>
+      <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> setQuery(e.target.value)}
+    /&gt;</span>
+  );
+}
+
+<span class="hljs-comment">// 常见用途 4：强制组件重渲染</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ForceRerender</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [, forceRender] = <span class="hljs-title function_">useReducer</span>(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleClick</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-title function_">forceRender</span>();
+  };
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleClick}</span>&gt;</span>Force Render<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// useRef 初始化</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">RefInitialization</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 首次渲染后才会执行初始化函数</span>
+  <span class="hljs-keyword">const</span> ref = <span class="hljs-title function_">useRef</span>(computeExpensiveInitialValue);
+
+  <span class="hljs-comment">// 等价于</span>
+  <span class="hljs-keyword">const</span> ref2 = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">if</span> (ref2.<span class="hljs-property">current</span> === <span class="hljs-literal">null</span>) {
+    ref2.<span class="hljs-property">current</span> = <span class="hljs-title function_">computeExpensiveInitialValue</span>();
+  }
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{ref.current}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre><hr>
+<h3 id="2.5-hook">2.5 自定义Hook</h3>
+<h4 id="2.5.1-hook">2.5.1 自定义Hook基本模式</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 自定义 Hook 命名规范：以 &quot;use&quot; 开头</span>
+
+<span class="hljs-comment">// 自定义 Hook 示例 1：窗口尺寸</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useWindowSize</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [size, setSize] = <span class="hljs-title function_">useState</span>({
+    <span class="hljs-attr">width</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">window</span> !== <span class="hljs-string">&#x27;undefined&#x27;</span> ? <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span> : <span class="hljs-number">0</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">window</span> !== <span class="hljs-string">&#x27;undefined&#x27;</span> ? <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span> : <span class="hljs-number">0</span>
+  });
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleResize</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-title function_">setSize</span>({
+        <span class="hljs-attr">width</span>: <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span>,
+        <span class="hljs-attr">height</span>: <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span>
+      });
+    }
+
+    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;resize&#x27;</span>, handleResize);
+    <span class="hljs-title function_">handleResize</span>(); <span class="hljs-comment">// 初始化</span>
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;resize&#x27;</span>, handleResize);
+  }, []);
+
+  <span class="hljs-keyword">return</span> size;
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Component</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> { width, height } = <span class="hljs-title function_">useWindowSize</span>();
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Window: {width} x {height}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 自定义 Hook 示例 2：异步数据获取</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useFetch</span>(<span class="hljs-params">url</span>) {
+  <span class="hljs-keyword">const</span> [data, setData] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [loading, setLoading] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">true</span>);
+  <span class="hljs-keyword">const</span> [error, setError] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">let</span> cancelled = <span class="hljs-literal">false</span>;
+
+    <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchData</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-title function_">setLoading</span>(<span class="hljs-literal">true</span>);
+      <span class="hljs-title function_">setError</span>(<span class="hljs-literal">null</span>);
+
+      <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url);
+        <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Network response was not ok&#x27;</span>);
+        }
+        <span class="hljs-keyword">const</span> json = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+
+        <span class="hljs-keyword">if</span> (!cancelled) {
+          <span class="hljs-title function_">setData</span>(json);
+        }
+      } <span class="hljs-keyword">catch</span> (error) {
+        <span class="hljs-keyword">if</span> (!cancelled) {
+          <span class="hljs-title function_">setError</span>(error.<span class="hljs-property">message</span>);
+        }
+      } <span class="hljs-keyword">finally</span> {
+        <span class="hljs-keyword">if</span> (!cancelled) {
+          <span class="hljs-title function_">setLoading</span>(<span class="hljs-literal">false</span>);
+        }
+      }
+    }
+
+    <span class="hljs-title function_">fetchData</span>();
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      cancelled = <span class="hljs-literal">true</span>;
+    };
+  }, [url]);
+
+  <span class="hljs-keyword">return</span> { data, loading, error };
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">UserProfile</span>(<span class="hljs-params">{ userId }</span>) {
+  <span class="hljs-keyword">const</span> { data, loading, error } = <span class="hljs-title function_">useFetch</span>(<span class="hljs-string">`/api/users/<span class="hljs-subst">${userId}</span>`</span>);
+
+  <span class="hljs-keyword">if</span> (loading) <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Loading</span> /&gt;</span></span>;
+  <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Error</span> <span class="hljs-attr">message</span>=<span class="hljs-string">{error}</span> /&gt;</span></span>;
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{data.name}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+
+<span class="hljs-comment">// 自定义 Hook 示例 3：本地存储</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useLocalStorage</span>(<span class="hljs-params">key, initialValue</span>) {
+  <span class="hljs-keyword">const</span> [storedValue, setStoredValue] = <span class="hljs-title function_">useState</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">const</span> item = <span class="hljs-variable language_">window</span>.<span class="hljs-property">localStorage</span>.<span class="hljs-title function_">getItem</span>(key);
+      <span class="hljs-keyword">return</span> item ? <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(item) : initialValue;
+    } <span class="hljs-keyword">catch</span> (error) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error);
+      <span class="hljs-keyword">return</span> initialValue;
+    }
+  });
+
+  <span class="hljs-keyword">const</span> setValue = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">const</span> valueToStore = value <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Function</span>
+        ? <span class="hljs-title function_">value</span>(storedValue)
+        : value;
+      <span class="hljs-title function_">setStoredValue</span>(valueToStore);
+      <span class="hljs-variable language_">window</span>.<span class="hljs-property">localStorage</span>.<span class="hljs-title function_">setItem</span>(key, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(valueToStore));
+    } <span class="hljs-keyword">catch</span> (error) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error);
+    }
+  }, [key, storedValue]);
+
+  <span class="hljs-keyword">return</span> [storedValue, setValue];
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Settings</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [theme, setTheme] = <span class="hljs-title function_">useLocalStorage</span>(<span class="hljs-string">&#x27;theme&#x27;</span>, <span class="hljs-string">&#x27;light&#x27;</span>);
+  <span class="hljs-keyword">const</span> [fontSize, setFontSize] = <span class="hljs-title function_">useLocalStorage</span>(<span class="hljs-string">&#x27;fontSize&#x27;</span>, <span class="hljs-number">16</span>);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{theme}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> setTheme(e.target.value)}&gt;
+        <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;light&quot;</span>&gt;</span>Light<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;dark&quot;</span>&gt;</span>Dark<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;range&quot;</span>
+        <span class="hljs-attr">min</span>=<span class="hljs-string">&quot;12&quot;</span>
+        <span class="hljs-attr">max</span>=<span class="hljs-string">&quot;24&quot;</span>
+        <span class="hljs-attr">value</span>=<span class="hljs-string">{fontSize}</span>
+        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> setFontSize(Number(e.target.value))}
+      /&gt;
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 自定义 Hook 示例 4：防抖</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useDebounce</span>(<span class="hljs-params">value, delay</span>) {
+  <span class="hljs-keyword">const</span> [debouncedValue, setDebouncedValue] = <span class="hljs-title function_">useState</span>(value);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> handler = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">setDebouncedValue</span>(value);
+    }, delay);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-built_in">clearTimeout</span>(handler);
+    };
+  }, [value, delay]);
+
+  <span class="hljs-keyword">return</span> debouncedValue;
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchComponent</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> debouncedQuery = <span class="hljs-title function_">useDebounce</span>(query, <span class="hljs-number">300</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (debouncedQuery) {
+      <span class="hljs-comment">// 执行搜索</span>
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Searching:&#x27;</span>, debouncedQuery);
+    }
+  }, [debouncedQuery]);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+      <span class="hljs-attr">value</span>=<span class="hljs-string">{query}</span>
+      <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> setQuery(e.target.value)}
+    /&gt;</span>
+  );
+}
+
+<span class="hljs-comment">// 自定义 Hook 示例 5：节流</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useThrottle</span>(<span class="hljs-params">value, interval</span>) {
+  <span class="hljs-keyword">const</span> [throttledValue, setThrottledValue] = <span class="hljs-title function_">useState</span>(value);
+  <span class="hljs-keyword">const</span> lastUpdated = <span class="hljs-title function_">useRef</span>(<span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>());
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> now = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();
+    <span class="hljs-keyword">const</span> remaining = interval - (now - lastUpdated.<span class="hljs-property">current</span>);
+
+    <span class="hljs-keyword">if</span> (remaining &lt;= <span class="hljs-number">0</span>) {
+      lastUpdated.<span class="hljs-property">current</span> = now;
+      <span class="hljs-title function_">setThrottledValue</span>(value);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">const</span> timeoutId = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        lastUpdated.<span class="hljs-property">current</span> = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();
+        <span class="hljs-title function_">setThrottledValue</span>(value);
+      }, remaining);
+
+      <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearTimeout</span>(timeoutId);
+    }
+  }, [value, interval]);
+
+  <span class="hljs-keyword">return</span> throttledValue;
+}
+</code></pre><h4 id="2.5.2-hook">2.5.2 高级自定义Hook</h4>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// 高级 Hook 示例：表单管理</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useForm</span>(<span class="hljs-params">initialValues</span>) {
+  <span class="hljs-keyword">const</span> [values, setValues] = <span class="hljs-title function_">useState</span>(initialValues);
+  <span class="hljs-keyword">const</span> [errors, setErrors] = <span class="hljs-title function_">useState</span>({});
+  <span class="hljs-keyword">const</span> [touched, setTouched] = <span class="hljs-title function_">useState</span>({});
+
+  <span class="hljs-keyword">const</span> handleChange = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">name, value, validate</span>) =&gt;</span> {
+    <span class="hljs-title function_">setValues</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =&gt;</span> ({ ...prev, [name]: value }));
+
+    <span class="hljs-keyword">if</span> (validate) {
+      <span class="hljs-keyword">const</span> error = <span class="hljs-title function_">validate</span>(value);
+      <span class="hljs-title function_">setErrors</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =&gt;</span> ({ ...prev, [name]: error }));
+    }
+  }, []);
+
+  <span class="hljs-keyword">const</span> handleBlur = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">name</span>) =&gt;</span> {
+    <span class="hljs-title function_">setTouched</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =&gt;</span> ({ ...prev, [name]: <span class="hljs-literal">true</span> }));
+  }, []);
+
+  <span class="hljs-keyword">const</span> handleSubmit = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">onSubmit</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+      event.<span class="hljs-title function_">preventDefault</span>();
+      <span class="hljs-title function_">onSubmit</span>(values);
+    };
+  }, [values]);
+
+  <span class="hljs-keyword">const</span> reset = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">setValues</span>(initialValues);
+    <span class="hljs-title function_">setErrors</span>({});
+    <span class="hljs-title function_">setTouched</span>({});
+  }, [initialValues]);
+
+  <span class="hljs-keyword">const</span> setFieldValue = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">name, value</span>) =&gt;</span> {
+    <span class="hljs-title function_">setValues</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =&gt;</span> ({ ...prev, [name]: value }));
+  }, []);
+
+  <span class="hljs-keyword">const</span> setFieldError = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">name, error</span>) =&gt;</span> {
+    <span class="hljs-title function_">setErrors</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =&gt;</span> ({ ...prev, [name]: error }));
+  }, []);
+
+  <span class="hljs-keyword">return</span> {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    reset,
+    setFieldValue,
+    setFieldError,
+    <span class="hljs-attr">isValid</span>: <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">values</span>(errors).<span class="hljs-title function_">every</span>(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> !e)
+  };
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">LoginForm</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> form = <span class="hljs-title function_">useForm</span>({
+    <span class="hljs-attr">email</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+    <span class="hljs-attr">password</span>: <span class="hljs-string">&#x27;&#x27;</span>
+  });
+
+  <span class="hljs-keyword">const</span> validate = {
+    <span class="hljs-attr">email</span>: <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (!value) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Email is required&#x27;</span>;
+      <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/\S+@\S+\.\S+/</span>.<span class="hljs-title function_">test</span>(value)) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Email is invalid&#x27;</span>;
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    },
+    <span class="hljs-attr">password</span>: <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (!value) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Password is required&#x27;</span>;
+      <span class="hljs-keyword">if</span> (value.<span class="hljs-property">length</span> &lt; <span class="hljs-number">6</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Password must be at least 6 characters&#x27;</span>;
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    }
+  };
+
+  <span class="hljs-keyword">const</span> handleSubmit = form.<span class="hljs-title function_">handleSubmit</span>(<span class="hljs-function">(<span class="hljs-params">values</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Form submitted:&#x27;</span>, values);
+  });
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{handleSubmit}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;email&quot;</span>
+        <span class="hljs-attr">value</span>=<span class="hljs-string">{form.values.email}</span>
+        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> form.handleChange(&#x27;email&#x27;, e.target.value, validate.email)}
+        onBlur={() =&gt; form.handleBlur(&#x27;email&#x27;)}
+      /&gt;
+      {form.touched.email &amp;&amp; form.errors.email &amp;&amp; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{form.errors.email}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      )}
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span>
+        <span class="hljs-attr">value</span>=<span class="hljs-string">{form.values.password}</span>
+        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{e</span> =&gt;</span> form.handleChange(&#x27;password&#x27;, e.target.value, validate.password)}
+        onBlur={() =&gt; form.handleBlur(&#x27;password&#x27;)}
+      /&gt;
+      {form.touched.password &amp;&amp; form.errors.password &amp;&amp; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{form.errors.password}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      )}
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">disabled</span>=<span class="hljs-string">{!form.isValid}</span>&gt;</span>
+        Submit
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 高级 Hook 示例：媒体查询</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useMediaQuery</span>(<span class="hljs-params">query</span>) {
+  <span class="hljs-keyword">const</span> [matches, setMatches] = <span class="hljs-title function_">useState</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">window</span> !== <span class="hljs-string">&#x27;undefined&#x27;</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">matchMedia</span>(query).<span class="hljs-property">matches</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  });
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> mediaQuery = <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">matchMedia</span>(query);
+
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleChange</span> = (<span class="hljs-params">event</span>) =&gt; {
+      <span class="hljs-title function_">setMatches</span>(event.<span class="hljs-property">matches</span>);
+    };
+
+    <span class="hljs-comment">// 监听变化</span>
+    <span class="hljs-keyword">if</span> (mediaQuery.<span class="hljs-property">addEventListener</span>) {
+      mediaQuery.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, handleChange);
+      <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> mediaQuery.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, handleChange);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-comment">// 兼容旧版浏览器</span>
+      mediaQuery.<span class="hljs-title function_">addListener</span>(handleChange);
+      <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> mediaQuery.<span class="hljs-title function_">removeListener</span>(handleChange);
+    }
+  }, [query]);
+
+  <span class="hljs-keyword">return</span> matches;
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ResponsiveComponent</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> isMobile = <span class="hljs-title function_">useMediaQuery</span>(<span class="hljs-string">&#x27;(max-width: 768px)&#x27;</span>);
+  <span class="hljs-keyword">const</span> isTablet = <span class="hljs-title function_">useMediaQuery</span>(<span class="hljs-string">&#x27;(min-width: 769px) and (max-width: 1024px)&#x27;</span>);
+  <span class="hljs-keyword">const</span> isDesktop = <span class="hljs-title function_">useMediaQuery</span>(<span class="hljs-string">&#x27;(min-width: 1025px)&#x27;</span>);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      {isMobile &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">MobileLayout</span> /&gt;</span>}
+      {isTablet &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">TabletLayout</span> /&gt;</span>}
+      {isDesktop &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">DesktopLayout</span> /&gt;</span>}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-comment">// 高级 Hook 示例：轮询</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">usePolling</span>(<span class="hljs-params">fetchFn, interval, options = {}</span>) {
+  <span class="hljs-keyword">const</span> { immediate = <span class="hljs-literal">true</span>, retries = <span class="hljs-number">3</span> } = options;
+  <span class="hljs-keyword">const</span> [data, setData] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [error, setError] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [loading, setLoading] = <span class="hljs-title function_">useState</span>(immediate);
+  <span class="hljs-keyword">const</span> attemptCount = <span class="hljs-title function_">useRef</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">const</span> fetchData = <span class="hljs-title function_">useCallback</span>(<span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchFn</span>();
+      <span class="hljs-title function_">setData</span>(result);
+      <span class="hljs-title function_">setError</span>(<span class="hljs-literal">null</span>);
+      attemptCount.<span class="hljs-property">current</span> = <span class="hljs-number">0</span>;
+    } <span class="hljs-keyword">catch</span> (err) {
+      <span class="hljs-title function_">setError</span>(err);
+      attemptCount.<span class="hljs-property">current</span>++;
+
+      <span class="hljs-keyword">if</span> (attemptCount.<span class="hljs-property">current</span> &lt; retries) {
+        <span class="hljs-comment">// 重试</span>
+        <span class="hljs-built_in">setTimeout</span>(fetchData, interval);
+      }
+    } <span class="hljs-keyword">finally</span> {
+      <span class="hljs-title function_">setLoading</span>(<span class="hljs-literal">false</span>);
+    }
+  }, [fetchFn, interval, retries]);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (immediate) {
+      <span class="hljs-title function_">fetchData</span>();
+    }
+
+    <span class="hljs-keyword">const</span> intervalId = <span class="hljs-built_in">setInterval</span>(fetchData, interval);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-built_in">clearInterval</span>(intervalId);
+    };
+  }, [fetchData, interval, immediate]);
+
+  <span class="hljs-keyword">return</span> { data, error, loading, <span class="hljs-attr">refetch</span>: fetchData };
+}
+
+<span class="hljs-comment">// 使用</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">RealTimeData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> { data, loading, error, refetch } = <span class="hljs-title function_">usePolling</span>(
+    <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/status&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> r.<span class="hljs-title function_">json</span>()),
+    <span class="hljs-number">5000</span>,
+    { <span class="hljs-attr">immediate</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">retries</span>: <span class="hljs-number">3</span> }
+  );
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      {loading &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">Loading</span> /&gt;</span>}
+      {error &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">Error</span> <span class="hljs-attr">message</span>=<span class="hljs-string">{error.message}</span> /&gt;</span>}
+      {data &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Status: {data.status}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>}
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{refetch}</span>&gt;</span>Refresh<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+</code></pre><hr>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="1-7-浏览器工作原理.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第1卷 浏览器渲染原理</span>
+          </a>
+              <a href="2-2-Vue3核心特性.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第2卷 Vue框架</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

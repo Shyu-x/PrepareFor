@@ -1,0 +1,94 @@
+@startuml Frontend_Architecture
+!theme plain
+hide stereotype
+
+skinparam rectangle {
+    BackgroundColor #f8f9fa
+    BorderColor #0d9488
+    FontName Microsoft YaHei
+    RoundCorner 10
+}
+
+skinparam package {
+    BackgroundColor #e0f2fe
+    BorderColor #0284c7
+}
+
+' 定义包
+package "app (App Router 页面)" as AppPages {
+    rectangle "layout.tsx\n(根布局/Antd配置)" as Layout
+    rectangle "page.tsx\n(主页面)" as MainPage
+    rectangle "login/\n登录页面" as LoginPage
+    rectangle "knowledge/\n知识库页面" as KnowledgePage
+    rectangle "project/\n项目管理页面" as ProjectPage
+    rectangle "meeting/\n视频会议页面" as MeetingPage
+    rectangle "share/[code]/\n分享页面" as SharePage
+}
+
+package "components (React 组件)" as Components {
+    rectangle "Sidebar.tsx\n侧边导航" as Sidebar
+    rectangle "Header.tsx\n顶部导航栏" as Header
+    rectangle "Editor.tsx\n原子化文档编辑器" as Editor
+    rectangle "Dashboard.tsx\n文档中心" as Dashboard
+    rectangle "ChatDrawer.tsx\n文档内嵌聊天" as ChatDrawer
+    rectangle "CommentPanel.tsx\n批注评论面板" as CommentPanel
+    rectangle "Annotation.tsx\n文本标注组件" as Annotation
+    rectangle "VideoConference.tsx\n视频会议组件" as VideoConf
+    rectangle "KanbanBoard.tsx\n看板组件" as Kanban
+    rectangle "TaskCard.tsx\n任务卡片" as TaskCard
+    rectangle "KnowledgeTree.tsx\n知识库树" as KnowledgeTree
+    rectangle "MeetingControlBar.tsx\n会议控制栏" as MeetingCtrl
+    rectangle "VersionHistoryPanel.tsx\n版本历史面板" as VersionHist
+    rectangle "ConflictResolver.tsx\n冲突解决器" as ConflictRes
+}
+
+package "store (Zustand 状态管理)" as Stores {
+    rectangle "documentStore.ts\n文档状态机" as DocStore
+    rectangle "commentStore.ts\n批注状态机" as CommentStore
+    rectangle "projectStore.ts\n项目管理状态机" as ProjectStore
+    rectangle "meetingStore.ts\n会议状态机" as MeetingStore
+    rectangle "knowledgeStore.ts\n知识库状态机" as KnowledgeStore
+    rectangle "userStore.ts\n用户状态机" as UserStore
+    rectangle "notificationStore.ts\n通知状态机" as NotifStore
+    rectangle "themeStore.ts\n主题状态机" as ThemeStore
+    rectangle "responsiveStore.ts\n响应式状态机" as ResponsiveStore
+}
+
+package "lib (工具库)" as Libs {
+    rectangle "socket.ts\nSocket.io 客户端" as SocketLib
+    rectangle "livekit.ts\nLiveKit 客户端" as LiveKitLib
+    rectangle "api.ts\nAPI 请求封装" as ApiLib
+    rectangle "utils.ts\n工具函数" as UtilsLib
+    rectangle "performance.ts\n性能监控" as PerfLib
+}
+
+package "第三方库依赖" as Dependencies {
+    node "Next.js 16" as NextJS
+    node "React 19" as React
+    node "Tailwind CSS v4" as Tailwind
+    node "Ant Design 6" as AntD
+    node "Zustand" as Zustand
+    node "Socket.io Client" as SocketIO
+    node "LiveKit Client" as LiveKit
+    node "Lucide React\n(图标库)" as Lucide
+}
+
+' 绘制依赖关系
+AppPages --> Components : 使用
+AppPages --> Stores : 状态订阅
+AppPages --> Libs : 函数调用
+Components --> Stores : 状态订阅
+Components --> Libs : 工具调用
+Stores --> Libs : 持久化
+Dependencies --> AppPages : 渲染
+Dependencies --> Components : UI 构建
+Dependencies --> Stores : 状态管理
+
+' 组件内部关系
+Editor --> CommentPanel : 批注交互
+Editor --> Annotation : 标注交互
+VideoConf --> MeetingCtrl : 会议控制
+Kanban --> TaskCard : 任务渲染
+KnowledgeTree --> KnowledgePage : 知识库导航
+
+@enduml

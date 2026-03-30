@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第2卷-框架生态 - 前端面试题库</title>
+  <meta name="description" content="{{SUBTITLE}}">
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- 图标 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+  <!-- 语法高亮 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+
+  <style>
+    /* ==================== CSS变量 ==================== */
+    :root {
+      --primary: #1a56db;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e40af;
+      --accent: #f59e0b;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --bg: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+      --font-serif: 'Noto Serif SC', serif;
+      --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    /* ==================== 重置 ==================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 18px; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 书籍排版标准 ==================== */
+    /* 中文排版规范： */
+    /* - 正文字号：18px（最佳阅读尺寸） */
+    /* - 行间距：1.8（保证呼吸感） */
+    /* - 段落间距：1.5em */
+    /* - 每行字数：60-70字符（最佳阅读宽度） */
+
+    /* ==================== 布局 ==================== */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ==================== 侧边栏 ==================== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* 侧边栏关闭按钮 */
+    .sidebar-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.15s;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* 目录 */
+    .toc { flex: 1; padding: 1rem 0; overflow-y: auto; }
+
+    .toc-section { margin-bottom: 0.5rem; }
+
+    .toc-section-title {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .toc-list { list-style: none; }
+
+    .toc-item { margin: 1px 0; }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 0.84375rem;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .toc-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--primary-light);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.2s;
+    }
+
+    .toc-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .toc-link.active {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--primary-light);
+      border-left-color: transparent;
+    }
+
+    .toc-link.active::before {
+      height: 60%;
+    }
+
+    .toc-link:hover { background: rgba(255,255,255,0.05); color: white; }
+    .toc-link.active { background: rgba(59,130,246,0.15); color: var(--primary-light); border-left-color: var(--primary-light); }
+
+    .toc-num { font-size: 0.75rem; color: rgba(255,255,255,0.4); min-width: 20px; }
+
+    /* 卷分组 */
+    .volume-group { margin-bottom: 0.5rem; }
+
+    .volume-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .volume-title:hover { background: rgba(255,255,255,0.05); }
+    .volume-icon { font-size: 0.625rem; color: rgba(255,255,255,0.5); transition: transform 0.2s; }
+    .volume-group.collapsed .volume-icon { transform: rotate(-90deg); }
+    .volume-group.collapsed .toc-list { display: none; }
+
+    /* ==================== 主内容 ==================== */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-width: 0; }
+
+    /* 顶部栏 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 50;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-muted); }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .topbar-actions { display: flex; gap: 0.5rem; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border: none; background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-tertiary); color: var(--primary); }
+
+    /* 文章容器 */
+    .article-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 文章头部 */
+    .article-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-light); position: relative; }
+    .article-header::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+    }
+
+    .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; color: var(--text-muted); }
+    .meta-item i { color: var(--primary); }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-subtitle { font-size: 1.125rem; color: var(--text-secondary); }
+
+    /* ==================== 内容样式 ==================== */
+    .content { color: var(--text-secondary); }
+
+    /* 段落 */
+    .content p { margin-bottom: 1.5em; text-align: justify; }
+
+    /* 标题 */
+    .content h2 {
+      font-family: var(--font-serif);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 2.5em 0 1em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .content h3 { font-size: 1.25rem; font-weight: 600; color: var(--text); margin: 2em 0 0.75em; }
+    .content h4 { font-size: 1.0625rem; font-weight: 600; color: var(--text); margin: 1.5em 0 0.5em; }
+    .content h5, .content h6 { font-size: 1rem; font-weight: 600; color: var(--text-muted); margin: 1.25em 0 0.5em; }
+
+    /* 锚点 */
+    .content h2 .anchor { opacity: 0; margin-left: 0.5rem; color: var(--text-muted); font-size: 0.875rem; transition: opacity 0.2s; }
+    .content h2:hover .anchor { opacity: 1; }
+
+    /* 列表 */
+    .content ul, .content ol { margin: 1.25em 0; padding-left: 1.75em; }
+    .content li { margin-bottom: 0.5em; }
+    .content ul li::marker { color: var(--primary); }
+
+    /* 代码块 - 书籍级排版 */
+    .content pre {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow-x: auto;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* 代码块语言标签 */
+    .content pre[data-lang]::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      border-radius: 0 12px 0 8px;
+      font-family: var(--font-sans);
+    }
+
+    .content code { font-family: var(--font-mono); font-size: 0.875em; line-height: 1.6; }
+
+    .content :not(pre) > code {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary-dark);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* 表格 */
+    .content table { width: 100%; margin: 1.5em 0; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .content th { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; font-weight: 600; text-align: left; padding: 1em 1.25em; font-size: 0.875rem; }
+    .content td { padding: 0.875em 1.25em; border-bottom: 1px solid var(--border-light); font-size: 0.9375rem; }
+    .content tr:last-child td { border-bottom: none; }
+    .content tr:nth-child(even) { background: var(--bg-secondary); }
+    .content tr:hover { background: rgba(29, 78, 216, 0.04); }
+
+    /* 引用 */
+    .content blockquote {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.03), rgba(29, 78, 216, 0.08));
+      border-radius: 0 12px 12px 0;
+    }
+
+    .content blockquote p { margin-bottom: 0.75em; font-style: italic; }
+    .content blockquote p:last-child { margin-bottom: 0; }
+
+    /* 分割线 */
+    .content hr { border: none; height: 1px; background: var(--border); margin: 2.5em 0; }
+
+    /* 图片 */
+    .content img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5em 0; }
+
+    /* ==================== 图表容器 ==================== */
+    .diagram-container {
+      position: relative;
+      margin: 1.5em 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .diagram-container:hover .diagram-fullscreen {
+      opacity: 1;
+    }
+
+    .diagram-fullscreen {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .diagram-fullscreen:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Mermaid 图表样式 */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 0.5rem;
+    }
+
+    .mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* PlantUML 图表样式 */
+    .plantuml-diagram {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* 图表全屏模式 */
+    .diagram-container.fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      margin: 0;
+      border-radius: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen {
+      opacity: 1;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .diagram-container.fullscreen .diagram-fullscreen:hover {
+      background: var(--primary);
+    }
+
+    .diagram-container.fullscreen .mermaid,
+    .diagram-container.fullscreen .plantuml-diagram {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    /* 链接 */
+    .content a { color: var(--primary); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+    .content a:hover { border-bottom-color: var(--primary); }
+
+    /* ==================== 提示框 ==================== */
+    .callout { margin: 1.5em 0; padding: 1.25em 1.5em; border-radius: 12px; border-left: 4px solid; }
+    .callout-info { background: rgba(8, 145, 178, 0.08); border-color: #0891b2; }
+    .callout-success { background: rgba(5, 150, 105, 0.08); border-color: var(--success); }
+    .callout-warning { background: rgba(245, 158, 11, 0.08); border-color: var(--accent); }
+    .callout-danger { background: rgba(220, 38, 38, 0.08); border-color: var(--danger); }
+
+    .callout-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9375rem; }
+    .callout-info .callout-title { color: #0891b2; }
+    .callout-success .callout-title { color: var(--success); }
+    .callout-warning .callout-title { color: var(--accent); }
+    .callout-danger .callout-title { color: var(--danger); }
+
+    /* ==================== 页脚导航 ==================== */
+    .page-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+    /* 章节导航 */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .chapter-nav-link {
+      flex: 1;
+      max-width: 45%;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .chapter-nav-link:hover {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(26, 86, 219, 0.04), rgba(26, 86, 219, 0.08));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.15);
+    }
+
+    .chapter-nav-link.prev {
+      align-items: flex-start;
+    }
+
+    .chapter-nav-link.next {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .chapter-nav-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-nav-link.prev .chapter-nav-label {
+      align-self: flex-start;
+    }
+
+    .chapter-nav-link.next .chapter-nav-label {
+      align-self: flex-end;
+    }
+
+    .chapter-nav-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
+    .chapter-nav-empty {
+      visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .chapter-nav {
+        flex-direction: column;
+      }
+      .chapter-nav-link {
+        max-width: 100%;
+      }
+      .chapter-nav-link.next {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .chapter-nav-label {
+        align-self: flex-start !important;
+      }
+    }
+    .page-nav { display: flex; justify-content: space-between; gap: 1.5rem; }
+    .page-nav-link { flex: 1; max-width: 45%; padding: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; transition: all 0.2s; }
+    .page-nav-link:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .page-nav-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .page-nav-title { font-weight: 600; color: var(--text); }
+
+    /* ==================== 侧边栏隐藏功能 ==================== */
+    .sidebar.hidden { transform: translateX(-100%); }
+
+    .main.expanded { margin-left: 0; }
+
+    /* 侧边栏切换按钮 - 仅在桌面显示 */
+    .sidebar-close { display: flex; }
+
+    /* ==================== 双页浏览模式 (沉浸式书籍效果) ==================== */
+    @media (min-width: 1200px) {
+      /* 隐藏侧边栏和顶部栏 */
+      .layout.dual-page .sidebar { display: none !important; }
+      .layout.dual-page .topbar { display: none !important; }
+
+      .layout.dual-page {
+        display: block;
+        background: #0f0f0f;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .layout.dual-page .main {
+        margin-left: 0;
+        max-width: 100%;
+        width: 100%;
+        background: #fafafa;
+        min-height: 100vh;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* 沉浸式内容区域 - 完全铺满 */
+      .layout.dual-page .article-container {
+        max-width: 100%;
+        width: 100%;
+        padding: 3rem 4rem;
+        margin: 0 auto;
+      }
+
+      /* 标题样式 - 书籍风格居中 */
+      .layout.dual-page .article-header {
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .layout.dual-page .article-title {
+        font-family: var(--font-serif);
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .layout.dual-page .article-subtitle {
+        font-size: 1.25rem;
+        color: #666;
+      }
+
+      .layout.dual-page .article-meta {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* 双页模式的文章内容 - 书籍排版 */
+      .layout.dual-page .content {
+        max-width: 900px;
+        margin: 0 auto;
+        column-count: 2;
+        column-gap: 4rem;
+        column-rule: 1px solid #e0e0e0;
+        text-align: justify;
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+
+      /* 标题跨列显示 */
+      .layout.dual-page .content h2,
+      .layout.dual-page .content h3 {
+        column-span: all;
+        break-after: avoid;
+        margin-top: 2rem;
+      }
+
+      /* 代码块不中断 */
+      .layout.dual-page .content pre {
+        break-inside: avoid;
+        margin: 1.5em 0;
+        font-size: 0.875rem;
+      }
+
+      /* 表格不中断 */
+      .layout.dual-page .content table {
+        break-inside: avoid;
+        font-size: 0.875rem;
+      }
+
+      /* 引用块不中断 */
+      .layout.dual-page .content blockquote {
+        break-inside: avoid;
+      }
+
+      /* 书籍式页脚 */
+      .layout.dual-page .page-footer {
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+
+      /* 退出按钮 - 固定在右上角 */
+      .layout.dual-page ~ .view-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .layout.dual-page ~ .view-toggle:hover {
+        background: #f5f5f5;
+      }
+    }
+
+    /* 超宽屏幕 - 三栏布局预览 */
+    @media (min-width: 1800px) {
+      .layout.dual-page .content {
+        column-count: 2;
+        max-width: 1400px;
+        column-gap: 5rem;
+        font-size: 1.0625rem;
+      }
+
+      .layout.dual-page .article-title {
+        font-size: 3rem;
+      }
+    }
+
+    /* 双页切换按钮 */
+    .view-toggle {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      z-index: 60;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .view-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    @media (min-width: 1200px) {
+      .view-toggle { display: flex; }
+    }
+
+    /* ==================== 响应式 ==================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .sidebar-close { display: none; }  /* 移动端不显示关闭按钮，用遮罩层关闭 */
+    }
+
+    @media (max-width: 768px) {
+      .article-container { padding: 2rem 1rem; }
+      .article-title { font-size: 1.875rem; }
+      .page-nav { flex-direction: column; }
+      .page-nav-link { max-width: 100%; }
+    }
+
+    /* 打印 */
+    @media print {
+      .sidebar, .topbar, .chapter-nav, .diagram-fullscreen { display: none !important; }
+      .main { margin-left: 0 !important; max-width: 100% !important; }
+      .article-container { padding: 0 !important; }
+      .content { font-size: 12pt !important; line-height: 1.6 !important; }
+      .content h2 { page-break-after: avoid; }
+      .content h3, .content h4 { page-break-after: avoid; }
+      .content pre, .content blockquote { page-break-inside: avoid; }
+      .content img { max-width: 100% !important; page-break-inside: avoid; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ==================== 打印优化 ==================== */
+    @page { margin: 2cm; }
+
+    /* ==================== 学习目标框 ==================== */
+    .learning-objectives {
+      margin: 2em 0;
+      padding: 1.5em;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+    }
+
+    .learning-objectives-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: #6366f1;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .learning-objectives ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .learning-objectives li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 关键点高亮 ==================== */
+    .key-point {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2em 0.6em;
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    /* ==================== 概念卡 ==================== */
+    .concept-card {
+      margin: 1.5em 0;
+      padding: 1.25em 1.5em;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .concept-card-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-card-title::before {
+      content: '💡';
+    }
+
+    /* ==================== 流程图样式 ==================== */
+    .flowchart-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .flowchart-step-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .flowchart-step-content {
+      flex: 1;
+    }
+
+    .flowchart-step-title {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .flowchart-step-desc {
+      font-size: 0.9em;
+      color: var(--text-secondary);
+    }
+
+    /* ==================== 代码行号 ==================== */
+    .hljs { counter-reset: line; }
+    .hljs .line { display: block; }
+    .hljs .line::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      width: 2.5em;
+      margin-right: 1em;
+      text-align: right;
+      color: #6b7280;
+      opacity: 0.5;
+    }
+
+    /* ==================== 进度指示器 ==================== */
+    .progress-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .progress-dot.active {
+      background: var(--primary);
+      transform: scale(1.25);
+    }
+
+    .progress-dot.completed {
+      background: var(--success);
+    }
+
+    /* ==================== 标签 ==================== */
+    .tag {
+      display: inline-block;
+      padding: 0.25em 0.75em;
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+    }
+
+    .tag-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* 移动菜单按钮 */
+    .menu-btn { display: none; position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); border: none; border-radius: 50%; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 200; align-items: center; justify-content: center; color: white; font-size: 1.25rem; }
+    @media (max-width: 1024px) { .menu-btn { display: flex; } }
+
+    /* 遮罩 */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+    @media (max-width: 1024px) { .overlay.visible { display: block; } }
+  </style>
+</head>
+<body>
+  <!-- 移动菜单按钮 -->
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+  <!-- 双页浏览切换按钮 -->
+  <button class="view-toggle" onclick="toggleDualPage()" title="双页浏览模式">
+    <i class="fas fa-book-open"></i>
+    <span>双页浏览</span>
+  </button>
+
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout" id="mainLayout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="sidebar-logo-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span class="sidebar-logo-text">前端面试题库</span>
+        </a>
+        <button class="sidebar-close" onclick="toggleSidebar()" title="关闭侧边栏">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav class="toc"><ul class="toc-list"><li class="toc-item"><a href="#2-vue" class="toc-link "><span>第2章 Vue框架</span></a></li><li class="toc-item"><a href="#1.1-vue3" class="toc-link "><span>1.1 Vue3响应式系统深度拆解</span></a></li><li class="toc-item"><a href="#1.1.1" class="toc-link "><span>1.1.1 响应式系统核心概念详解</span></a></li><li class="toc-item"><a href="#1.1.2" class="toc-link "><span>1.1.2 完整响应式实现代码</span></a></li><li class="toc-item"><a href="#1.1.3" class="toc-link "><span>1.1.3 响应式原理面试追问</span></a></li><li class="toc-item"><a href="#1.2-ref-reactive" class="toc-link "><span>1.2 ref 与 reactive</span></a></li><li class="toc-item"><a href="#1.2.1-ref" class="toc-link "><span>1.2.1 ref 深入理解</span></a></li><li class="toc-item"><a href="#1.2.2-reactive" class="toc-link "><span>1.2.2 reactive 深入理解</span></a></li><li class="toc-item"><a href="#1.2.3-torefs-toref" class="toc-link "><span>1.2.3 toRefs 与 toRef</span></a></li><li class="toc-item"><a href="#1.3-computed-watch" class="toc-link "><span>1.3 computed 与 watch</span></a></li></ul></nav>
+    </aside>
+
+    <!-- 主内容 -->
+    <div class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="icon-btn" onclick="toggleSidebar()" title="目录">
+            <i class="fas fa-bars"></i>
+          </button>
+          <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>/</span>
+          <span>第2卷 框架生态 / 第2章 Vue框架</span>
+        </nav>
+        <div class="topbar-actions">
+          <button class="icon-btn" onclick="window.print()" title="打印"><i class="fas fa-print"></i></button>
+        </div>
+      </header>
+
+      <!-- 文章 -->
+      <main class="article-container">
+        <article>
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="meta-item"><i class="fas fa-book"></i> 第2卷 框架生态</span>
+            </div>
+            <h1 class="article-title">第2卷-框架生态</h1>
+          </header>
+
+          <div class="content"><hr>
+<h2 id="2-vue">第2章 Vue框架</h2>
+<hr>
+<h3 id="1.1-vue3">1.1 Vue3响应式系统深度拆解</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃                    Vue 3 响应式原理                              ┃
+┃                                                                  ┃
+┃  1. 初始化 (Proxy)                                              ┃ 
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃ 
+┃  ┃  reactive(obj) ━━▶ new Proxy(obj, handlers)           ┃   ┃    
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ┃    
+┃                              ┃                                 ┃  
+┃                              ▼                                 ┃  
+┃  2. 依赖收集 (Track)                                           ┃  
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃ 
+┃  ┃  get: activeEffect 存入 targetMap                       ┃   ┃  
+┃  ┃  targetMap (WeakMap)                                    ┃   ┃  
+┃  ┃    ┗━ depsMap (Map)                                    ┃   ┃   
+┃  ┃         ┗━ dep (Set)                                    ┃   ┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ┃    
+┃                              ┃                                 ┃  
+┃                              ▼                                 ┃  
+┃  3. 触发更新 (Trigger)                                         ┃  
+┃     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓   ┃ 
+┃  ┃  set: 找到对应的 dep，执行所有 effect                   ┃   ┃  
+┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛   ┃    
+┃                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+
+</code></pre><p><strong>Vue 2 vs Vue 3 响应式对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">Vue 2 (Object.defineProperty)</th>
+<th style="text-align:left">Vue 3 (Proxy)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>原理</strong></td>
+<td style="text-align:left">拦截对象属性的 getter/setter</td>
+<td style="text-align:left">代理整个对象</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>对象新增</strong></td>
+<td style="text-align:left">需使用 Vue.set</td>
+<td style="text-align:left">自动监听</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>数组操作</strong></td>
+<td style="text-align:left">需重写数组方法</td>
+<td style="text-align:left">可直接监听</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>性能</strong></td>
+<td style="text-align:left">递归，消耗大</td>
+<td style="text-align:left">代理，性能更好</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>支持</strong></td>
+<td style="text-align:left">IE11+</td>
+<td style="text-align:left">现代浏览器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1.1.1">1.1.1 响应式系统核心概念详解</h3>
+<p><strong>响应式系统的三要素</strong>：</p>
+<ol>
+<li>
+<p><strong>响应式对象（Reactive Object）</strong>：使用 Proxy 包装后的对象，当属性被访问或修改时能够自动触发相应操作。</p>
+</li>
+<li>
+<p><strong>依赖收集（Dependency Tracking）</strong>：在组件渲染过程中，追踪哪些响应式数据被使用，建立数据与组件之间的关联关系。</p>
+</li>
+<li>
+<p><strong>触发更新（Trigger）</strong>：当响应式数据发生变化时，能够准确找到依赖该数据的组件并触发重新渲染。</p>
+</li>
+</ol>
+<p><strong>Vue 3 响应式系统的架构图</strong>：</p>
+<pre class="hljs"><code>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  
+┃                         Vue 3 响应式系统架构                              ┃
+┃                                                                          ┃ 
+┃  ┏━━━━━━━━━━━━━┓      ┏━━━━━━━━━━━━━┓      ┏━━━━━━━━━━━━━┓             ┃   
+┃  ┃   组件渲染   ┃ ━━▶  ┃   依赖收集   ┃ ━━▶  ┃   触发更新   ┃             ┃
+┃  ┗━━━━━━━━━━━━━┛      ┗━━━━━━━━━━━━━┛      ┗━━━━━━━━━━━━━┛             ┃   
+┃        ┃                    ┃                    ┃                     ┃   
+┃        ▼                    ▼                    ▼                     ┃   
+┃  ┏━━━━━━━━━━━━━┓      ┏━━━━━━━━━━━━━┓      ┏━━━━━━━━━━━━━┓             ┃   
+┃  ┃   Proxy     ┃      ┃   targetMap ┃      ┃   effects   ┃             ┃   
+┃  ┃  拦截读写    ┃      ┃   依赖存储   ┃      ┃   副作用队列 ┃             ┃
+┃  ┗━━━━━━━━━━━━━┛      ┗━━━━━━━━━━━━━┛      ┗━━━━━━━━━━━━━┛             ┃   
+┃                                                                          ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  
+
+</code></pre><h3 id="1.1.2">1.1.2 完整响应式实现代码</h3>
+<p><strong>自定义简易版响应式系统</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 完整响应式系统实现</span>
+
+<span class="hljs-comment">// 全局变量存储当前活跃的 effect</span>
+<span class="hljs-keyword">let</span> activeEffect = <span class="hljs-literal">null</span>;
+
+<span class="hljs-comment">// 存储所有响应式对象的依赖关系</span>
+<span class="hljs-comment">// targetMap 结构: WeakMap&lt;Object, Map&lt;string, Set&lt;Function&gt;&gt;&gt;</span>
+<span class="hljs-keyword">const</span> targetMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>();
+
+<span class="hljs-comment">/**
+ * 收集依赖
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Object</span>} target 目标对象
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">string</span>} key 属性名
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">target, key</span>) {
+  <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span>;
+
+  <span class="hljs-comment">// 获取目标对象的 depsMap</span>
+  <span class="hljs-keyword">let</span> depsMap = targetMap.<span class="hljs-title function_">get</span>(target);
+  <span class="hljs-keyword">if</span> (!depsMap) {
+    depsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+    targetMap.<span class="hljs-title function_">set</span>(target, depsMap);
+  }
+
+  <span class="hljs-comment">// 获取属性名的 dep</span>
+  <span class="hljs-keyword">let</span> dep = depsMap.<span class="hljs-title function_">get</span>(key);
+  <span class="hljs-keyword">if</span> (!dep) {
+    dep = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+    depsMap.<span class="hljs-title function_">set</span>(key, dep);
+  }
+
+  <span class="hljs-comment">// 将 activeEffect 存入 dep</span>
+  dep.<span class="hljs-title function_">add</span>(activeEffect);
+}
+
+<span class="hljs-comment">/**
+ * 触发更新
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Object</span>} target 目标对象
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">string</span>} key 属性名
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">*</span>} newValue 新值
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key, newValue</span>) {
+  <span class="hljs-keyword">const</span> depsMap = targetMap.<span class="hljs-title function_">get</span>(target);
+  <span class="hljs-keyword">if</span> (!depsMap) <span class="hljs-keyword">return</span>;
+
+  <span class="hljs-keyword">const</span> dep = depsMap.<span class="hljs-title function_">get</span>(key);
+  <span class="hljs-keyword">if</span> (dep) {
+    <span class="hljs-comment">// 执行所有依赖的 effect</span>
+    dep.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">effect</span> =&gt;</span> {
+      <span class="hljs-title function_">effect</span>();
+    });
+  }
+}
+
+<span class="hljs-comment">/**
+ * 创建响应式对象
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Object</span>} target 目标对象
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Proxy</span>}
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reactive</span>(<span class="hljs-params">target</span>) {
+  <span class="hljs-keyword">const</span> handlers = {
+    <span class="hljs-comment">// 拦截读取操作</span>
+    <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key, receiver</span>) {
+      <span class="hljs-comment">// 进行依赖收集</span>
+      <span class="hljs-title function_">track</span>(target, key);
+      <span class="hljs-comment">// 返回属性值</span>
+      <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key, receiver);
+      <span class="hljs-comment">// 如果是对象，递归创建响应式</span>
+      <span class="hljs-keyword">if</span> (result &amp;&amp; <span class="hljs-keyword">typeof</span> result === <span class="hljs-string">&#x27;object&#x27;</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title function_">reactive</span>(result);
+      }
+      <span class="hljs-keyword">return</span> result;
+    },
+
+    <span class="hljs-comment">// 拦截写入操作</span>
+    <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, value, receiver</span>) {
+      <span class="hljs-keyword">const</span> oldValue = target[key];
+      <span class="hljs-comment">// 设置属性值</span>
+      <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, value, receiver);
+
+      <span class="hljs-comment">// 只有当值发生变化时才触发更新</span>
+      <span class="hljs-keyword">if</span> (oldValue !== value) {
+        <span class="hljs-comment">// 触发更新</span>
+        <span class="hljs-title function_">trigger</span>(target, key, value);
+      }
+
+      <span class="hljs-keyword">return</span> result;
+    },
+
+    <span class="hljs-comment">// 拦截删除操作</span>
+    <span class="hljs-title function_">deleteProperty</span>(<span class="hljs-params">target, key</span>) {
+      <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">deleteProperty</span>(target, key);
+      <span class="hljs-keyword">if</span> (result) {
+        <span class="hljs-title function_">trigger</span>(target, key);
+      }
+      <span class="hljs-keyword">return</span> result;
+    }
+  };
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(target, handlers);
+}
+
+<span class="hljs-comment">/**
+ * 创建副作用函数
+ * <span class="hljs-doctag">@param</span> {<span class="hljs-type">Function</span>} fn 副作用函数
+ * <span class="hljs-doctag">@returns</span> {<span class="hljs-type">Function</span>}
+ */</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn</span>) {
+  activeEffect = fn;
+  <span class="hljs-comment">// 立即执行一次，进行依赖收集</span>
+  <span class="hljs-title function_">fn</span>();
+  activeEffect = <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-comment">// 使用示例</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+  <span class="hljs-attr">count</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">user</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+    <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+  }
+});
+
+<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;count changed:&#x27;</span>, state.<span class="hljs-property">count</span>);
+});
+
+<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;user name:&#x27;</span>, state.<span class="hljs-property">user</span>.<span class="hljs-property">name</span>);
+});
+
+<span class="hljs-comment">// 触发更新</span>
+state.<span class="hljs-property">count</span> = <span class="hljs-number">1</span>; <span class="hljs-comment">// 输出: count changed: 1</span>
+state.<span class="hljs-property">user</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;Jerry&#x27;</span>; <span class="hljs-comment">// 输出: user name: Jerry</span>
+</code></pre><h3 id="1.1.3">1.1.3 响应式原理面试追问</h3>
+<p><strong>面试官可能追问的问题</strong>：</p>
+<p><strong>Q1: 为什么 Vue 3 选择使用 Proxy 而不是 Object.defineProperty？</strong></p>
+<p>参考答案：</p>
+<ol>
+<li>
+<p><strong>Object.defineProperty 的局限性</strong>：</p>
+<ul>
+<li>只能监听单个属性，无法监听整个对象</li>
+<li>需要遍历对象的每个属性进行监听</li>
+<li>无法监听数组的变化（需要重写数组方法）</li>
+<li>删除或新增属性无法监听（需要使用 Vue.set/delete）</li>
+<li>对属性的添加/删除操作无法监听</li>
+</ul>
+</li>
+<li>
+<p><strong>Proxy 的优势</strong>：</p>
+<ul>
+<li>可以监听整个对象，包括属性的添加和删除</li>
+<li>不需要遍历对象属性，性能更好</li>
+<li>支持数组的拦截</li>
+<li>有 13 种拦截方法，更全面</li>
+<li>返回的是一个新对象，可以保持对原对象的引用</li>
+</ul>
+</li>
+<li>
+<p><strong>Proxy 的缺点</strong>：</p>
+<ul>
+<li>不支持 IE 浏览器</li>
+<li>需要创建代理对象，有一定的内存开销</li>
+</ul>
+</li>
+</ol>
+<p><strong>Q2: Vue 3 的响应式系统是如何处理嵌套对象的？</strong></p>
+<p>参考答案：</p>
+<p>Vue 3 使用了懒加载的响应式转换。当访问一个嵌套对象时，只有在访问时才会将其转换为响应式对象。这通过在 get 捕获器中递归调用 reactive() 实现：</p>
+<pre class="hljs"><code><span class="hljs-title function_">get</span>(<span class="hljs-params">target, key, receiver</span>) {
+  <span class="hljs-title function_">track</span>(target, key);
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key, receiver);
+  <span class="hljs-comment">// 懒加载：只有访问对象时才递归转换</span>
+  <span class="hljs-keyword">if</span> (result &amp;&amp; <span class="hljs-keyword">typeof</span> result === <span class="hljs-string">&#x27;object&#x27;</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">reactive</span>(result);
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+</code></pre><p>这种方式的优势：</p>
+<ul>
+<li>避免不必要的性能开销</li>
+<li>只有实际使用的对象才会被转换为响应式</li>
+<li>减少了内存占用</li>
+</ul>
+<p><strong>Q3: Vue 3 的响应式系统如何处理循环引用？</strong></p>
+<p>参考答案：</p>
+<p>Vue 3 使用了 WeakMap 来存储响应式对象的映射关系。WeakMap 的特点是：</p>
+<ul>
+<li>键必须是对象</li>
+<li>键是弱引用的，可以被垃圾回收</li>
+<li>不支持遍历</li>
+</ul>
+<p>这意味着如果一个响应式对象不再被其他地方引用，它可以被垃圾回收，响应式系统不会阻止这种回收。</p>
+<hr>
+<h3 id="1.2-ref-reactive">1.2 ref 与 reactive</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// ref - 基础类型响应式</span>
+<span class="hljs-keyword">import</span> { ref, isRef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count.<span class="hljs-property">value</span>);  <span class="hljs-comment">// 0</span>
+count.<span class="hljs-property">value</span>++;             <span class="hljs-comment">// 修改值</span>
+
+<span class="hljs-comment">// ref 原理</span>
+<span class="hljs-comment">// ref(value) -&gt; { value: value }</span>
+<span class="hljs-comment">// 访问/修改通过 .value</span>
+
+<span class="hljs-comment">// reactive - 对象响应式</span>
+<span class="hljs-keyword">import</span> { reactive, isReactive } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(state.<span class="hljs-property">name</span>);  <span class="hljs-comment">// Tom</span>
+state.<span class="hljs-property">age</span> = <span class="hljs-number">20</span>;           <span class="hljs-comment">// 修改值</span>
+
+<span class="hljs-comment">// reactive 限制</span>
+<span class="hljs-comment">// 1. 只对对象类型有效</span>
+<span class="hljs-comment">// 2. 替换整个对象会丢失响应性</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({});
+state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });  <span class="hljs-comment">// 失去响应式</span>
+
+<span class="hljs-comment">// toRefs - 保持响应式</span>
+<span class="hljs-keyword">import</span> { reactive, toRefs } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+});
+<span class="hljs-keyword">const</span> { name, age } = <span class="hljs-title function_">toRefs</span>(state);
+<span class="hljs-comment">// name 仍然是响应式的</span>
+
+<span class="hljs-comment">// toRaw - 转为原始对象</span>
+<span class="hljs-keyword">import</span> { reactive, toRaw } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+<span class="hljs-keyword">const</span> raw = <span class="hljs-title function_">toRaw</span>(state);  <span class="hljs-comment">// 原始对象</span>
+</code></pre><h3 id="1.2.1-ref">1.2.1 ref 深入理解</h3>
+<p><strong>ref 的实现原理</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// ref 简易实现</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">RefImpl</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">value</span>) {
+    <span class="hljs-comment">// 如果是对象，使用 reactive 包装</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_value</span> = <span class="hljs-title function_">isObject</span>(value) ? <span class="hljs-title function_">reactive</span>(value) : value;
+  }
+
+  <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() {
+    <span class="hljs-comment">// 依赖收集</span>
+    <span class="hljs-title function_">track</span>(<span class="hljs-variable language_">this</span>, <span class="hljs-string">&#x27;value&#x27;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">_value</span>;
+  }
+
+  <span class="hljs-keyword">set</span> <span class="hljs-title function_">value</span>(<span class="hljs-params">newValue</span>) {
+    <span class="hljs-comment">// 只有值发生变化时才更新</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-title function_">hasChanged</span>(newValue, <span class="hljs-variable language_">this</span>.<span class="hljs-property">_value</span>)) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_value</span> = <span class="hljs-title function_">isObject</span>(newValue) ? <span class="hljs-title function_">reactive</span>(newValue) : newValue;
+      <span class="hljs-comment">// 触发更新</span>
+      <span class="hljs-title function_">trigger</span>(<span class="hljs-variable language_">this</span>, <span class="hljs-string">&#x27;value&#x27;</span>);
+    }
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ref</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RefImpl</span>(value);
+}
+
+<span class="hljs-comment">// 辅助函数</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">isObject</span>(<span class="hljs-params">val</span>) {
+  <span class="hljs-keyword">return</span> val !== <span class="hljs-literal">null</span> &amp;&amp; <span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;object&#x27;</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">hasChanged</span>(<span class="hljs-params">newValue, oldValue</span>) {
+  <span class="hljs-keyword">return</span> newValue !== oldValue;
+}
+</code></pre><p><strong>ref 与 reactive 的选择</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">推荐</th>
+<th style="text-align:left">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">基础类型 (string, number, boolean)</td>
+<td style="text-align:left">ref</td>
+<td style="text-align:left">reactive 不支持基础类型</td>
+</tr>
+<tr>
+<td style="text-align:left">对象类型</td>
+<td style="text-align:left">reactive</td>
+<td style="text-align:left">更直观，访问无需 .value</td>
+</tr>
+<tr>
+<td style="text-align:left">数组</td>
+<td style="text-align:left">reactive</td>
+<td style="text-align:left">更简洁</td>
+</tr>
+<tr>
+<td style="text-align:left">函数</td>
+<td style="text-align:left">ref</td>
+<td style="text-align:left">需要保持响应性</td>
+</tr>
+<tr>
+<td style="text-align:left">模板中使用的响应式数据</td>
+<td style="text-align:left">两者皆可</td>
+<td style="text-align:left">ref 在模板中会自动解包</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ref 的自动解包</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 模板中的自动解包</span>
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ count });
+
+<span class="hljs-comment">// 模板中可以直接使用 {{ count }} 而非 {{ count.value }}</span>
+<span class="hljs-comment">// 但在 script 中需要使用 count.value</span>
+
+<span class="hljs-comment">// 数组中的自动解包</span>
+<span class="hljs-keyword">const</span> arr = <span class="hljs-title function_">ref</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+<span class="hljs-comment">// arr.value.push(4) // 正确</span>
+
+<span class="hljs-comment">// 嵌套在 reactive 中自动解包</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+  <span class="hljs-attr">count</span>: <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>) <span class="hljs-comment">// 自动解包</span>
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(state.<span class="hljs-property">count</span>); <span class="hljs-comment">// 0，无需 .value</span>
+</code></pre><h3 id="1.2.2-reactive">1.2.2 reactive 深入理解</h3>
+<p><strong>reactive 的限制和注意事项</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// 1. 不能替换整个对象</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+<span class="hljs-comment">// 错误做法 - 失去响应性</span>
+state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Jerry&#x27;</span> });
+<span class="hljs-comment">// 正确做法 - 修改属性</span>
+<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(state, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Jerry&#x27;</span> });
+
+<span class="hljs-comment">// 2. 对 reactive 的解构会失去响应性</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">18</span> });
+<span class="hljs-comment">// 解构后失去响应性</span>
+<span class="hljs-keyword">const</span> { name, age } = state;
+<span class="hljs-comment">// 正确做法 - 使用 toRefs</span>
+<span class="hljs-keyword">const</span> { name, age } = <span class="hljs-title function_">toRefs</span>(state);
+<span class="hljs-comment">// 或者</span>
+<span class="hljs-keyword">const</span> name = <span class="hljs-title function_">toRef</span>(state, <span class="hljs-string">&#x27;name&#x27;</span>);
+
+<span class="hljs-comment">// 3. reactive 数组问题</span>
+<span class="hljs-keyword">const</span> list = <span class="hljs-title function_">reactive</span>([]);
+<span class="hljs-comment">// 可以通过索引修改</span>
+list[<span class="hljs-number">0</span>] = <span class="hljs-number">1</span>; <span class="hljs-comment">// 响应式</span>
+<span class="hljs-comment">// 可以使用数组方法</span>
+list.<span class="hljs-title function_">push</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// 响应式</span>
+
+<span class="hljs-comment">// 4. 响应式判断</span>
+<span class="hljs-keyword">import</span> { reactive, isReactive, isProxy, isRef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isReactive</span>(state)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isReactive</span>(count)); <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isProxy</span>(state));    <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isRef</span>(count));     <span class="hljs-comment">// true</span>
+</code></pre><h3 id="1.2.3-torefs-toref">1.2.3 toRefs 与 toRef</h3>
+<p><strong>实现原理和使用场景</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// toRef - 为响应式对象的某个属性创建 ref</span>
+<span class="hljs-keyword">import</span> { reactive, toRef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+});
+
+<span class="hljs-comment">// 为 name 属性创建 ref</span>
+<span class="hljs-keyword">const</span> nameRef = <span class="hljs-title function_">toRef</span>(state, <span class="hljs-string">&#x27;name&#x27;</span>);
+<span class="hljs-comment">// 修改 ref 会影响原始对象</span>
+nameRef.<span class="hljs-property">value</span> = <span class="hljs-string">&#x27;Jerry&#x27;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(state.<span class="hljs-property">name</span>); <span class="hljs-comment">// Jerry</span>
+
+<span class="hljs-comment">// 修改原始对象也会影响 ref</span>
+state.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;Tom&#x27;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(nameRef.<span class="hljs-property">value</span>); <span class="hljs-comment">// Tom</span>
+
+<span class="hljs-comment">// toRefs - 为响应式对象的所有属性创建 ref</span>
+<span class="hljs-keyword">import</span> { reactive, toRefs } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>
+});
+
+<span class="hljs-comment">// 转换为多个 ref</span>
+<span class="hljs-keyword">const</span> { name, age } = <span class="hljs-title function_">toRefs</span>(state);
+
+<span class="hljs-comment">// 使用场景：解构返回响应式数据</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useUser</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+    <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>,
+    <span class="hljs-attr">gender</span>: <span class="hljs-string">&#x27;male&#x27;</span>
+  });
+
+  <span class="hljs-comment">// 返回解构后的响应式数据</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">toRefs</span>(state);
+}
+
+<span class="hljs-keyword">const</span> { name, age, gender } = <span class="hljs-title function_">useUser</span>();
+<span class="hljs-comment">// name, age, gender 都是响应式的 ref</span>
+</code></pre><hr>
+<h3 id="1.3-computed-watch">1.3 computed 与 watch</h3>
+<p><strong>参考答案：</strong></p>
+<pre class="hljs"><code><span class="hljs-comment">// computed - 计算属性</span>
+<span class="hljs-keyword">import</span> { ref, computed } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> firstName = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;John&#x27;</span>);
+<span class="hljs-keyword">const</span> lastName = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;Doe&#x27;</span>);
+
+<span class="hljs-comment">// 只读计算属性</span>
+<span class="hljs-keyword">const</span> fullName = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${firstName.value}</span> <span class="hljs-subst">${lastName.value}</span>`</span>;
+});
+
+<span class="hljs-comment">// 可写计算属性</span>
+<span class="hljs-keyword">const</span> fullName = <span class="hljs-title function_">computed</span>({
+  <span class="hljs-title function_">get</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${firstName.value}</span> <span class="hljs-subst">${lastName.value}</span>`</span>;
+  },
+  <span class="hljs-title function_">set</span>(<span class="hljs-params">newValue</span>) {
+    [firstName.<span class="hljs-property">value</span>, lastName.<span class="hljs-property">value</span>] = newValue.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27; &#x27;</span>);
+  }
+});
+
+<span class="hljs-comment">// watch - 监听</span>
+<span class="hljs-keyword">import</span> { ref, watch } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// 监听单个 ref</span>
+<span class="hljs-title function_">watch</span>(count, <span class="hljs-function">(<span class="hljs-params">newVal, oldVal</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`count changed: <span class="hljs-subst">${oldVal}</span> -&gt; <span class="hljs-subst">${newVal}</span>`</span>);
+});
+
+<span class="hljs-comment">// 监听多个 ref</span>
+<span class="hljs-title function_">watch</span>([count, firstName], <span class="hljs-function">(<span class="hljs-params">[newCount, newName], [oldCount, oldName]</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;changed&#x27;</span>);
+});
+
+<span class="hljs-comment">// 监听 reactive</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span> });
+<span class="hljs-title function_">watch</span>(state, <span class="hljs-function">(<span class="hljs-params">newVal, oldVal</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;state changed&#x27;</span>);
+}, { <span class="hljs-attr">deep</span>: <span class="hljs-literal">true</span> });
+
+<span class="hljs-comment">// watchEffect - 立即执行</span>
+<span class="hljs-keyword">import</span> { watchEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-title function_">watchEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`count is: <span class="hljs-subst">${count.value}</span>`</span>);
+  <span class="hljs-comment">// 立即执行，依赖变化时再次执行</span>
+});
+</code></pre><h3 id="1.3.1-computed">1.3.1 computed 深入理解</h3>
+<p><strong>computed 的实现原理</strong>：</p>
+<pre class="hljs"><code><span class="hljs-comment">// computed 简易实现</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ComputedImpl</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">getter, setter</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_getter</span> = getter;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_setter</span> = setter;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_value</span> = <span class="hljs-literal">undefined</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_dirty</span> = <span class="hljs-literal">true</span>; <span class="hljs-comment">// 标记是否需要重新计算</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">_effect</span> = <span class="hljs-literal">null</span>;
+  }
+
+  <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() {
+    <span class="hljs-comment">// 依赖收集</span>
+    <span class="hljs-keyword">if</span> (activeEffect) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_effect</span> = activeEffect;
+    }
+
+    <span class="hljs-comment">// 如果是响应式数据的依赖，执行依赖收集</span>
+    <span class="hljs-keyword">if</span> (activeEffect) {
+      <span class="hljs-title function_">track</span>(<span class="hljs-variable language_">this</span>, <span class="hljs-string">&#x27;value&#x27;</span>);
+    }
+
+    <span class="hljs-comment">// 如果是脏的，重新计算</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">_dirty</span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_value</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_getter</span>();
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">_dirty</span> = <span class="hljs-literal">false</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">_value</span>;
+  }
+
+  <span class="hljs-keyword">set</span> <span class="hljs-title function_">value</span>(<span class="hljs-params">newValue</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">_setter</span>(newValue);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter, setter</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComputedImpl</span>(getter, setter);
+}
+</code></pre><p><strong>computed 的特性</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { ref, computed } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-comment">// 1. 计算属性会缓存结果</span>
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+<span class="hljs-keyword">const</span> double = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;computing...&#x27;</span>);
+  <span class="hljs-keyword">return</span> count.<span class="hljs-property">value</span> * <span class="hljs-number">2</span>;
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(double.<span class="hljs-property">value</span>); <span class="hljs-comment">// computing... 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(double.<span class="hljs-property">value</span>); <span class="hljs-comment">// 不再计算，直接返回缓存</span>
+
+<span class="hljs-comment">// 2. 依赖变化时才重新计算</span>
+count.<span class="hljs-property">value</span> = <span class="hljs-number">1</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(double.<span class="hljs-property">value</span>); <span class="hljs-comment">// computing... 2</span>
+
+<span class="hljs-comment">// 3. 只读 vs 可写</span>
+<span class="hljs-comment">// 只读</span>
+<span class="hljs-keyword">const</span> readOnly = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> count.<span class="hljs-property">value</span> * <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// 可写</span>
+<span class="hljs-keyword">const</span> writable = <span class="hljs-title function_">computed</span>({
+  <span class="hljs-attr">get</span>: <span class="hljs-function">() =&gt;</span> count.<span class="hljs-property">value</span> * <span class="hljs-number">2</span>,
+  <span class="hljs-attr">set</span>: <span class="hljs-function">(<span class="hljs-params">val</span>) =&gt;</span> {
+    count.<span class="hljs-property">value</span> = val / <span class="hljs-number">2</span>;
+  }
+});
+
+writable.<span class="hljs-property">value</span> = <span class="hljs-number">20</span>; <span class="hljs-comment">// count 变为 10</span>
+
+<span class="hljs-comment">// 4. 计算属性可以引用其他计算属性</span>
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+<span class="hljs-keyword">const</span> double = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> count.<span class="hljs-property">value</span> * <span class="hljs-number">2</span>);
+<span class="hljs-keyword">const</span> quadruple = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> double.<span class="hljs-property">value</span> * <span class="hljs-number">2</span>);
+</code></pre><h3 id="1.3.2-watch">1.3.2 watch 深入理解</h3>
+<p><strong>watch 的配置选项</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { ref, reactive, watch } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-comment">// 1. immediate - 立即执行</span>
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+<span class="hljs-title function_">watch</span>(count, <span class="hljs-function">(<span class="hljs-params">newVal, oldVal</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;count changed&#x27;</span>);
+}, { <span class="hljs-attr">immediate</span>: <span class="hljs-literal">true</span> }); <span class="hljs-comment">// 立即执行，oldVal 为 undefined</span>
+
+<span class="hljs-comment">// 2. deep - 深度监听</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({
+  <span class="hljs-attr">user</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Tom&#x27;</span>,
+    <span class="hljs-attr">address</span>: {
+      <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;Beijing&#x27;</span>
+    }
+  }
+});
+
+<span class="hljs-comment">// 深度监听</span>
+<span class="hljs-title function_">watch</span>(state, <span class="hljs-function">(<span class="hljs-params">newVal, oldVal</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;state changed&#x27;</span>);
+}, { <span class="hljs-attr">deep</span>: <span class="hljs-literal">true</span> });
+
+<span class="hljs-comment">// 监听单个属性</span>
+<span class="hljs-title function_">watch</span>(<span class="hljs-function">() =&gt;</span> state.<span class="hljs-property">user</span>.<span class="hljs-property">name</span>, <span class="hljs-function">(<span class="hljs-params">newVal, oldVal</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;name changed&#x27;</span>);
+});
+
+<span class="hljs-comment">// 3. flush - 回调时机</span>
+<span class="hljs-comment">// &#x27;pre&#x27; - 组件更新前（默认）</span>
+<span class="hljs-comment">// &#x27;post&#x27; - 组件更新后</span>
+<span class="hljs-comment">// &#x27;sync&#x27; - 同步执行</span>
+
+<span class="hljs-title function_">watch</span>(count, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;count changed&#x27;</span>);
+}, { <span class="hljs-attr">flush</span>: <span class="hljs-string">&#x27;post&#x27;</span> }); <span class="hljs-comment">// 在 DOM 更新后执行</span>
+
+<span class="hljs-comment">// 4. once - 只执行一次</span>
+<span class="hljs-title function_">watch</span>(count, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;count changed&#x27;</span>);
+}, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> });
+</code></pre><p><strong>watchEffect vs watch</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { ref, watch, watchEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+<span class="hljs-keyword">const</span> name = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;Tom&#x27;</span>);
+
+<span class="hljs-comment">// watch - 懒执行</span>
+<span class="hljs-comment">// 1. 第一次不执行</span>
+<span class="hljs-comment">// 2. 显式指定依赖</span>
+<span class="hljs-title function_">watch</span>(count, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;count changed&#x27;</span>);
+});
+
+<span class="hljs-comment">// watchEffect - 立即执行</span>
+<span class="hljs-comment">// 1. 立即执行一次</span>
+<span class="hljs-comment">// 2. 自动收集依赖</span>
+<span class="hljs-title function_">watchEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;count is:&#x27;</span>, count.<span class="hljs-property">value</span>);
+});
+
+<span class="hljs-comment">// 对比</span>
+<span class="hljs-title function_">watchEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 自动收集所有响应式依赖</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(name.<span class="hljs-property">value</span>, count.<span class="hljs-property">value</span>);
+});
+
+<span class="hljs-title function_">watch</span>([count, name], <span class="hljs-function">(<span class="hljs-params">[newCount, newName], [oldCount, oldName]</span>) =&gt;</span> {
+  <span class="hljs-comment">// 需要显式指定监听哪些数据</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;changed&#x27;</span>);
+});
+</code></pre><p><strong>watch 清理副作用</strong>：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { ref, watch } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// 清理副作用</span>
+<span class="hljs-title function_">watch</span>(count, <span class="hljs-function">(<span class="hljs-params">newVal, oldVal, onCleanup</span>) =&gt;</span> {
+  <span class="hljs-comment">// 创建取消令牌</span>
+  <span class="hljs-keyword">let</span> cancelled = <span class="hljs-literal">false</span>;
+
+  <span class="hljs-comment">// 异步操作</span>
+  <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/count/<span class="hljs-subst">${newVal}</span>`</span>)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.<span class="hljs-title function_">json</span>())
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (!cancelled) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;data:&#x27;</span>, data);
+      }
+    });
+
+  <span class="hljs-comment">// 清理函数</span>
+  <span class="hljs-title function_">onCleanup</span>(<span class="hljs-function">() =&gt;</span> {
+    cancelled = <span class="hljs-literal">true</span>;
+  });
+});
+</code></pre><hr>
+</div>
+
+          <footer class="page-footer">
+            <nav class="chapter-nav">
+              <a href="2-1-React核心原理.html" class="chapter-nav-link prev">
+            <span class="chapter-nav-label"><i class="fas fa-arrow-left"></i> 上一章</span>
+            <span class="chapter-nav-title">第2卷 React深入</span>
+          </a>
+              <a href="2-3-BFF架构.html" class="chapter-nav-link next">
+            <span class="chapter-nav-label">下一章 <i class="fas fa-arrow-right"></i></span>
+            <span class="chapter-nav-title">第2卷 Node与BFF</span>
+          </a>
+            </nav>
+          </footer>
+        </article>
+      </main>
+    </div>
+  </div>
+
+  <!-- 语法高亮 -->
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+  <!-- Mermaid 图表支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        curve: 'basis',
+        padding: 15
+      },
+      sequence: {
+        actorMargin: 50,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35
+      }
+    });
+  </script>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.overlay');
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile) {
+        // 移动端使用遮罩层
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('visible');
+      } else {
+        // 桌面端切换隐藏/显示
+        sidebar.classList.toggle('hidden');
+        // 保存状态到 localStorage
+        const isHidden = sidebar.classList.contains('hidden');
+        localStorage.setItem('sidebarHidden', isHidden);
+      }
+    }
+
+    // 图表全屏切换
+    function toggleDiagramFullscreen(btn) {
+      const container = btn.closest('.diagram-container');
+      container.classList.toggle('fullscreen');
+
+      // 按 ESC 退出全屏
+      if (container.classList.contains('fullscreen')) {
+        document.addEventListener('keydown', handleDiagramEsc);
+      } else {
+        document.removeEventListener('keydown', handleDiagramEsc);
+      }
+    }
+
+    function handleDiagramEsc(e) {
+      if (e.key === 'Escape') {
+        const fullscreenContainer = document.querySelector('.diagram-container.fullscreen');
+        if (fullscreenContainer) {
+          fullscreenContainer.classList.remove('fullscreen');
+          document.removeEventListener('keydown', handleDiagramEsc);
+        }
+      }
+    }
+
+    // 双页浏览模式切换
+    function toggleDualPage() {
+      const layout = document.getElementById('mainLayout');
+      const btn = document.querySelector('.view-toggle');
+      layout.classList.toggle('dual-page');
+
+      const isDualPage = layout.classList.contains('dual-page');
+      btn.innerHTML = isDualPage
+        ? '<i class="fas fa-columns"></i><span>单页浏览</span>'
+        : '<i class="fas fa-book-open"></i><span>双页浏览</span>';
+
+      localStorage.setItem('dualPageMode', isDualPage);
+    }
+
+    // 页面加载时恢复侧边栏状态
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const layout = document.getElementById('mainLayout');
+      const isMobile = window.innerWidth > 1024;
+
+      if (isMobile) {
+        const savedState = localStorage.getItem('sidebarHidden');
+        if (savedState === 'true') {
+          sidebar.classList.add('hidden');
+        }
+      }
+
+      // 恢复双页浏览模式
+      const savedDualPage = localStorage.getItem('dualPageMode');
+      if (savedDualPage === 'true') {
+        layout.classList.add('dual-page');
+        const btn = document.querySelector('.view-toggle');
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-columns"></i><span>单页浏览</span>';
+        }
+      }
+    });
+
+    // 卷展开/折叠
+    document.querySelectorAll('.volume-title').forEach(el => {
+      el.addEventListener('click', () => el.parentElement.classList.toggle('collapsed'));
+    });
+
+    // 滚动监听更新目录激活状态
+    const headings = document.querySelectorAll('.content h2[id], .content h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          tocLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) link.classList.add('active');
+          });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70%' });
+
+    headings.forEach(h => observer.observe(h));
+
+    // 点击目录跳转
+    tocLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
